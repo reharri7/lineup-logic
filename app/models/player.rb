@@ -1,7 +1,8 @@
 class Player < ApplicationRecord
   belongs_to :team
   belongs_to :position
-  belongs_to :fantasy_team, optional: true
+  has_many :fantasy_team_players
+  has_many :fantasy_teams, through: :fantasy_team_players
 
   validates :name, presence: true
   validates :number, presence: true, numericality: { only_integer: true }

@@ -10,7 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_31_213122) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_31_220123) do
+  create_table "fantasy_team_players", force: :cascade do |t|
+    t.integer "fantasy_team_id", null: false
+    t.integer "player_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["fantasy_team_id"], name: "index_fantasy_team_players_on_fantasy_team_id"
+    t.index ["player_id"], name: "index_fantasy_team_players_on_player_id"
+  end
+
   create_table "fantasy_teams", force: :cascade do |t|
     t.string "name"
     t.integer "user_id", null: false
@@ -55,6 +64,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_31_213122) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "fantasy_team_players", "fantasy_teams"
+  add_foreign_key "fantasy_team_players", "players"
   add_foreign_key "fantasy_teams", "users"
   add_foreign_key "players", "fantasy_teams"
   add_foreign_key "players", "positions"

@@ -1,3 +1,4 @@
+
 class CreatePlayers < ActiveRecord::Migration[8.0]
   def change
     create_table :players do |t|
@@ -5,7 +6,6 @@ class CreatePlayers < ActiveRecord::Migration[8.0]
       t.integer :number
       t.references :team, null: false, foreign_key: true
       t.references :position, null: false, foreign_key: true
-      t.references :fantasy_team, null: false, foreign_key: true
       t.integer :weekly_position_rank
       t.integer :weekly_flex_rank
 
