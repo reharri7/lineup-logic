@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  number: 1
+  team: one
+  position: one
+  fantasy_team: one
+  weekly_position_rank: 1
+  weekly_flex_rank: 1
+
+two:
+  name: MyString
+  number: 1
+  team: two
+  position: two
+  fantasy_team: two
+  weekly_position_rank: 1
+  weekly_flex_rank: 1
