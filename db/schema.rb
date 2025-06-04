@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_31_220123) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_04_010146) do
   create_table "fantasy_team_players", force: :cascade do |t|
     t.integer "fantasy_team_id", null: false
     t.integer "player_id", null: false
@@ -62,6 +62,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_31_220123) do
     t.string "role"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "auth_token"
+    t.datetime "token_expires_at"
+    t.index ["auth_token"], name: "index_users_on_auth_token", unique: true
   end
 
   add_foreign_key "fantasy_team_players", "fantasy_teams"
