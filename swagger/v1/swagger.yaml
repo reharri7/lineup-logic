@@ -51,6 +51,39 @@ paths:
               required:
               - email
               - password
+  "/api/auth/logout":
+    delete:
+      summary: logout user
+      tags:
+      - Authentication
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: Authorization
+        in: string
+        required: true
+        description: Bearer token
+        example: Bearer your_auth_token_here
+      responses:
+        '200':
+          description: successful logout
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Successfully logged out
+        '401':
+          description: unauthorized - invalid or missing token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
   "/api/users":
     get:
       summary: list users

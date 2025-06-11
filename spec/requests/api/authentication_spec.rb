@@ -39,5 +39,32 @@ RSpec.describe 'api/authentication', type: :request do
         run_test!
       end
     end
+    path '/api/auth/logout' do
+      delete('logout user') do
+        tags 'Authentication'
+        consumes 'application/json'
+        produces 'application/json'
+        security [ { bearerAuth: [] } ]
+
+        parameter name: :Authorization, in: :string, required: true, description: 'Bearer token', example: 'Bearer your_auth_token_here'
+
+        response(200, 'successful logout') do
+          schema type: :object,
+                 properties: {
+                   message: { type: :string, example: 'Successfully logged out' }
+                 }
+          run_test!
+        end
+
+        response(401, 'unauthorized - invalid or missing token') do
+          schema type: :object,
+                 properties: {
+                   error: { type: :string }
+                 }
+          run_test!
+        end
+
+      end
+    end
   end
 end
