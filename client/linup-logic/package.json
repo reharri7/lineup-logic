@@ -20,10 +20,10 @@
     "@angular/platform-browser-dynamic": "^20.0.3",
     "@angular/router": "^20.0.3",
     "@openapitools/openapi-generator-cli": "^2.20.2",
-    "@tailwindcss/postcss": "^4.1.8",
+    "@tailwindcss/postcss": "^4.1.10",
     "daisyui": "^5.0.43",
-    "postcss": "^8.5.4",
     "rxjs": "~7.4.0",
+    "tailwindcss": "^4.1.10",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.1"
   },
@@ -39,7 +39,7 @@
     "karma-coverage": "~2.1.0",
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "~1.7.0",
-    "postcss": "^8.5.3",
+    "postcss": "^8.5.5",
     "typescript": "5.8.3"
   }
 }
