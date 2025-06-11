@@ -5,7 +5,7 @@ RSpec.describe 'api/users', type: :request do
     get('list users') do
       tags 'Users'
       produces 'application/json'
-      security [bearerAuth: []]
+      security [ bearerAuth: [] ]
 
       response(200, 'successful') do
         schema type: :array,
@@ -25,7 +25,7 @@ RSpec.describe 'api/users', type: :request do
       tags 'Users'
       consumes 'application/json'
       produces 'application/json'
-      security [bearerAuth: []]
+      security [ bearerAuth: [] ]
 
       parameter name: :user, in: :body, schema: {
         type: :object,

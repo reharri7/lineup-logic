@@ -63,7 +63,6 @@ RSpec.describe 'api/authentication', type: :request do
                  }
           run_test!
         end
-
       end
     end
   end
