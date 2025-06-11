@@ -1,5 +1,4 @@
 .gitignore
-.openapi-generator-ignore
 README.md
 api.base.service.ts
 api.module.ts
@@ -16,6 +15,7 @@ model/apiAuthLoginPost200Response.ts
 model/apiAuthLoginPost200ResponseUser.ts
 model/apiAuthLoginPost401Response.ts
 model/apiAuthLoginPostRequest.ts
+model/apiAuthLogoutDelete200Response.ts
 model/apiUsersGet200ResponseInner.ts
 model/apiUsersPostRequest.ts
 model/models.ts

@@ -14,6 +14,7 @@ import { Observable }                                        from 'rxjs';
 import { ApiAuthLoginPost200Response } from '../model/models';
 import { ApiAuthLoginPost401Response } from '../model/models';
 import { ApiAuthLoginPostRequest } from '../model/models';
+import { ApiAuthLogoutDelete200Response } from '../model/models';
 
 
 import { Configuration }                                     from '../configuration';
@@ -30,5 +31,12 @@ export interface AuthenticationServiceInterface {
      * @param apiAuthLoginPostRequest 
      */
     apiAuthLoginPost(apiAuthLoginPostRequest?: ApiAuthLoginPostRequest, extraHttpRequestParams?: any): Observable<ApiAuthLoginPost200Response>;
+
+    /**
+     * logout user
+     * 
+     * @param authorization Bearer token
+     */
+    apiAuthLogoutDelete(authorization: string, extraHttpRequestParams?: any): Observable<ApiAuthLogoutDelete200Response>;
 
 }

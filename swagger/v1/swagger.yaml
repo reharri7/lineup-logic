@@ -60,10 +60,12 @@ paths:
       - bearerAuth: []
       parameters:
       - name: Authorization
-        in: string
+        in: header
         required: true
         description: Bearer token
         example: Bearer your_auth_token_here
+        schema:
+          type: string
       responses:
         '200':
           description: successful logout

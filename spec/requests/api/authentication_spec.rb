@@ -46,7 +46,7 @@ RSpec.describe 'api/authentication', type: :request do
         produces 'application/json'
         security [ { bearerAuth: [] } ]
 
-        parameter name: :Authorization, in: :string, required: true, description: 'Bearer token', example: 'Bearer your_auth_token_here'
+        parameter name: :Authorization, in: :header, type: :string, required: true, description: 'Bearer token', example: 'Bearer your_auth_token_here'
 
         response(200, 'successful logout') do
           schema type: :object,
