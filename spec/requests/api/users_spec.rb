@@ -30,10 +30,13 @@ RSpec.describe 'api/users', type: :request do
       parameter name: :user, in: :body, schema: {
         type: :object,
         properties: {
+          username: { type: :string },
           email: { type: :string },
-          password: { type: :string }
+          password: { type: :string },
+          password_confirmation: { type: :string }
+
         },
-        required: %w[email password]
+        required: %w[username email password password_confirmation] # Update this
       }
 
       response(201, 'created') do
