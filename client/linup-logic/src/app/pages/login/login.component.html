@@ -1,0 +1,54 @@
+<app-navbar></app-navbar>
+
+<div class="flex min-h-screen items-center justify-center bg-base-200">
+  <div class="card w-full max-w-sm bg-base-100 shadow-xl">
+    <div class="card-body">
+      <h2 class="card-title text-2xl font-bold text-center mb-6">Login</h2>
+
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text">Email</span>
+          </label>
+          <input
+            type="email"
+            placeholder="email@example.com"
+            class="input input-bordered"
+            formControlName="email"
+          />
+          <label *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" class="label">
+            <span class="label-text-alt text-error">Please enter a valid email address</span>
+          </label>
+        </div>
+
+        <div class="form-control mt-4">
+          <label class="label">
+            <span class="label-text">Password</span>
+          </label>
+          <input
+            type="password"
+            placeholder="••••••••"
+            class="input input-bordered"
+            formControlName="password"
+          />
+          <label *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="label">
+            <span class="label-text-alt text-error">Password is required</span>
+          </label>
+          <label class="label">
+            <a routerLink="/forgot-password" class="label-text-alt link link-hover">Forgot password?</a>
+          </label>
+        </div>
+
+        <div class="form-control mt-6">
+          <button type="submit" class="btn btn-primary" [disabled]="loginForm.invalid">Login</button>
+        </div>
+      </form>
+
+      <div class="divider mt-6">OR</div>
+
+      <div class="form-control">
+        <a routerLink="/register" class="btn btn-outline">Create Account</a>
+      </div>
+    </div>
+  </div>
+</div>
