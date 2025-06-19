@@ -4,7 +4,7 @@ class Api::UsersController < ApplicationController
   # POST /api/signup
   def create
     @user = User.new(user_params)
-    @user.role = "user" # Set default role explicitly
+    @user.role = "user"
 
     if @user.save
       @user.generate_auth_token
@@ -23,6 +23,6 @@ class Api::UsersController < ApplicationController
   private
 
   def user_params
-    params.require(:user).permit(:username, :email, :password, :password_confirmation)
+    params.permit(:username, :email, :password, :password_confirmation)
   end
 end
