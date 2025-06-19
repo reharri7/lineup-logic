@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import {Component, computed, OnInit, Signal} from '@angular/core';
+import {Router, RouterModule} from '@angular/router';
+import {AuthService} from "../../shared/services/auth.service";
 
 @Component({
   selector: 'app-navbar',
@@ -10,9 +11,27 @@ import { RouterModule } from '@angular/router';
 })
 export class NavbarComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private auth: AuthService,
+    private router: Router
+  ) { }
+
+  async logout() {
+    this.auth.logout();
+  }
+
+  isAuthenticated: Signal<Boolean> = computed(() => {
+    return this.auth.isAuthenticated();
+  })
 
   ngOnInit(): void {
   }
 
+  async handleLoginButtonClicked() {
+    if(this.isAuthenticated()) {
+      await this.logout();
+    } else {
+      await this.router.navigate(['/login']);
+    }
+  }
 }

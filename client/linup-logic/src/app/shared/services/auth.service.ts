@@ -36,13 +36,13 @@ export class AuthService {
 
   logout() {
     this._token.set(null);
-    this.http.delete(`${this.apiUrl}/logout`).subscribe(); // optional
+    this.http.delete(`${this.apiUrl}/logout`);
     this.router.navigate(['/login']);
   }
 
   // ✅ Refresh still returns Observable (required for interceptor)
   refreshToken(): Observable<{token: string}> {
-    return this.http.post<{ token: string }>(`${this.apiUrl}/refresh`, {}).pipe(
+    return this.http.post<{ token: string }>(`${this.apiUrl}/refresh_token`, {}).pipe(
       tap(res => this._token.set(res.token)),
       tap(() => console.log('Token refreshed'))
     );
