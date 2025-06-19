@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import { NavbarComponent } from "../../components/navbar/navbar.component";
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
@@ -14,7 +14,7 @@ import { lastValueFrom } from 'rxjs';
     NavbarComponent,
     CommonModule,
     ReactiveFormsModule,
-    RouterModule
+    RouterModule,
   ],
   standalone: true
 })
