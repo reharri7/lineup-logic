@@ -1,9 +1,10 @@
-import {Injectable, signal, computed, effect, Inject} from '@angular/core';
+import {Injectable, signal, computed, effect} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { tap, map } from 'rxjs/operators';
 import {environment} from "../../../environments/environment";
+import {NotificationService} from "./notification.service";
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -14,7 +15,11 @@ export class AuthService {
   private _token = signal<string | null>(sessionStorage.getItem(this.tokenKey));
   readonly isAuthenticated = computed(() => !!this._token());
 
-  constructor(private http: HttpClient, private router: Router) {
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private notificationService: NotificationService
+    ) {
     // 🔁 Keep sessionStorage in sync with signal
     effect(() => {
       const token = this._token();
@@ -28,9 +33,16 @@ export class AuthService {
 
   // ✅ Login returns an Observable (for use in components)
   login(email: string, password: string): Observable<{ token: string }> {
-    return this.http.post<{ token: string }>(`${this.apiUrl}/login`, { email, password }).pipe(
-      tap(res => this._token.set(res.token)),
-      tap(() => console.log('Login successful'))
+    return this.http.post<{ token: string }>(`${this.apiUrl}/login`, { email, password }, { observe: 'response' }).pipe(
+      tap(res => {
+        if (res.status === 200 && res.body) {
+          this._token.set(res.body.token);
+        } else {
+          this.notificationService.showNotification('Login failed', 'error');
+        }
+      }),
+      // Map back to the expected return type
+      map(res => res.body as { token: string })
     );
   }
 
@@ -42,9 +54,14 @@ export class AuthService {
 
   // ✅ Refresh still returns Observable (required for interceptor)
   refreshToken(): Observable<{token: string}> {
-    return this.http.post<{ token: string }>(`${this.apiUrl}/refresh_token`, {}).pipe(
-      tap(res => this._token.set(res.token)),
-      tap(() => console.log('Token refreshed'))
+    return this.http.post<{ token: string }>(`${this.apiUrl}/refresh_token`, {}, { observe: 'response' }).pipe(
+      tap(res => {
+        if (res.status === 200 && res.body) {
+          this._token.set(res.body.token);
+        }
+      }),
+      // Map back to the expected return type
+      map(res => res.body as { token: string })
     );
   }
 

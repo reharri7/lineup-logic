@@ -1,10 +1,11 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import { NavbarComponent } from "../../components/navbar/navbar.component";
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import {Router, RouterModule} from '@angular/router';
 import {AuthService} from "../../shared/services/auth.service";
 import { lastValueFrom } from 'rxjs';
+import {NotificationService} from "../../shared/services/notification.service";
 
 @Component({
   selector: 'app-login',
@@ -26,7 +27,8 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private auth: AuthService,
-    private router: Router
+    private router: Router,
+    private notificationService: NotificationService
   ) { }
 
   ngOnInit(): void {
@@ -38,11 +40,15 @@ export class LoginComponent implements OnInit {
       const password = this.loginForm.get('password')?.value;
       if(!!email && !!password) {
         try {
-          await lastValueFrom(this.auth.login(email, password));
-          // Redirect to home page
-          await this.router.navigate(['/']);
+          const result = await lastValueFrom(this.auth.login(email, password));
+          if(result && result.token) {
+            this.notificationService.showNotification('Login successful', 'success');
+            // Redirect to home page
+            await this.router.navigate(['/']);
+          }
         } catch (e) {
           console.error('Login failed:', e);
+          this.notificationService.showNotification('Login failed', 'error');
         }
       }
     }

@@ -13,7 +13,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(authReq).pipe(
     catchError((error: HttpErrorResponse) => {
-      if (error.status === 401 && (!req.url.includes('/login') || !req.url.includes('/signup'))) {
+      if (error.status === 401 && !(req.url.includes('/login') || req.url.includes('/signup'))) {
         return auth.refreshToken().pipe(
           switchMap(() => {
             const newToken = auth.getToken();
@@ -42,7 +42,7 @@ export class AuthInterceptor implements HttpInterceptor {
 
     return next.handle(authReq).pipe(
       catchError((error: HttpErrorResponse) => {
-        if (error.status === 401 && (!req.url.includes('/login') || !req.url.includes('/signup'))) {
+        if (error.status === 401 && !(req.url.includes('/login') || req.url.includes('/signup'))) {
           return this.auth.refreshToken().pipe(
             switchMap(() => {
               const newToken = this.auth.getToken();
