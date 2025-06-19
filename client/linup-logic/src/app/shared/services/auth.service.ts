@@ -33,7 +33,7 @@ export class AuthService {
 
   // ✅ Login returns an Observable (for use in components)
   login(email: string, password: string): Observable<{ token: string }> {
-    return this.http.post<{ token: string }>(`${this.apiUrl}/login`, { email, password }, { observe: 'response' }).pipe(
+    return this.http.post<{ token: string }>(`${this.apiUrl}/api/login`, { email, password }, { observe: 'response' }).pipe(
       tap(res => {
         if (res.status === 200 && res.body) {
           this._token.set(res.body.token);
@@ -48,13 +48,13 @@ export class AuthService {
 
   logout() {
     this._token.set(null);
-    this.http.delete(`${this.apiUrl}/logout`);
+    this.http.delete(`${this.apiUrl}/api/logout`);
     this.router.navigate(['/login']);
   }
 
   // ✅ Refresh still returns Observable (required for interceptor)
   refreshToken(): Observable<{token: string}> {
-    return this.http.post<{ token: string }>(`${this.apiUrl}/refresh_token`, {}, { observe: 'response' }).pipe(
+    return this.http.post<{ token: string }>(`${this.apiUrl}/api/refresh_token`, {}, { observe: 'response' }).pipe(
       tap(res => {
         if (res.status === 200 && res.body) {
           this._token.set(res.body.token);
@@ -67,5 +67,10 @@ export class AuthService {
 
   getToken(): string | null {
     return this._token();
+  }
+
+  // Method to set token directly (for use after signup)
+  setToken(token: string): void {
+    this._token.set(token);
   }
 }

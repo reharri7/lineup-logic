@@ -3,5 +3,7 @@ export * from './apiAuthLoginPost200ResponseUser';
 export * from './apiAuthLoginPost401Response';
 export * from './apiAuthLoginPostRequest';
 export * from './apiAuthLogoutDelete200Response';
+export * from './apiSignupPost201Response';
+export * from './apiSignupPost201ResponseUser';
+export * from './apiSignupPostRequest';
 export * from './apiUsersGet200ResponseInner';
-export * from './apiUsersPostRequest';

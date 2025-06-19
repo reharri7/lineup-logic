@@ -20,12 +20,13 @@ RSpec.describe 'api/users', type: :request do
         run_test!
       end
     end
+  end
 
+  path '/api/signup' do
     post('create user') do
       tags 'Users'
       consumes 'application/json'
       produces 'application/json'
-      security [ bearerAuth: [] ]
 
       parameter name: :user, in: :body, schema: {
         type: :object,
@@ -42,8 +43,17 @@ RSpec.describe 'api/users', type: :request do
       response(201, 'created') do
         schema type: :object,
                properties: {
-                 id: { type: :integer },
-                 email: { type: :string }
+                 user: { 
+                   type: :object,
+                   properties: {
+                     id: { type: :integer },
+                     username: { type: :string },
+                     email: { type: :string },
+                     role: { type: :string }
+                   }
+                 },
+                 token: { type: :string },
+                 expires_at: { type: :string, format: :datetime }
                }
         run_test!
       end

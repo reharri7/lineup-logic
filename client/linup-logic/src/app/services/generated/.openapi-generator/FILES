@@ -16,8 +16,10 @@ model/apiAuthLoginPost200ResponseUser.ts
 model/apiAuthLoginPost401Response.ts
 model/apiAuthLoginPostRequest.ts
 model/apiAuthLogoutDelete200Response.ts
+model/apiSignupPost201Response.ts
+model/apiSignupPost201ResponseUser.ts
+model/apiSignupPostRequest.ts
 model/apiUsersGet200ResponseInner.ts
-model/apiUsersPostRequest.ts
 model/models.ts
 param.ts
 variables.ts

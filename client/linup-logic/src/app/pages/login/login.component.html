@@ -5,7 +5,7 @@
     <div class="card-body">
       <h2 class="card-title text-2xl font-bold text-center mb-6">Login</h2>
 
-      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
         <div class="form-control">
           <label class="label">
             <span class="label-text">Email</span>
@@ -31,9 +31,11 @@
             class="input input-bordered"
             formControlName="password"
           />
-          <label *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="label">
-            <span class="label-text-alt text-error">Password is required</span>
-          </label>
+          @if(loginForm.get('password')?.invalid && loginForm.get('password')?.touched) {
+            <label class="label">
+              <span class="label-text-alt text-error">Password is required</span>
+            </label>
+          }
           <label class="label">
             <a routerLink="/forgot-password" class="label-text-alt link link-hover">Forgot password?</a>
           </label>
@@ -56,11 +58,75 @@
 <dialog #dialog class="modal">
   <div class="modal-box">
     <h3 class="text-lg font-bold">Create Account</h3>
-    <p class="py-4">Press ESC key or click the button below to close</p>
-    <div class="modal-action">
-      <form>
-        <button class="btn">Close</button>
-      </form>
-    </div>
+
+    <form [formGroup]="createAccountForm" (ngSubmit)="onCreateAccount()">
+      <div class="form-control mt-4">
+        <label class="label">
+          <span class="label-text">Email</span>
+        </label>
+        <input
+          type="email"
+          placeholder="email@example.com"
+          class="input input-bordered"
+          formControlName="email"
+        />
+        <label *ngIf="createAccountForm.get('email')?.invalid && createAccountForm.get('email')?.touched" class="label">
+          <span class="label-text-alt text-error">Please enter a valid email address</span>
+        </label>
+      </div>
+
+      <div class="form-control mt-4">
+        <label class="label">
+          <span class="label-text">Username</span>
+        </label>
+        <input
+          type="text"
+          placeholder="username"
+          class="input input-bordered"
+          formControlName="username"
+        />
+        <label *ngIf="createAccountForm.get('username')?.invalid && createAccountForm.get('username')?.touched" class="label">
+          <span class="label-text-alt text-error">Username is required</span>
+        </label>
+      </div>
+
+      <div class="form-control mt-4">
+        <label class="label">
+          <span class="label-text">Password</span>
+        </label>
+        <input
+          type="password"
+          placeholder="••••••••"
+          class="input input-bordered"
+          formControlName="password"
+        />
+        <label *ngIf="createAccountForm.get('password')?.invalid && createAccountForm.get('password')?.touched" class="label">
+          <span class="label-text-alt text-error">Password is required</span>
+        </label>
+      </div>
+
+      <div class="form-control mt-4">
+        <label class="label">
+          <span class="label-text">Confirm Password</span>
+        </label>
+        <input
+          type="password"
+          placeholder="••••••••"
+          class="input input-bordered"
+          formControlName="password_confirmation"
+        />
+        <label *ngIf="createAccountForm.get('password_confirmation')?.invalid && createAccountForm.get('password_confirmation')?.touched" class="label">
+          <span class="label-text-alt text-error">Password confirmation is required</span>
+        </label>
+        <label *ngIf="createAccountForm.errors?.['passwordMismatch'] && createAccountForm.get('password_confirmation')?.touched" class="label">
+          <span class="label-text-alt text-error">Passwords do not match</span>
+        </label>
+      </div>
+
+      <div class="modal-action">
+        <button type="submit" class="btn btn-primary" [disabled]="createAccountForm.invalid">Create Account</button>
+        <button type="button" class="btn" (click)="dialog.close()">Cancel</button>
+      </div>
+    </form>
   </div>
 </dialog>

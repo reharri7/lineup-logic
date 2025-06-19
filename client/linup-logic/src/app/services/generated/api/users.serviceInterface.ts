@@ -11,9 +11,9 @@ import { HttpHeaders }                                       from '@angular/comm
 
 import { Observable }                                        from 'rxjs';
 
-import { ApiAuthLoginPost200ResponseUser } from '../model/models';
+import { ApiSignupPost201Response } from '../model/models';
+import { ApiSignupPostRequest } from '../model/models';
 import { ApiUsersGet200ResponseInner } from '../model/models';
-import { ApiUsersPostRequest } from '../model/models';
 
 
 import { Configuration }                                     from '../configuration';
@@ -25,16 +25,16 @@ export interface UsersServiceInterface {
     configuration: Configuration;
 
     /**
+     * create user
+     * 
+     * @param apiSignupPostRequest 
+     */
+    apiSignupPost(apiSignupPostRequest?: ApiSignupPostRequest, extraHttpRequestParams?: any): Observable<ApiSignupPost201Response>;
+
+    /**
      * list users
      * 
      */
     apiUsersGet(extraHttpRequestParams?: any): Observable<Array<ApiUsersGet200ResponseInner>>;
-
-    /**
-     * create user
-     * 
-     * @param apiUsersPostRequest 
-     */
-    apiUsersPost(apiUsersPostRequest?: ApiUsersPostRequest, extraHttpRequestParams?: any): Observable<ApiAuthLoginPost200ResponseUser>;
 
 }

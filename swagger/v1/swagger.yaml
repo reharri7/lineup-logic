@@ -110,12 +110,11 @@ paths:
                     created_at:
                       type: string
                       format: datetime
+  "/api/signup":
     post:
       summary: create user
       tags:
       - Users
-      security:
-      - bearerAuth: []
       parameters: []
       responses:
         '201':
@@ -125,10 +124,22 @@ paths:
               schema:
                 type: object
                 properties:
-                  id:
-                    type: integer
-                  email:
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      username:
+                        type: string
+                      email:
+                        type: string
+                      role:
+                        type: string
+                  token:
                     type: string
+                  expires_at:
+                    type: string
+                    format: datetime
       requestBody:
         content:
           application/json:
