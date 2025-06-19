@@ -43,7 +43,7 @@ RSpec.describe 'api/users', type: :request do
       response(201, 'created') do
         schema type: :object,
                properties: {
-                 user: { 
+                 user: {
                    type: :object,
                    properties: {
                      id: { type: :integer },
