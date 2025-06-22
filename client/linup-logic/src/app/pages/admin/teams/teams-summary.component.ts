@@ -4,7 +4,13 @@ import {FormsModule} from '@angular/forms';
 import {HttpClient} from '@angular/common/http';
 import {ActivatedRoute, RouterLink} from "@angular/router";
 import {TeamsService} from "../../../services/generated/api/teams.service";
+import {ApiTeamsPost201Response} from "../../../services/generated/model/apiTeamsPost201Response";
 import {ApiTeamsPost201ResponseTeam} from "../../../services/generated/model/apiTeamsPost201ResponseTeam";
+
+// Extended interface to handle the API response with teams array
+interface TeamsResponse extends ApiTeamsPost201Response {
+  teams?: ApiTeamsPost201ResponseTeam[];
+}
 
 @Component({
   selector: 'app-teams',
@@ -30,7 +36,19 @@ export class TeamsSummaryComponent implements OnInit {
 
   loadTeams(): void {
     this.isLoading = true;
-    // todo: get all teams
-    this.isLoading = false;
+    this.teamsService.apiTeamsGet().subscribe({
+      next: (response: TeamsResponse) => {
+        if (response && response.teams) {
+          this.teams = response.teams;
+        } else {
+          this.teams = [];
+        }
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.error('Error loading teams:', error);
+        this.isLoading = false;
+      }
+    });
   }
 }

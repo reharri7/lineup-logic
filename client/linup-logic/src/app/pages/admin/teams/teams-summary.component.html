@@ -25,17 +25,30 @@
           <table class="table table-zebra w-full">
             <thead>
               <tr>
-                <th>ID</th>
                 <th>Name</th>
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody>
               @for (team of teams; track team.id) {
-<!--                todo list teams-->
+                <tr>
+                  <td>{{ team.name }}</td>
+                  <td>
+                    <div class="flex gap-2">
+                      <button class="btn btn-sm btn-primary" [routerLink]="['/admin/teams', team.id]">
+                        Edit
+                      </button>
+                    </div>
+                  </td>
+                </tr>
               }
             </tbody>
           </table>
+        </div>
+
+        <!-- Add Create New Team button -->
+        <div class="mt-4">
+          <button class="btn btn-success" routerLink="new">Create New Team</button>
         </div>
       }
     </div>

@@ -4,7 +4,7 @@ import {
   ApiTeamsPostRequest,
   TeamsService
 } from "../../../../services/generated";
-import {ActivatedRoute, Router} from "@angular/router";
+import {ActivatedRoute, Router, RouterLink} from "@angular/router";
 import {lastValueFrom} from "rxjs";
 import {FormBuilder, ReactiveFormsModule, UntypedFormGroup} from "@angular/forms";
 import {NotificationService} from "../../../../shared/services/notification.service";
@@ -13,7 +13,8 @@ import {ModalService} from "../../../../shared/services/modal.service";
 @Component({
   selector: 'app-team',
   imports: [
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    RouterLink
   ],
   templateUrl: './team.component.html',
   styleUrl: './team.component.css'
