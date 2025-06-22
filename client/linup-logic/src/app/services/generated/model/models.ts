@@ -6,4 +6,8 @@ export * from './apiAuthLogoutDelete200Response';
 export * from './apiSignupPost201Response';
 export * from './apiSignupPost201ResponseUser';
 export * from './apiSignupPostRequest';
+export * from './apiTeamsPost201Response';
+export * from './apiTeamsPost201ResponseTeam';
+export * from './apiTeamsPost422Response';
+export * from './apiTeamsPostRequest';
 export * from './apiUsersGet200ResponseInner';

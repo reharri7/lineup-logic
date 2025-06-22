@@ -1,7 +1,10 @@
 export * from './authentication.service';
 import { AuthenticationService } from './authentication.service';
 export * from './authentication.serviceInterface';
+export * from './teams.service';
+import { TeamsService } from './teams.service';
+export * from './teams.serviceInterface';
 export * from './users.service';
 import { UsersService } from './users.service';
 export * from './users.serviceInterface';
-export const APIS = [AuthenticationService, UsersService];
+export const APIS = [AuthenticationService, TeamsService, UsersService];

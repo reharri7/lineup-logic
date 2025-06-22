@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import { NavbarComponent } from "../../components/navbar/navbar.component";
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import {Router, RouterModule} from '@angular/router';
@@ -14,7 +13,6 @@ import {passwordMatchValidator} from "../../shared/validators";
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
   imports: [
-    NavbarComponent,
     CommonModule,
     ReactiveFormsModule,
     RouterModule,

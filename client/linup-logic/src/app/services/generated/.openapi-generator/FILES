@@ -5,6 +5,8 @@ api.module.ts
 api/api.ts
 api/authentication.service.ts
 api/authentication.serviceInterface.ts
+api/teams.service.ts
+api/teams.serviceInterface.ts
 api/users.service.ts
 api/users.serviceInterface.ts
 configuration.ts
@@ -19,6 +21,10 @@ model/apiAuthLogoutDelete200Response.ts
 model/apiSignupPost201Response.ts
 model/apiSignupPost201ResponseUser.ts
 model/apiSignupPostRequest.ts
+model/apiTeamsPost201Response.ts
+model/apiTeamsPost201ResponseTeam.ts
+model/apiTeamsPost422Response.ts
+model/apiTeamsPostRequest.ts
 model/apiUsersGet200ResponseInner.ts
 model/models.ts
 param.ts
