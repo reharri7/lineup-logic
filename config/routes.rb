@@ -16,6 +16,7 @@ Rails.application.routes.draw do
 
     # Registration routes
     post "/signup", to: "users#create"
+    resources :teams
   end
 
   # Defines the root path route ("/")
