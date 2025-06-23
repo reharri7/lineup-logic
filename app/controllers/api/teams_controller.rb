@@ -1,9 +1,9 @@
 class Api::TeamsController < ApplicationController
-    #GET /api/teams
+    # GET /api/teams
     def index
       @teams = Team.all
       render json: {
-        teams: @teams.as_json(only: [:id, :name])
+        teams: @teams.as_json(only: [ :id, :name ])
       }, status: :ok
   end
 
@@ -12,10 +12,10 @@ def show
   @team = Team.find(params[:id])
 
   render json: {
-    team: @team.as_json(only: [:id, :name])
+    team: @team.as_json(only: [ :id, :name ])
   }, status: :ok
 rescue ActiveRecord::RecordNotFound
-  render json: { error: 'Team not found' }, status: :not_found
+  render json: { error: "Team not found" }, status: :not_found
 end
 
     # POST /api/teams

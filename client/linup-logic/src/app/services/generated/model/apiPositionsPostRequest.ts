@@ -7,10 +7,9 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { ApiPositionsPost201ResponsePosition } from './apiPositionsPost201ResponsePosition';
 
 
-export interface ApiTeamsPost201Response { 
-    team?: ApiPositionsPost201ResponsePosition;
+export interface ApiPositionsPostRequest { 
+    name: string;
 }
 

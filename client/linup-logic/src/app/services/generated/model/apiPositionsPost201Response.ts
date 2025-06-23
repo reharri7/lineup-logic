@@ -10,7 +10,7 @@
 import { ApiPositionsPost201ResponsePosition } from './apiPositionsPost201ResponsePosition';
 
 
-export interface ApiTeamsPost201Response { 
-    team?: ApiPositionsPost201ResponsePosition;
+export interface ApiPositionsPost201Response { 
+    position?: ApiPositionsPost201ResponsePosition;
 }
 

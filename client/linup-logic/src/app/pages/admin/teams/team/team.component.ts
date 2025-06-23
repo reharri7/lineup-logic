@@ -1,7 +1,5 @@
 import {Component, OnInit} from '@angular/core';
 import {
-  ApiTeamsPost201Response, ApiTeamsPost201ResponseTeam,
-  ApiTeamsPostRequest,
   TeamsService
 } from "../../../../services/generated";
 import {ActivatedRoute, Router, RouterLink} from "@angular/router";
@@ -9,6 +7,8 @@ import {lastValueFrom} from "rxjs";
 import {FormBuilder, ReactiveFormsModule, UntypedFormGroup} from "@angular/forms";
 import {NotificationService} from "../../../../shared/services/notification.service";
 import {ModalService} from "../../../../shared/services/modal.service";
+import {ApiTeamsPost201ResponseTeam} from "../../../../services/generated/model/apiTeamsPost201ResponseTeam";
+import {ApiTeamsPostRequest} from "../../../../services/generated/model/apiTeamsPostRequest";
 
 @Component({
   selector: 'app-team',
