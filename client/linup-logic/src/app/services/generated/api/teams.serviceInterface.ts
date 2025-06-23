@@ -12,9 +12,9 @@ import { HttpHeaders }                                       from '@angular/comm
 import { Observable }                                        from 'rxjs';
 
 import { ApiAuthLoginPost401Response } from '../model/models';
-import { ApiPositionsPost422Response } from '../model/models';
-import { ApiPositionsPostRequest } from '../model/models';
+import { ApiPositionsGet422Response } from '../model/models';
 import { ApiTeamsPost201Response } from '../model/models';
+import { ApiTeamsPostRequest } from '../model/models';
 
 
 import { Configuration }                                     from '../configuration';
@@ -49,15 +49,15 @@ export interface TeamsServiceInterface {
      * update team
      * 
      * @param id team id
-     * @param apiPositionsPostRequest 
+     * @param apiTeamsPostRequest 
      */
-    apiTeamsIdPut(id: number, apiPositionsPostRequest?: ApiPositionsPostRequest, extraHttpRequestParams?: any): Observable<ApiTeamsPost201Response>;
+    apiTeamsIdPut(id: number, apiTeamsPostRequest?: ApiTeamsPostRequest, extraHttpRequestParams?: any): Observable<ApiTeamsPost201Response>;
 
     /**
      * create team
      * 
-     * @param apiPositionsPostRequest 
+     * @param apiTeamsPostRequest 
      */
-    apiTeamsPost(apiPositionsPostRequest?: ApiPositionsPostRequest, extraHttpRequestParams?: any): Observable<ApiTeamsPost201Response>;
+    apiTeamsPost(apiTeamsPostRequest?: ApiTeamsPostRequest, extraHttpRequestParams?: any): Observable<ApiTeamsPost201Response>;
 
 }

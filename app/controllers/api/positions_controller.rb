@@ -3,7 +3,7 @@ class Api::PositionsController < ApplicationController
   def index
     @positions = Position.all
     render json: {
-      positions: @positions.as_json(only: [ :id, :name ])
+      positions: @positions.as_json(only: [ :id, :position_name ])
     }, status: :ok
   end
 
@@ -12,7 +12,7 @@ class Api::PositionsController < ApplicationController
     @position = Position.find(params[:id])
 
     render json: {
-      position: @position.as_json(only: [ :id, :name ])
+      position: @position.as_json(only: [ :id, :position_name ])
     }, status: :ok
 
   rescue ActiveRecord::RecordNotFound
@@ -25,7 +25,7 @@ class Api::PositionsController < ApplicationController
 
     if @position.save
       render json: {
-        position: @position.as_json(only: [ :id, :name ])
+        position: @position.as_json(only: [ :id, :position_name ])
       }, status: :created
     else
       render json: { errors: @position.errors.full_messages }, status: :unprocessable_entity
@@ -38,13 +38,15 @@ class Api::PositionsController < ApplicationController
 
     if @position.update(position_params)
       render json: {
-        position: @position.as_json(only: [ :id, :name ])
+        position: @position.as_json(only: [ :id, :position_name ])
       }, status: :ok
     else
       render json: {
         errors: @position.errors.full_messages
       }, status: :unprocessable_entity
     end
+  rescue ActiveRecord::RecordNotFound
+    render json: { error: "Position not found" }, status: :not_found
   end
 
   # DELETE /api/positions/:id
@@ -54,13 +56,15 @@ class Api::PositionsController < ApplicationController
     if @position.destroy
       head :no_content
     else
-      render json: { errors: @position.errors.full_messages }
+      render json: { errors: @position.errors.full_messages }, status: :unprocessable_entity
     end
+  rescue ActiveRecord::RecordNotFound
+    render json: { error: "Position not found" }, status: :not_found
   end
 
   private
 
   def position_params
-    params.permit(:name)
+    params.permit(:position_name)
   end
 end

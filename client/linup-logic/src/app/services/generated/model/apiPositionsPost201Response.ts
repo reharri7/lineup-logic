@@ -7,10 +7,10 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { ApiPositionsPost201ResponsePosition } from './apiPositionsPost201ResponsePosition';
+import { ApiPositionsGet200ResponsePositionsInner } from './apiPositionsGet200ResponsePositionsInner';
 
 
 export interface ApiPositionsPost201Response { 
-    position?: ApiPositionsPost201ResponsePosition;
+    position?: ApiPositionsGet200ResponsePositionsInner;
 }
 

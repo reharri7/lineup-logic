@@ -19,11 +19,11 @@ import { Observable }                                        from 'rxjs';
 // @ts-ignore
 import { ApiAuthLoginPost401Response } from '../model/apiAuthLoginPost401Response';
 // @ts-ignore
-import { ApiPositionsPost422Response } from '../model/apiPositionsPost422Response';
-// @ts-ignore
-import { ApiPositionsPostRequest } from '../model/apiPositionsPostRequest';
+import { ApiPositionsGet422Response } from '../model/apiPositionsGet422Response';
 // @ts-ignore
 import { ApiTeamsPost201Response } from '../model/apiTeamsPost201Response';
+// @ts-ignore
+import { ApiTeamsPostRequest } from '../model/apiTeamsPostRequest';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -205,14 +205,14 @@ export class TeamsService extends BaseService implements TeamsServiceInterface {
     /**
      * update team
      * @param id team id
-     * @param apiPositionsPostRequest 
+     * @param apiTeamsPostRequest 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public apiTeamsIdPut(id: number, apiPositionsPostRequest?: ApiPositionsPostRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiTeamsPost201Response>;
-    public apiTeamsIdPut(id: number, apiPositionsPostRequest?: ApiPositionsPostRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiTeamsPost201Response>>;
-    public apiTeamsIdPut(id: number, apiPositionsPostRequest?: ApiPositionsPostRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiTeamsPost201Response>>;
-    public apiTeamsIdPut(id: number, apiPositionsPostRequest?: ApiPositionsPostRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public apiTeamsIdPut(id: number, apiTeamsPostRequest?: ApiTeamsPostRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiTeamsPost201Response>;
+    public apiTeamsIdPut(id: number, apiTeamsPostRequest?: ApiTeamsPostRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiTeamsPost201Response>>;
+    public apiTeamsIdPut(id: number, apiTeamsPostRequest?: ApiTeamsPostRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiTeamsPost201Response>>;
+    public apiTeamsIdPut(id: number, apiTeamsPostRequest?: ApiTeamsPostRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling apiTeamsIdPut.');
         }
@@ -256,7 +256,7 @@ export class TeamsService extends BaseService implements TeamsServiceInterface {
         return this.httpClient.request<ApiTeamsPost201Response>('put', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: apiPositionsPostRequest,
+                body: apiTeamsPostRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
@@ -269,14 +269,14 @@ export class TeamsService extends BaseService implements TeamsServiceInterface {
 
     /**
      * create team
-     * @param apiPositionsPostRequest 
+     * @param apiTeamsPostRequest 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public apiTeamsPost(apiPositionsPostRequest?: ApiPositionsPostRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiTeamsPost201Response>;
-    public apiTeamsPost(apiPositionsPostRequest?: ApiPositionsPostRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiTeamsPost201Response>>;
-    public apiTeamsPost(apiPositionsPostRequest?: ApiPositionsPostRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiTeamsPost201Response>>;
-    public apiTeamsPost(apiPositionsPostRequest?: ApiPositionsPostRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public apiTeamsPost(apiTeamsPostRequest?: ApiTeamsPostRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiTeamsPost201Response>;
+    public apiTeamsPost(apiTeamsPostRequest?: ApiTeamsPostRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiTeamsPost201Response>>;
+    public apiTeamsPost(apiTeamsPostRequest?: ApiTeamsPostRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiTeamsPost201Response>>;
+    public apiTeamsPost(apiTeamsPostRequest?: ApiTeamsPostRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -317,7 +317,7 @@ export class TeamsService extends BaseService implements TeamsServiceInterface {
         return this.httpClient.request<ApiTeamsPost201Response>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: apiPositionsPostRequest,
+                body: apiTeamsPostRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

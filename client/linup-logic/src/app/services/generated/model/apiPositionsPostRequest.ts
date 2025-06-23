@@ -10,6 +10,6 @@
 
 
 export interface ApiPositionsPostRequest { 
-    name: string;
+    position_name: string;
 }
 

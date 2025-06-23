@@ -107,7 +107,7 @@ paths:
                     properties:
                       id:
                         type: integer
-                      name:
+                      position_name:
                         type: string
         '422':
           description: unprocessable entity
@@ -126,10 +126,44 @@ paths:
             schema:
               type: object
               properties:
-                name:
+                position_name:
                   type: string
               required:
-              - name
+              - position_name
+    get:
+      summary: get positions
+      tags:
+      - Positions
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  positions:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        position_name:
+                          type: string
+        '422':
+          description: unprocessable entity
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
   "/api/positions/{id}":
     parameters:
     - name: id
@@ -157,7 +191,7 @@ paths:
                     properties:
                       id:
                         type: integer
-                      name:
+                      position_name:
                         type: string
         '422':
           description: unprocessable entity
@@ -199,7 +233,7 @@ paths:
                     properties:
                       id:
                         type: integer
-                      name:
+                      position_name:
                         type: string
         '422':
           description: unprocessable entity
@@ -227,10 +261,10 @@ paths:
             schema:
               type: object
               properties:
-                name:
+                position_name:
                   type: string
               required:
-              - name
+              - position_name
     delete:
       summary: delete position
       tags:
@@ -260,41 +294,6 @@ paths:
                 properties:
                   error:
                     type: string
-  "/api/positions/":
-    get:
-      summary: get positions
-      tags:
-      - Positions
-      security:
-      - bearerAuth: []
-      responses:
-        '200':
-          description: successful
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  positions:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: integer
-                        name:
-                          type: string
-        '422':
-          description: unprocessable entity
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  errors:
-                    type: array
-                    items:
-                      type: string
   "/api/teams":
     post:
       summary: create team

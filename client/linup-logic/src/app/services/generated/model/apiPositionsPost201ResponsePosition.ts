@@ -11,6 +11,6 @@
 
 export interface ApiPositionsPost201ResponsePosition { 
     id?: number;
-    name?: string;
+    position_name?: string;
 }
 

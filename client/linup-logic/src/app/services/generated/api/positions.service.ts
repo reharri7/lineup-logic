@@ -21,9 +21,9 @@ import { ApiAuthLoginPost401Response } from '../model/apiAuthLoginPost401Respons
 // @ts-ignore
 import { ApiPositionsGet200Response } from '../model/apiPositionsGet200Response';
 // @ts-ignore
-import { ApiPositionsPost201Response } from '../model/apiPositionsPost201Response';
+import { ApiPositionsGet422Response } from '../model/apiPositionsGet422Response';
 // @ts-ignore
-import { ApiPositionsPost422Response } from '../model/apiPositionsPost422Response';
+import { ApiPositionsPost201Response } from '../model/apiPositionsPost201Response';
 // @ts-ignore
 import { ApiPositionsPostRequest } from '../model/apiPositionsPostRequest';
 
@@ -81,7 +81,7 @@ export class PositionsService extends BaseService implements PositionsServiceInt
             }
         }
 
-        let localVarPath = `/api/positions/`;
+        let localVarPath = `/api/positions`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ApiPositionsGet200Response>('get', `${basePath}${localVarPath}`,
             {

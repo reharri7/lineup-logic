@@ -11,9 +11,9 @@ RSpec.describe 'api/positions', type: :request do
       parameter name: :position, in: :body, schema: {
         type: :object,
         properties: {
-          name: { type: :string }
+          position_name: { type: :string }
         },
-        required: %w[name]
+        required: %w[position_name]
       }
 
       response(201, 'created') do
@@ -23,7 +23,7 @@ RSpec.describe 'api/positions', type: :request do
                    type: :object,
                    properties: {
                      id: { type: :integer },
-                     name: { type: :string }
+                     position_name: { type: :string }
                    }
                  }
                }
@@ -59,7 +59,7 @@ RSpec.describe 'api/positions', type: :request do
                    type: :object,
                    properties: {
                      id: { type: :integer },
-                     name: { type: :string }
+                     position_name: { type: :string }
                    }
                  }
                }
@@ -95,9 +95,9 @@ RSpec.describe 'api/positions', type: :request do
       parameter name: :position, in: :body, schema: {
         type: :object,
         properties: {
-          name: { type: :string }
+          position_name: { type: :string }
         },
-        required: %w[name]
+        required: %w[position_name]
       }
 
       response(200, 'successful') do
@@ -107,7 +107,7 @@ RSpec.describe 'api/positions', type: :request do
                    type: :object,
                    properties: {
                      id: { type: :integer },
-                     name: { type: :string }
+                     position_name: { type: :string }
                    }
                  }
                }
@@ -164,7 +164,7 @@ RSpec.describe 'api/positions', type: :request do
     end
   end
 
-  path '/api/positions/' do
+  path '/api/positions' do
     get('get positions') do
       tags 'Positions'
       consumes 'application/json'
@@ -180,7 +180,7 @@ RSpec.describe 'api/positions', type: :request do
                      type: :object,
                      properties: {
                        id: { type: :integer },
-                       name: { type: :string }
+                       position_name: { type: :string }
                      }
                    }
                  }
