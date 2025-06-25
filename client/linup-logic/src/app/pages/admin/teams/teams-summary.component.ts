@@ -17,7 +17,7 @@ interface TeamsResponse extends ApiTeamsPost201Response {
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './teams-summary.component.html',
-  styleUrl: './teams-summary.component.css'
+  styleUrls: ['./teams-summary.component.css']
 })
 export class TeamsSummaryComponent implements OnInit {
   teams: ApiTeamsPost201ResponseTeam[] = [];
