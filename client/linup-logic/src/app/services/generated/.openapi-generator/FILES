@@ -37,6 +37,7 @@ model/apiPositionsPostRequest.ts
 model/apiSignupPost201Response.ts
 model/apiSignupPost201ResponseUser.ts
 model/apiSignupPostRequest.ts
+model/apiTeamsGet200Response.ts
 model/apiTeamsPost201Response.ts
 model/apiTeamsPostRequest.ts
 model/apiUsersGet200ResponseInner.ts

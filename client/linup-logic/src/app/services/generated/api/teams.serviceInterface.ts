@@ -13,6 +13,7 @@ import { Observable }                                        from 'rxjs';
 
 import { ApiAuthLoginPost401Response } from '../model/models';
 import { ApiPlayersGet422Response } from '../model/models';
+import { ApiTeamsGet200Response } from '../model/models';
 import { ApiTeamsPost201Response } from '../model/models';
 import { ApiTeamsPostRequest } from '../model/models';
 
@@ -29,7 +30,7 @@ export interface TeamsServiceInterface {
      * get teams
      * 
      */
-    apiTeamsGet(extraHttpRequestParams?: any): Observable<ApiTeamsPost201Response>;
+    apiTeamsGet(extraHttpRequestParams?: any): Observable<ApiTeamsGet200Response>;
 
     /**
      * delete team
