@@ -7,10 +7,10 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { ApiTeamsPost201ResponseTeam } from './apiTeamsPost201ResponseTeam';
+import { ApiPlayersGet200ResponsePlayersInnerTeam } from './apiPlayersGet200ResponsePlayersInnerTeam';
 
 
 export interface ApiTeamsPost201Response { 
-    team?: ApiTeamsPost201ResponseTeam;
+    team?: ApiPlayersGet200ResponsePlayersInnerTeam;
 }
 

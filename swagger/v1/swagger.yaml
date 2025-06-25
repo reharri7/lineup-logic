@@ -86,6 +86,310 @@ paths:
                 properties:
                   error:
                     type: string
+  "/api/players":
+    post:
+      summary: create player
+      tags:
+      - Players
+      security:
+      - bearerAuth: []
+      parameters: []
+      responses:
+        '201':
+          description: created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  player:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      name:
+                        type: string
+                      number:
+                        type: integer
+                      weekly_position_rank:
+                        type: integer
+                        nullable: true
+                      weekly_flex_rank:
+                        type: integer
+                        nullable: true
+                      team:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          name:
+                            type: string
+                      position:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          position_name:
+                            type: string
+        '422':
+          description: unprocessable entity
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                number:
+                  type: integer
+                team_id:
+                  type: integer
+                position_id:
+                  type: integer
+                weekly_position_rank:
+                  type: integer
+                  nullable: true
+                weekly_flex_rank:
+                  type: integer
+                  nullable: true
+              required:
+              - name
+              - number
+              - team_id
+              - position_id
+    get:
+      summary: get players
+      tags:
+      - Players
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  players:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        name:
+                          type: string
+                        number:
+                          type: integer
+                        team:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                            name:
+                              type: string
+                        position:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                            position_name:
+                              type: string
+        '422':
+          description: unprocessable entity
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+  "/api/players/{id}":
+    parameters:
+    - name: id
+      in: path
+      description: player id
+      required: true
+      schema:
+        type: integer
+    get:
+      summary: get player by id
+      tags:
+      - Players
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  player:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      name:
+                        type: string
+                      number:
+                        type: integer
+                      weekly_position_rank:
+                        type: integer
+                        nullable: true
+                      weekly_flex_rank:
+                        type: integer
+                        nullable: true
+                      team:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          name:
+                            type: string
+                      position:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          position_name:
+                            type: string
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+    put:
+      summary: update player
+      tags:
+      - Players
+      security:
+      - bearerAuth: []
+      parameters: []
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  player:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      name:
+                        type: string
+                      number:
+                        type: integer
+                      weekly_position_rank:
+                        type: integer
+                        nullable: true
+                      weekly_flex_rank:
+                        type: integer
+                        nullable: true
+                      team:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          name:
+                            type: string
+                      position:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          position_name:
+                            type: string
+        '422':
+          description: unprocessable entity
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                number:
+                  type: integer
+                team_id:
+                  type: integer
+                position_id:
+                  type: integer
+                weekly_position_rank:
+                  type: integer
+                  nullable: true
+                weekly_flex_rank:
+                  type: integer
+                  nullable: true
+    delete:
+      summary: delete player
+      tags:
+      - Players
+      security:
+      - bearerAuth: []
+      responses:
+        '204':
+          description: no content
+        '422':
+          description: unprocessable entity
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
   "/api/positions":
     post:
       summary: create position

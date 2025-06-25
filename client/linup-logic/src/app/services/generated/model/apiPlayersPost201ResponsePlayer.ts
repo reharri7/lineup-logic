@@ -8,9 +8,16 @@
  * Do not edit the class manually.
  */
 import { ApiPlayersGet200ResponsePlayersInnerPosition } from './apiPlayersGet200ResponsePlayersInnerPosition';
+import { ApiPlayersGet200ResponsePlayersInnerTeam } from './apiPlayersGet200ResponsePlayersInnerTeam';
 
 
-export interface ApiPositionsPost201Response { 
+export interface ApiPlayersPost201ResponsePlayer { 
+    id?: number;
+    name?: string;
+    number?: number;
+    weekly_position_rank?: number | null;
+    weekly_flex_rank?: number | null;
+    team?: ApiPlayersGet200ResponsePlayersInnerTeam;
     position?: ApiPlayersGet200ResponsePlayersInnerPosition;
 }
 

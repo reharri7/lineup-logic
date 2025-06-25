@@ -19,40 +19,44 @@ import { Observable }                                        from 'rxjs';
 // @ts-ignore
 import { ApiAuthLoginPost401Response } from '../model/apiAuthLoginPost401Response';
 // @ts-ignore
+import { ApiPlayersGet200Response } from '../model/apiPlayersGet200Response';
+// @ts-ignore
 import { ApiPlayersGet422Response } from '../model/apiPlayersGet422Response';
 // @ts-ignore
-import { ApiTeamsPost201Response } from '../model/apiTeamsPost201Response';
+import { ApiPlayersIdPutRequest } from '../model/apiPlayersIdPutRequest';
 // @ts-ignore
-import { ApiTeamsPostRequest } from '../model/apiTeamsPostRequest';
+import { ApiPlayersPost201Response } from '../model/apiPlayersPost201Response';
+// @ts-ignore
+import { ApiPlayersPostRequest } from '../model/apiPlayersPostRequest';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
 import { BaseService } from '../api.base.service';
 import {
-    TeamsServiceInterface
-} from './teams.serviceInterface';
+    PlayersServiceInterface
+} from './players.serviceInterface';
 
 
 
 @Injectable({
   providedIn: 'root'
 })
-export class TeamsService extends BaseService implements TeamsServiceInterface {
+export class PlayersService extends BaseService implements PlayersServiceInterface {
 
     constructor(protected httpClient: HttpClient, @Optional() @Inject(BASE_PATH) basePath: string|string[], @Optional() configuration?: Configuration) {
         super(basePath, configuration);
     }
 
     /**
-     * get teams
+     * get players
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public apiTeamsGet(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiTeamsPost201Response>;
-    public apiTeamsGet(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiTeamsPost201Response>>;
-    public apiTeamsGet(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiTeamsPost201Response>>;
-    public apiTeamsGet(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public apiPlayersGet(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiPlayersGet200Response>;
+    public apiPlayersGet(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiPlayersGet200Response>>;
+    public apiPlayersGet(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiPlayersGet200Response>>;
+    public apiPlayersGet(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -79,9 +83,9 @@ export class TeamsService extends BaseService implements TeamsServiceInterface {
             }
         }
 
-        let localVarPath = `/api/teams/`;
+        let localVarPath = `/api/players`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<ApiTeamsPost201Response>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<ApiPlayersGet200Response>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -95,17 +99,17 @@ export class TeamsService extends BaseService implements TeamsServiceInterface {
     }
 
     /**
-     * delete team
-     * @param id team id
+     * delete player
+     * @param id player id
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public apiTeamsIdDelete(id: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public apiTeamsIdDelete(id: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public apiTeamsIdDelete(id: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public apiTeamsIdDelete(id: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public apiPlayersIdDelete(id: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public apiPlayersIdDelete(id: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public apiPlayersIdDelete(id: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public apiPlayersIdDelete(id: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling apiTeamsIdDelete.');
+            throw new Error('Required parameter id was null or undefined when calling apiPlayersIdDelete.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -133,7 +137,7 @@ export class TeamsService extends BaseService implements TeamsServiceInterface {
             }
         }
 
-        let localVarPath = `/api/teams/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: undefined})}`;
+        let localVarPath = `/api/players/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
             {
@@ -149,17 +153,17 @@ export class TeamsService extends BaseService implements TeamsServiceInterface {
     }
 
     /**
-     * get team by id
-     * @param id team id
+     * get player by id
+     * @param id player id
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public apiTeamsIdGet(id: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiTeamsPost201Response>;
-    public apiTeamsIdGet(id: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiTeamsPost201Response>>;
-    public apiTeamsIdGet(id: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiTeamsPost201Response>>;
-    public apiTeamsIdGet(id: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public apiPlayersIdGet(id: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiPlayersPost201Response>;
+    public apiPlayersIdGet(id: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiPlayersPost201Response>>;
+    public apiPlayersIdGet(id: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiPlayersPost201Response>>;
+    public apiPlayersIdGet(id: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling apiTeamsIdGet.');
+            throw new Error('Required parameter id was null or undefined when calling apiPlayersIdGet.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -187,9 +191,9 @@ export class TeamsService extends BaseService implements TeamsServiceInterface {
             }
         }
 
-        let localVarPath = `/api/teams/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: undefined})}`;
+        let localVarPath = `/api/players/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<ApiTeamsPost201Response>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<ApiPlayersPost201Response>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -203,18 +207,18 @@ export class TeamsService extends BaseService implements TeamsServiceInterface {
     }
 
     /**
-     * update team
-     * @param id team id
-     * @param apiTeamsPostRequest 
+     * update player
+     * @param id player id
+     * @param apiPlayersIdPutRequest 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public apiTeamsIdPut(id: number, apiTeamsPostRequest?: ApiTeamsPostRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiTeamsPost201Response>;
-    public apiTeamsIdPut(id: number, apiTeamsPostRequest?: ApiTeamsPostRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiTeamsPost201Response>>;
-    public apiTeamsIdPut(id: number, apiTeamsPostRequest?: ApiTeamsPostRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiTeamsPost201Response>>;
-    public apiTeamsIdPut(id: number, apiTeamsPostRequest?: ApiTeamsPostRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public apiPlayersIdPut(id: number, apiPlayersIdPutRequest?: ApiPlayersIdPutRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiPlayersPost201Response>;
+    public apiPlayersIdPut(id: number, apiPlayersIdPutRequest?: ApiPlayersIdPutRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiPlayersPost201Response>>;
+    public apiPlayersIdPut(id: number, apiPlayersIdPutRequest?: ApiPlayersIdPutRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiPlayersPost201Response>>;
+    public apiPlayersIdPut(id: number, apiPlayersIdPutRequest?: ApiPlayersIdPutRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling apiTeamsIdPut.');
+            throw new Error('Required parameter id was null or undefined when calling apiPlayersIdPut.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -251,12 +255,12 @@ export class TeamsService extends BaseService implements TeamsServiceInterface {
             }
         }
 
-        let localVarPath = `/api/teams/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: undefined})}`;
+        let localVarPath = `/api/players/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<ApiTeamsPost201Response>('put', `${basePath}${localVarPath}`,
+        return this.httpClient.request<ApiPlayersPost201Response>('put', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: apiTeamsPostRequest,
+                body: apiPlayersIdPutRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
@@ -268,15 +272,15 @@ export class TeamsService extends BaseService implements TeamsServiceInterface {
     }
 
     /**
-     * create team
-     * @param apiTeamsPostRequest 
+     * create player
+     * @param apiPlayersPostRequest 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public apiTeamsPost(apiTeamsPostRequest?: ApiTeamsPostRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiTeamsPost201Response>;
-    public apiTeamsPost(apiTeamsPostRequest?: ApiTeamsPostRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiTeamsPost201Response>>;
-    public apiTeamsPost(apiTeamsPostRequest?: ApiTeamsPostRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiTeamsPost201Response>>;
-    public apiTeamsPost(apiTeamsPostRequest?: ApiTeamsPostRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public apiPlayersPost(apiPlayersPostRequest?: ApiPlayersPostRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiPlayersPost201Response>;
+    public apiPlayersPost(apiPlayersPostRequest?: ApiPlayersPostRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiPlayersPost201Response>>;
+    public apiPlayersPost(apiPlayersPostRequest?: ApiPlayersPostRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiPlayersPost201Response>>;
+    public apiPlayersPost(apiPlayersPostRequest?: ApiPlayersPostRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -312,12 +316,12 @@ export class TeamsService extends BaseService implements TeamsServiceInterface {
             }
         }
 
-        let localVarPath = `/api/teams`;
+        let localVarPath = `/api/players`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<ApiTeamsPost201Response>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<ApiPlayersPost201Response>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: apiTeamsPostRequest,
+                body: apiPlayersPostRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

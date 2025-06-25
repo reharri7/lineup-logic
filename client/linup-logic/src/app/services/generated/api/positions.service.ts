@@ -19,9 +19,9 @@ import { Observable }                                        from 'rxjs';
 // @ts-ignore
 import { ApiAuthLoginPost401Response } from '../model/apiAuthLoginPost401Response';
 // @ts-ignore
-import { ApiPositionsGet200Response } from '../model/apiPositionsGet200Response';
+import { ApiPlayersGet422Response } from '../model/apiPlayersGet422Response';
 // @ts-ignore
-import { ApiPositionsGet422Response } from '../model/apiPositionsGet422Response';
+import { ApiPositionsGet200Response } from '../model/apiPositionsGet200Response';
 // @ts-ignore
 import { ApiPositionsPost201Response } from '../model/apiPositionsPost201Response';
 // @ts-ignore

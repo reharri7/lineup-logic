@@ -8,9 +8,14 @@
  * Do not edit the class manually.
  */
 import { ApiPlayersGet200ResponsePlayersInnerPosition } from './apiPlayersGet200ResponsePlayersInnerPosition';
+import { ApiPlayersGet200ResponsePlayersInnerTeam } from './apiPlayersGet200ResponsePlayersInnerTeam';
 
 
-export interface ApiPositionsPost201Response { 
+export interface ApiPlayersGet200ResponsePlayersInner { 
+    id?: number;
+    name?: string;
+    number?: number;
+    team?: ApiPlayersGet200ResponsePlayersInnerTeam;
     position?: ApiPlayersGet200ResponsePlayersInnerPosition;
 }
 
