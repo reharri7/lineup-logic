@@ -1,0 +1,23 @@
+<div class="container mx-auto p-4">
+  <div class="flex justify-between items-center mb-4">
+    <h1 class="text-2xl font-bold">Positions Management</h1>
+    <button class="btn btn-outline" routerLink="/admin/positions">Back to Positions</button>
+  </div>
+
+  @if (isRecordLoading) {
+    <div class="flex justify-center my-4">
+      <span class="loading loading-spinner loading-lg"></span>
+    </div>
+  }
+  <form [formGroup]="formGroup">
+    <input type="text" placeholder="Position Name" formControlName="position_name">
+  </form>
+
+  <div class="flex gap-2 mt-4">
+    <button class="btn btn-primary" (click)="onSubmit()">Submit</button>
+    @if(!!recordId) {
+      <button class="btn btn-error" (click)="onDelete()">Delete</button>
+    }
+  </div>
+
+</div>
