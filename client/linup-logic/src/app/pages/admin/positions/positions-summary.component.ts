@@ -17,7 +17,7 @@ interface PositionsResponse extends ApiPositionsPost201Response {
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './positions-summary.component.html',
-  styleUrl: './positions-summary.component.css'
+  styleUrls: ['./positions-summary.component.css']
 })
 export class PositionsSummaryComponent implements OnInit {
   positions: ApiPositionsPost201ResponsePosition[] = [];
