@@ -7,7 +7,7 @@ import {RouterLink} from "@angular/router";
     RouterLink
   ],
   templateUrl: './admin.component.html',
-  styleUrl: './admin.component.css'
+  styleUrls: ['./admin.component.css']
 })
 export class AdminComponent {
 
