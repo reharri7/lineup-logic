@@ -1,4 +1,4 @@
-class Api::PlayerController < ApplicationController
+class Api::PlayersController < ApplicationController
   # GET /api/players
   def index
     @players = Player.all
