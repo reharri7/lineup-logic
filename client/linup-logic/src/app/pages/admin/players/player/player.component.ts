@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import {ApiPlayersPost201ResponsePlayer, PlayersService} from "../../../../services/generated";
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { NotificationService } from "../../../../shared/services/notification.service";
@@ -26,6 +26,46 @@ export class PlayerComponent implements OnInit {
   protected recordId: number;
   protected player: ApiPlayersPost201ResponsePlayer = {};
   public formGroup: UntypedFormGroup;
+
+  // Platform detection for keyboard shortcuts
+  public isMac = /Mac|iPod|iPhone|iPad/.test(navigator.platform);
+
+  // Get the appropriate modifier key display text for UI
+  get modifierKeyText(): string {
+    return this.isMac ? '⌘' : 'Ctrl';
+  }
+
+  // Keyboard shortcuts
+  @HostListener('document:keydown', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent) {
+    // Prevent shortcuts when typing in form fields
+    if (event.target instanceof HTMLInputElement ||
+        event.target instanceof HTMLTextAreaElement ||
+        event.target instanceof HTMLSelectElement) {
+      return;
+    }
+
+    // Check for the appropriate modifier key based on platform (Cmd for Mac, Ctrl for others)
+    const modifierKeyPressed = this.isMac ? event.metaKey : event.ctrlKey;
+
+    // Save/Submit form (Cmd+S on Mac, Ctrl+S on Windows/Linux)
+    if (modifierKeyPressed && event.key === 's') {
+      event.preventDefault(); // Prevent browser save dialog
+      this.onSubmit();
+    }
+
+    // Delete player (Cmd+D on Mac, Ctrl+D on Windows/Linux) - only when editing an existing player
+    if (modifierKeyPressed && event.key === 'd' && !!this.recordId) {
+      event.preventDefault(); // Prevent browser bookmark dialog
+      this.onDelete();
+    }
+
+    // Esc: Navigate back to players list
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      this.router.navigate(['/admin/players']);
+    }
+  }
 
   constructor(
     private playersService: PlayersService,
