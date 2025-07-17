@@ -2,8 +2,7 @@
   <select
     class="select select-bordered w-full"
     [disabled]="isLoading"
-    [value]="control.value"
-    (change)="onPositionSelect($event)">
+    [formControl]="control">
     <option value="">Select a position</option>
     @for(position of positions; track position.id) {
       <option [value]="position.id">

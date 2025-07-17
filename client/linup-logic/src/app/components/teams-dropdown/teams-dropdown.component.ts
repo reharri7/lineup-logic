@@ -47,10 +47,5 @@ export class TeamsDropdownComponent implements OnInit {
     });
   }
 
-  onTeamSelect(event: Event): void {
-    const selectElement = event.target as HTMLSelectElement;
-    const teamId = selectElement.value ? Number(selectElement.value) : null;
-    this.control.setValue(teamId);
-    this.control.markAsDirty();
-  }
+  // onTeamSelect method removed as we're now using [formControl] binding directly
 }

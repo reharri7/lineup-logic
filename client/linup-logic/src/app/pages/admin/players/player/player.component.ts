@@ -23,14 +23,9 @@ import { PositionsDropdownComponent } from "../../../../components/positions-dro
 })
 export class PlayerComponent implements OnInit {
   public isRecordLoading = false;
-  protected readonly recordId: number;
+  protected recordId: number;
   protected player: ApiPlayersPost201ResponsePlayer = {};
-  public formGroup: UntypedFormGroup = new FormBuilder().group({
-    name: ['', Validators.required],
-    number: ['', [Validators.required, Validators.min(0), Validators.max(99)]],
-    team_id: [null, Validators.required],
-    position_id: [null, Validators.required]
-  });
+  public formGroup: UntypedFormGroup;
 
   constructor(
     private playersService: PlayersService,
@@ -38,39 +33,49 @@ export class PlayerComponent implements OnInit {
     private notificationService: NotificationService,
     private modalService: ModalService,
     private router: Router,
+    private formBuilder: FormBuilder,
   ) {
     this.recordId = Number(this.activatedRoute.snapshot.params['playerId'] || 0);
+    this.formGroup = this.formBuilder.group({
+      name: ['', Validators.required],
+      number: ['', [Validators.required, Validators.min(0), Validators.max(99)]],
+      team_id: [null, Validators.required],
+      position_id: [null, Validators.required]
+    });
   }
 
   get teamControl() {
-    return this.formGroup.get('team_id') as FormControl;
+    return this.formGroup?.get('team_id') as FormControl;
   }
 
   get positionControl() {
-    return this.formGroup.get('position_id') as FormControl;
+    return this.formGroup?.get('position_id') as FormControl;
   }
 
   async ngOnInit() {
     this.isRecordLoading = true;
+
     if(!!this.recordId) {
       const result = await lastValueFrom(this.playersService.apiPlayersIdGet(this.recordId));
       if(!!result && result.player) {
         this.player = result.player;
+        console.log(this.player);
         this.formGroup.patchValue({
           name: this.player.name,
           number: this.player.number,
           team_id: this.player.team?.id,
           position_id: this.player.position?.id
         });
+        console.log(this.formGroup.value);
       }
     }
     this.isRecordLoading = false;
   }
 
   async onSubmit() {
-    this.formGroup.markAllAsTouched();
-    if(this.formGroup.valid) {
-      const formData: ApiPlayersPostRequest = this.formGroup.value;
+    this.formGroup?.markAllAsTouched();
+    if(this.formGroup?.valid) {
+      const formData: ApiPlayersPostRequest = this.formGroup?.value;
       if(!!this.recordId) {
         const result = await lastValueFrom(this.playersService.apiPlayersIdPut(this.recordId, formData));
         if(!!result) {
@@ -78,8 +83,9 @@ export class PlayerComponent implements OnInit {
         }
       } else {
         const result = await lastValueFrom(this.playersService.apiPlayersPost(formData));
-        if(!!result && !!result.player) {
+        if(!!result && !!result.player && !!result.player.id) {
           this.notificationService.showNotification('Player created', 'success');
+          this.recordId = result.player.id;
           await this.router.navigate(['/admin/players', result.player.id]);
         }
       }

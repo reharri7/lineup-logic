@@ -41,7 +41,7 @@ export const ADMIN_ROUTES: Routes = [
     component: PlayersSummaryComponent,
   },
   {
-    path: 'players/:positionId',
+    path: 'players/:playerId',
     component: PlayerComponent,
   },
   {

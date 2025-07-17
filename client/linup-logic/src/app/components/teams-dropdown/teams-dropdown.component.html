@@ -1,9 +1,7 @@
 <div class="form-control w-full">
   <select
     class="select select-bordered w-full"
-    [disabled]="isLoading"
-    [value]="control.value"
-    (change)="onTeamSelect($event)">
+    [formControl]="control">
     <option value="">Select a team</option>
     @for(team of teams; track team.id) {
       <option [value]="team.id">

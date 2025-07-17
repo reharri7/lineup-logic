@@ -42,10 +42,5 @@ export class PositionsDropdownComponent implements OnInit {
     }
   }
 
-  onPositionSelect(event: Event): void {
-    const selectElement = event.target as HTMLSelectElement;
-    const positionId = selectElement.value ? Number(selectElement.value) : null;
-    this.control.setValue(positionId);
-    this.control.markAsDirty();
-  }
+  // onPositionSelect method removed as we're now using [formControl] binding directly
 }
