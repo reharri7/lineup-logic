@@ -66,9 +66,47 @@ Dynamic tooltips are added to the buttons in the HTML to inform users about the 
 <button class="btn btn-error tooltip" [attr.data-tip]="modifierKeyText + '+D to delete'" (click)="onDelete()">Delete</button>
 ```
 
+## Auto-Focus Functionality
+
+The Player Component implements auto-focus functionality that automatically focuses on the first input field (Player Name) when the component loads. This improves user experience by allowing immediate typing without having to click on the field first.
+
+### Implementation Details
+
+The auto-focus functionality is implemented using Angular's `ViewChild` decorator to get a reference to the input element, and the `ngAfterViewInit` lifecycle hook to focus on the element after the view has been initialized.
+
+```typescript
+// Get a reference to the input element
+@ViewChild('nameInput') nameInput: ElementRef;
+
+// Focus on the input element after the view has been initialized
+ngAfterViewInit() {
+  this.focusNameInput();
+}
+
+// Helper method to focus on the name input field
+private focusNameInput() {
+  if (!this.isRecordLoading && this.nameInput?.nativeElement) {
+    this.nameInput.nativeElement.focus();
+  }
+}
+```
+
+The implementation also includes a call to `focusNameInput()` after the loading is complete in the `ngOnInit` method to ensure the input field gets focused even if the form is loaded asynchronously.
+
+```typescript
+async ngOnInit() {
+  // ... existing code ...
+  this.isRecordLoading = false;
+  
+  // Focus on the first input field after loading is complete
+  setTimeout(() => this.focusNameInput(), 0);
+}
+```
+
 ## Accessibility Considerations
 
 - Keyboard shortcuts are disabled when focus is on form fields to prevent interference with normal typing
 - Visual tooltips are provided on buttons to inform users about available shortcuts
 - Platform-specific shortcuts are used (Ctrl+S on Windows/Linux, ⌘+S on Mac) to align with platform conventions
 - The implementation automatically detects the user's platform and uses the appropriate modifier key
+- Auto-focus on the first input field improves keyboard accessibility by eliminating the need for an initial mouse click

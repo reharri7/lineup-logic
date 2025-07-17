@@ -43,8 +43,8 @@ export class PlayersSummaryComponent implements OnInit {
     // Check for the appropriate modifier key based on platform (Cmd for Mac, Ctrl for others)
     const modifierKeyPressed = this.isMac ? event.metaKey : event.ctrlKey;
 
-    // Create new player (Cmd+N on Mac, Ctrl+N on Windows/Linux)
-    if (modifierKeyPressed && event.key === 'n') {
+    // Create new player (Cmd+E on Mac, Ctrl+E on Windows/Linux)
+    if (modifierKeyPressed && event.key === 'e') {
       event.preventDefault();
       this.createNewPlayer();
     }

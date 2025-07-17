@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, HostListener, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import {ApiPlayersPost201ResponsePlayer, PlayersService} from "../../../../services/generated";
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { NotificationService } from "../../../../shared/services/notification.service";
@@ -21,7 +21,8 @@ import { PositionsDropdownComponent } from "../../../../components/positions-dro
   templateUrl: './player.component.html',
   styleUrl: './player.component.css'
 })
-export class PlayerComponent implements OnInit {
+export class PlayerComponent implements OnInit, AfterViewInit {
+  @ViewChild('nameInput') nameInput: ElementRef | undefined;
   public isRecordLoading = false;
   protected recordId: number;
   protected player: ApiPlayersPost201ResponsePlayer = {};
@@ -78,7 +79,7 @@ export class PlayerComponent implements OnInit {
     this.recordId = Number(this.activatedRoute.snapshot.params['playerId'] || 0);
     this.formGroup = this.formBuilder.group({
       name: ['', Validators.required],
-      number: ['', [Validators.required, Validators.min(0), Validators.max(99)]],
+      number: ['', [Validators.required, Validators.min(-1), Validators.max(99)]],
       team_id: [null, Validators.required],
       position_id: [null, Validators.required]
     });
@@ -110,6 +111,21 @@ export class PlayerComponent implements OnInit {
       }
     }
     this.isRecordLoading = false;
+
+    // Focus on the first input field after loading is complete
+    setTimeout(() => this.focusNameInput(), 0);
+  }
+
+  ngAfterViewInit() {
+    // Initial focus attempt - may not work if the form is still loading
+    this.focusNameInput();
+  }
+
+  // Helper method to focus on the name input field
+  private focusNameInput() {
+    if (!this.isRecordLoading && this.nameInput?.nativeElement) {
+      this.nameInput.nativeElement.focus();
+    }
   }
 
   async onSubmit() {
