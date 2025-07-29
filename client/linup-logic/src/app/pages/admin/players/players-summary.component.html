@@ -53,6 +53,45 @@
               }
             </tbody>
           </table>
+          <div class="join flex justify-center mt-4">
+            <button
+              class="join-item btn"
+              [disabled]="currentPage === 1"
+              (click)="goToFirstPage()">
+              First
+            </button>
+
+            <button
+              class="join-item btn"
+              [disabled]="currentPage === 1"
+              (click)="prevPage()">
+              «
+            </button>
+
+            <button
+              class="join-item btn btn-active"
+              disabled>
+              {{ currentPage }}
+            </button>
+
+            <button
+              class="join-item btn"
+              [disabled]="currentPage === totalPages"
+              (click)="nextPage()">
+              »
+            </button>
+
+            <button
+              class="join-item btn"
+              [disabled]="currentPage === totalPages"
+              (click)="goToLastPage()">
+              Last
+            </button>
+          </div>
+
+          <div class="text-center text-sm mt-2">
+            Showing {{ (currentPage - 1) * pageSize + 1 }} to {{ getUpperBoundOfDisplayedEntries() }} of {{ totalCount }} entries
+          </div>
         </div>
 
       }

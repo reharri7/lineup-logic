@@ -1,12 +1,22 @@
 class Api::PlayersController < ApplicationController
   # GET /api/players
   def index
-    @players = Player.all
+    page = params[:page] || 1
+    size = params[:size] || 25
+
+    @players = Player.page(page).per(size)
+
     render json: {
       players: @players.as_json(only: [ :id, :name, :number ], include: {
         team: { only: [ :id, :name ] },
         position: { only: [ :id, :position_name ] }
-      })
+      }),
+      meta: {
+        current_page: @players.current_page,
+        total_pages: @players.total_pages,
+        total_count: @players.total_count,
+        size: @players.limit_value
+      }
     }, status: :ok
   end
 

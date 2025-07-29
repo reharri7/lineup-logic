@@ -8,9 +8,11 @@
  * Do not edit the class manually.
  */
 import { ApiPlayersGet200ResponsePlayersInner } from './apiPlayersGet200ResponsePlayersInner';
+import { ApiPlayersGet200ResponseMeta } from './apiPlayersGet200ResponseMeta';
 
 
 export interface ApiPlayersGet200Response { 
     players?: Array<ApiPlayersGet200ResponsePlayersInner>;
+    meta?: ApiPlayersGet200ResponseMeta;
 }
 

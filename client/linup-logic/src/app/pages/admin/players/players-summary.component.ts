@@ -2,14 +2,9 @@ import { Component, OnInit, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink, Router } from "@angular/router";
-import { PlayersService } from "../../../services/generated/api/players.service";
-import { ApiPlayersGet200Response } from "../../../services/generated/model/apiPlayersGet200Response";
-import { ApiPlayersGet200ResponsePlayersInner } from "../../../services/generated/model/apiPlayersGet200ResponsePlayersInner";
-
-// Extended interface to handle the API response with players array
-interface PlayersResponse extends ApiPlayersGet200Response {
-  players?: ApiPlayersGet200ResponsePlayersInner[];
-}
+import { PlayersService } from "../../../services/generated";
+import { ApiPlayersGet200ResponsePlayersInner } from "../../../services/generated";
+import {lastValueFrom} from "rxjs";
 
 @Component({
   selector: 'app-players-summary',
@@ -22,34 +17,36 @@ export class PlayersSummaryComponent implements OnInit {
   players: ApiPlayersGet200ResponsePlayersInner[] = [];
   isLoading = false;
 
-  // Platform detection for keyboard shortcuts
+  currentPage = 1;
+  totalPages = 1;
+  totalCount = 0;
+  pageSize = 25;
+
+  getUpperBoundOfDisplayedEntries(): number {
+    return Math.min(this.currentPage * this.pageSize, this.totalCount);
+  }
+
   public isMac = /Mac|iPod|iPhone|iPad/.test(navigator.platform);
 
-  // Get the appropriate modifier key display text for UI
   get modifierKeyText(): string {
     return this.isMac ? '⌘' : 'Ctrl';
   }
 
-  // Keyboard shortcuts
   @HostListener('document:keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
-    // Prevent shortcuts when typing in form fields
     if (event.target instanceof HTMLInputElement ||
-        event.target instanceof HTMLTextAreaElement ||
-        event.target instanceof HTMLSelectElement) {
+      event.target instanceof HTMLTextAreaElement ||
+      event.target instanceof HTMLSelectElement) {
       return;
     }
 
-    // Check for the appropriate modifier key based on platform (Cmd for Mac, Ctrl for others)
     const modifierKeyPressed = this.isMac ? event.metaKey : event.ctrlKey;
 
-    // Create new player (Cmd+E on Mac, Ctrl+E on Windows/Linux)
     if (modifierKeyPressed && event.key === 'e') {
       event.preventDefault();
       this.createNewPlayer();
     }
 
-    // Back to admin (Escape key)
     if (event.key === 'Escape') {
       event.preventDefault();
       this.goBack();
@@ -62,7 +59,6 @@ export class PlayersSummaryComponent implements OnInit {
   ) {
   }
 
-  // Navigation methods
   createNewPlayer(): void {
     this.router.navigate(['/admin/players/new']);
   }
@@ -71,25 +67,66 @@ export class PlayersSummaryComponent implements OnInit {
     this.router.navigate(['/admin']);
   }
 
-  ngOnInit(): void {
-    this.loadPlayers();
+  async ngOnInit(): Promise<void> {
+    await this.loadPlayers();
   }
 
-  loadPlayers(): void {
+  async loadPlayers() {
     this.isLoading = true;
-    this.playersService.apiPlayersGet().subscribe({
-      next: (response: PlayersResponse) => {
-        if (response && response.players) {
-          this.players = response.players;
-        } else {
-          this.players = [];
+    try {
+      const result = await lastValueFrom(this.playersService.apiPlayersGet(this.currentPage, this.pageSize));
+      if (!!result && !!result.players) {
+        this.players = result.players;
+
+        if (result.meta) {
+          this.currentPage = result.meta.current_page!;
+          this.totalPages = result.meta.total_pages!;
+          this.totalCount = result.meta.total_count!;
+          this.pageSize = result.meta.size!;
         }
-        this.isLoading = false;
-      },
-      error: (error) => {
-        console.error('Error loading players:', error);
-        this.isLoading = false;
+      } else {
+        this.players = [];
       }
-    });
+    } catch (error) {
+      console.error('Error loading players:', error);
+    } finally {
+      this.isLoading = false;
+    }
+
+  }
+
+  goToPage(page: number): void {
+    if (page >= 1 && page <= this.totalPages && page !== this.currentPage) {
+      this.currentPage = page;
+      this.loadPlayers();
+    }
+  }
+
+  nextPage(): void {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.loadPlayers();
+    }
+  }
+
+  prevPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.loadPlayers();
+    }
+  }
+
+  goToFirstPage(): void {
+    if (this.currentPage !== 1) {
+      this.currentPage = 1;
+      this.loadPlayers();
+    }
+  }
+
+  goToLastPage(): void {
+    if (this.currentPage !== this.totalPages) {
+      this.currentPage = this.totalPages;
+      this.loadPlayers();
+    }
   }
 }

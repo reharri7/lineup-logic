@@ -23,6 +23,7 @@ model/apiAuthLoginPost401Response.ts
 model/apiAuthLoginPostRequest.ts
 model/apiAuthLogoutDelete200Response.ts
 model/apiPlayersGet200Response.ts
+model/apiPlayersGet200ResponseMeta.ts
 model/apiPlayersGet200ResponsePlayersInner.ts
 model/apiPlayersGet200ResponsePlayersInnerPosition.ts
 model/apiPlayersGet200ResponsePlayersInnerTeam.ts

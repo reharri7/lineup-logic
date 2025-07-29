@@ -66,6 +66,8 @@ RSpec.describe 'api/players', type: :request do
       consumes 'application/json'
       produces 'application/json'
       security [ bearerAuth: [] ]
+      parameter name: :page, in: :query, type: :integer, required: false, description: 'Page number'
+      parameter name: :size, in: :query, type: :integer, required: false, description: 'Number of items per page'
 
       response(200, 'successful') do
         schema type: :object,
@@ -94,7 +96,16 @@ RSpec.describe 'api/players', type: :request do
                        }
                      }
                    }
-                 }
+                 },
+               meta: {
+                type: :object,
+                properties: {
+                  current_page: { type: :integer },
+                  total_pages: { type: :integer },
+                  total_count: { type: :integer },
+                  size: { type: :integer }
+                }
+               }
                }
         run_test!
       end

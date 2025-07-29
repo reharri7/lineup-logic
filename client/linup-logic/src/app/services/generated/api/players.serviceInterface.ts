@@ -30,8 +30,10 @@ export interface PlayersServiceInterface {
     /**
      * get players
      * 
+     * @param page Page number
+     * @param size Number of items per page
      */
-    apiPlayersGet(extraHttpRequestParams?: any): Observable<ApiPlayersGet200Response>;
+    apiPlayersGet(page?: number, size?: number, extraHttpRequestParams?: any): Observable<ApiPlayersGet200Response>;
 
     /**
      * delete player

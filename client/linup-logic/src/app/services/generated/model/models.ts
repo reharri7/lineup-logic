@@ -4,6 +4,7 @@ export * from './apiAuthLoginPost401Response';
 export * from './apiAuthLoginPostRequest';
 export * from './apiAuthLogoutDelete200Response';
 export * from './apiPlayersGet200Response';
+export * from './apiPlayersGet200ResponseMeta';
 export * from './apiPlayersGet200ResponsePlayersInner';
 export * from './apiPlayersGet200ResponsePlayersInnerPosition';
 export * from './apiPlayersGet200ResponsePlayersInnerTeam';
