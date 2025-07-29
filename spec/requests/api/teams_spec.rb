@@ -134,11 +134,14 @@ path '/api/teams/' do
       response(200, 'successful') do
         schema type: :object,
                properties: {
-                 team: {
-                   type: :object,
-                   properties: {
-                     id: { type: :integer },
-                     name: { type: :string }
+                 teams: {
+                   type: :array,
+                   items: {
+                     type: :object,
+                     properties: {
+                       id: { type: :integer },
+                       name: { type: :string }
+                     }
                    }
                  }
                }

@@ -12,8 +12,8 @@ import { HttpHeaders }                                       from '@angular/comm
 import { Observable }                                        from 'rxjs';
 
 import { ApiAuthLoginPost401Response } from '../model/models';
+import { ApiPlayersGet422Response } from '../model/models';
 import { ApiPositionsGet200Response } from '../model/models';
-import { ApiPositionsGet422Response } from '../model/models';
 import { ApiPositionsPost201Response } from '../model/models';
 import { ApiPositionsPostRequest } from '../model/models';
 

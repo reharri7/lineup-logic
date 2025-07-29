@@ -19,7 +19,9 @@ import { Observable }                                        from 'rxjs';
 // @ts-ignore
 import { ApiAuthLoginPost401Response } from '../model/apiAuthLoginPost401Response';
 // @ts-ignore
-import { ApiPositionsGet422Response } from '../model/apiPositionsGet422Response';
+import { ApiPlayersGet422Response } from '../model/apiPlayersGet422Response';
+// @ts-ignore
+import { ApiTeamsGet200Response } from '../model/apiTeamsGet200Response';
 // @ts-ignore
 import { ApiTeamsPost201Response } from '../model/apiTeamsPost201Response';
 // @ts-ignore
@@ -49,9 +51,9 @@ export class TeamsService extends BaseService implements TeamsServiceInterface {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public apiTeamsGet(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiTeamsPost201Response>;
-    public apiTeamsGet(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiTeamsPost201Response>>;
-    public apiTeamsGet(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiTeamsPost201Response>>;
+    public apiTeamsGet(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiTeamsGet200Response>;
+    public apiTeamsGet(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiTeamsGet200Response>>;
+    public apiTeamsGet(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiTeamsGet200Response>>;
     public apiTeamsGet(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
@@ -81,7 +83,7 @@ export class TeamsService extends BaseService implements TeamsServiceInterface {
 
         let localVarPath = `/api/teams/`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<ApiTeamsPost201Response>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<ApiTeamsGet200Response>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,

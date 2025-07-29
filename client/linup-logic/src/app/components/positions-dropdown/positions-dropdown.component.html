@@ -1,0 +1,23 @@
+<div class="form-control w-full">
+  <select
+    class="select select-bordered w-full"
+    [disabled]="isLoading"
+    [formControl]="control">
+    <option value="">Select a position</option>
+    @for(position of positions; track position.id) {
+      <option [value]="position.id">
+        {{ position.position_name }}
+      </option>
+    }
+  </select>
+  @if(isLoading) {
+    <div class="mt-2 text-sm text-gray-500">
+      Loading positions...
+    </div>
+  }
+  @if(control.touched && control.invalid) {
+    <div class="mt-2 text-sm text-error">
+      Please select a position
+    </div>
+  }
+</div>

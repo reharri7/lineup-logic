@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_04_010146) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_16_062717) do
   create_table "fantasy_team_players", force: :cascade do |t|
     t.integer "fantasy_team_id", null: false
     t.integer "player_id", null: false
@@ -33,12 +33,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_04_010146) do
     t.integer "number"
     t.integer "team_id", null: false
     t.integer "position_id", null: false
-    t.integer "fantasy_team_id", null: false
     t.integer "weekly_position_rank"
     t.integer "weekly_flex_rank"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["fantasy_team_id"], name: "index_players_on_fantasy_team_id"
     t.index ["position_id"], name: "index_players_on_position_id"
     t.index ["team_id"], name: "index_players_on_team_id"
   end
@@ -70,7 +68,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_04_010146) do
   add_foreign_key "fantasy_team_players", "fantasy_teams"
   add_foreign_key "fantasy_team_players", "players"
   add_foreign_key "fantasy_teams", "users"
-  add_foreign_key "players", "fantasy_teams"
   add_foreign_key "players", "positions"
   add_foreign_key "players", "teams"
 end

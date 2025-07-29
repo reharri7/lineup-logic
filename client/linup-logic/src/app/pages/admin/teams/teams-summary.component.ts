@@ -25,8 +25,6 @@ export class TeamsSummaryComponent implements OnInit {
 
   constructor(
     private teamsService: TeamsService,
-    private http: HttpClient,
-    private activatedRoute: ActivatedRoute
   ) {
   }
 

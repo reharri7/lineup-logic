@@ -1,0 +1,100 @@
+<div class="container mx-auto p-4">
+  <div class="flex justify-between items-center mb-4">
+    <h1 class="text-2xl font-bold">Players Management</h1>
+    <div class="flex gap-2">
+      <button class="btn btn-success tooltip" [attr.data-tip]="modifierKeyText + '+E to create new player'" routerLink="new" (click)="createNewPlayer()">Create New Player</button>
+      <button class="btn btn-outline tooltip" data-tip="Press Esc to go back" routerLink="/admin" (click)="goBack()">Back</button>
+    </div>
+  </div>
+
+  <!-- Loading indicator -->
+  @if (isLoading) {
+    <div class="flex justify-center my-4">
+      <span class="loading loading-spinner loading-lg"></span>
+    </div>
+  }
+
+  <!-- Players list -->
+  <div class="card bg-base-200">
+    <div class="card-body">
+      <h2 class="card-title">Players</h2>
+
+      @if (players.length === 0 && !isLoading) {
+        <div class="alert alert-info">
+          <span>No players found. Add a new player to get started.</span>
+        </div>
+      } @else {
+        <div class="overflow-x-auto">
+          <table class="table table-zebra w-full">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Number</th>
+                <th>Team</th>
+                <th>Position</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (player of players; track player.id) {
+                <tr>
+                  <td>{{ player.name }}</td>
+                  <td>{{ player.number }}</td>
+                  <td>{{ player.team?.name }}</td>
+                  <td>{{ player.position?.position_name }}</td>
+                  <td>
+                    <div class="flex gap-2">
+                      <button class="btn btn-sm btn-primary" [routerLink]="['/admin/players', player.id]">
+                        Edit
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+          <div class="join flex justify-center mt-4">
+            <button
+              class="join-item btn"
+              [disabled]="currentPage === 1"
+              (click)="goToFirstPage()">
+              First
+            </button>
+
+            <button
+              class="join-item btn"
+              [disabled]="currentPage === 1"
+              (click)="prevPage()">
+              «
+            </button>
+
+            <button
+              class="join-item btn btn-active"
+              disabled>
+              {{ currentPage }}
+            </button>
+
+            <button
+              class="join-item btn"
+              [disabled]="currentPage === totalPages"
+              (click)="nextPage()">
+              »
+            </button>
+
+            <button
+              class="join-item btn"
+              [disabled]="currentPage === totalPages"
+              (click)="goToLastPage()">
+              Last
+            </button>
+          </div>
+
+          <div class="text-center text-sm mt-2">
+            Showing {{ (currentPage - 1) * pageSize + 1 }} to {{ getUpperBoundOfDisplayedEntries() }} of {{ totalCount }} entries
+          </div>
+        </div>
+
+      }
+    </div>
+  </div>
+</div>

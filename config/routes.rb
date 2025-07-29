@@ -19,6 +19,7 @@ Rails.application.routes.draw do
     # Admin routes
     resources :teams
     resources :positions
+    resources :players
   end
 
   # Defines the root path route ("/")
