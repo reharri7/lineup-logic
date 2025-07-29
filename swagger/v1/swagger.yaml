@@ -186,6 +186,42 @@ paths:
         description: Number of items per page
         schema:
           type: integer
+      - name: name_filter
+        in: query
+        required: false
+        description: Name to filter by
+        schema:
+          type: string
+      - name: number_filter
+        in: query
+        required: false
+        description: Number to filter by
+        schema:
+          type: integer
+      - name: team_id
+        in: query
+        required: false
+        description: Team ID to filter by
+        schema:
+          type: integer
+      - name: position_id
+        in: query
+        required: false
+        description: Position ID to filter by
+        schema:
+          type: integer
+      - name: sort_by
+        in: query
+        required: false
+        description: Field to sort by (name, number, team_id, position_id)
+        schema:
+          type: string
+      - name: sort_direction
+        in: query
+        required: false
+        description: Sort direction (asc, desc)
+        schema:
+          type: string
       responses:
         '200':
           description: successful

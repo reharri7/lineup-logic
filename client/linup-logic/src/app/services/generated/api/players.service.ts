@@ -52,19 +52,37 @@ export class PlayersService extends BaseService implements PlayersServiceInterfa
      * get players
      * @param page Page number
      * @param size Number of items per page
+     * @param nameFilter Name to filter by
+     * @param numberFilter Number to filter by
+     * @param teamId Team ID to filter by
+     * @param positionId Position ID to filter by
+     * @param sortBy Field to sort by (name, number, team_id, position_id)
+     * @param sortDirection Sort direction (asc, desc)
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public apiPlayersGet(page?: number, size?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiPlayersGet200Response>;
-    public apiPlayersGet(page?: number, size?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiPlayersGet200Response>>;
-    public apiPlayersGet(page?: number, size?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiPlayersGet200Response>>;
-    public apiPlayersGet(page?: number, size?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public apiPlayersGet(page?: number, size?: number, nameFilter?: string, numberFilter?: number, teamId?: number, positionId?: number, sortBy?: string, sortDirection?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiPlayersGet200Response>;
+    public apiPlayersGet(page?: number, size?: number, nameFilter?: string, numberFilter?: number, teamId?: number, positionId?: number, sortBy?: string, sortDirection?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiPlayersGet200Response>>;
+    public apiPlayersGet(page?: number, size?: number, nameFilter?: string, numberFilter?: number, teamId?: number, positionId?: number, sortBy?: string, sortDirection?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiPlayersGet200Response>>;
+    public apiPlayersGet(page?: number, size?: number, nameFilter?: string, numberFilter?: number, teamId?: number, positionId?: number, sortBy?: string, sortDirection?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
         localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
           <any>page, 'page');
         localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
           <any>size, 'size');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>nameFilter, 'name_filter');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>numberFilter, 'number_filter');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>teamId, 'team_id');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>positionId, 'position_id');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>sortBy, 'sort_by');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>sortDirection, 'sort_direction');
 
         let localVarHeaders = this.defaultHeaders;
 

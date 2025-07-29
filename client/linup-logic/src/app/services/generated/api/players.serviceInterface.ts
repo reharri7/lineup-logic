@@ -32,8 +32,14 @@ export interface PlayersServiceInterface {
      * 
      * @param page Page number
      * @param size Number of items per page
+     * @param nameFilter Name to filter by
+     * @param numberFilter Number to filter by
+     * @param teamId Team ID to filter by
+     * @param positionId Position ID to filter by
+     * @param sortBy Field to sort by (name, number, team_id, position_id)
+     * @param sortDirection Sort direction (asc, desc)
      */
-    apiPlayersGet(page?: number, size?: number, extraHttpRequestParams?: any): Observable<ApiPlayersGet200Response>;
+    apiPlayersGet(page?: number, size?: number, nameFilter?: string, numberFilter?: number, teamId?: number, positionId?: number, sortBy?: string, sortDirection?: string, extraHttpRequestParams?: any): Observable<ApiPlayersGet200Response>;
 
     /**
      * delete player
