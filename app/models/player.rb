@@ -1,7 +1,7 @@
 class Player < ApplicationRecord
   belongs_to :team
   belongs_to :position
-  
+
   # Players can optionally be associated with fantasy teams
   # This is a lookup table that fantasy teams can reference
   has_many :fantasy_team_players, dependent: :destroy
