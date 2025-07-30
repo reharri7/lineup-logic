@@ -4,12 +4,12 @@ class Api::PlayersController < ApplicationController
     page = params[:page] || 1
     size = params[:size] || 25
     allowed_sort_columns = %w[name number team_id position_id]
-    sort_by = allowed_sort_columns.include?(params[:sort_by]) ? params[:sort_by] : 'name'
-    sort_direction = %w[asc desc].include?(params[:sort_direction].to_s.downcase) ? params[:sort_direction].downcase : 'asc'
+    sort_by = allowed_sort_columns.include?(params[:sort_by]) ? params[:sort_by] : "name"
+    sort_direction = %w[asc desc].include?(params[:sort_direction].to_s.downcase) ? params[:sort_direction].downcase : "asc"
 
     @players = Player.all
 
-    @players = @players.where('name LIKE ?', "%#{params[:name_filter]}%") if params[:name_filter].present?
+    @players = @players.where("name LIKE ?", "%#{params[:name_filter]}%") if params[:name_filter].present?
     @players = @players.where(number: params[:number_filter]) if params[:number_filter].present?
     @players = @players.where(team_id: params[:team_id]) if params[:team_id].present?
     @players = @players.where(position_id: params[:position_id]) if params[:position_id].present?
