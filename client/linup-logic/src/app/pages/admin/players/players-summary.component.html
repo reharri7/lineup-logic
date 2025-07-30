@@ -8,18 +8,71 @@
   </div>
 
   <!-- Loading indicator -->
-  @if (isLoading) {
+  @if (isLoading()) {
     <div class="flex justify-center my-4">
       <span class="loading loading-spinner loading-lg"></span>
     </div>
   }
+
+  <!-- Filters -->
+  <div class="card bg-base-200 mb-4">
+    <div class="card-body">
+      <h2 class="card-title">Filters</h2>
+      <div class="flex flex-wrap gap-4 mb-2">
+        <div class="form-control">
+          <label class="label">Name</label>
+          <input
+            type="text"
+            class="input input-bordered"
+            [value]="nameFilter()"
+            (input)="onNameFilterChange($event)"
+            placeholder="Filter by name">
+        </div>
+
+        <div class="form-control">
+          <label class="label">Number</label>
+          <input
+            type="number"
+            class="input input-bordered"
+            [value]="numberFilter()"
+            (input)="onNumberFilterChange($event)"
+            placeholder="Filter by number">
+        </div>
+
+        <div class="form-control">
+          <label class="label">Team</label>
+          <select class="select select-bordered" [value]="teamId()" (change)="onTeamChange($event)">
+            <option [value]="null">All Teams</option>
+            @for (team of teams(); track team.id) {
+              <option [value]="team.id">{{ team.name }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="form-control">
+          <label class="label">Position</label>
+          <select class="select select-bordered" [value]="positionId()" (change)="onPositionChange($event)">
+            <option [value]="null">All Positions</option>
+            @for (position of positions(); track position.id) {
+              <option [value]="position.id">{{ position.position_name }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <div class="flex gap-2">
+        <button class="btn btn-primary" (click)="applyFilters()">Apply Filters</button>
+        <button class="btn btn-outline" (click)="clearFilters()">Clear Filters</button>
+      </div>
+    </div>
+  </div>
 
   <!-- Players list -->
   <div class="card bg-base-200">
     <div class="card-body">
       <h2 class="card-title">Players</h2>
 
-      @if (players.length === 0 && !isLoading) {
+      @if (players().length === 0 && !isLoading()) {
         <div class="alert alert-info">
           <span>No players found. Add a new player to get started.</span>
         </div>
@@ -28,15 +81,43 @@
           <table class="table table-zebra w-full">
             <thead>
               <tr>
-                <th>Name</th>
-                <th>Number</th>
-                <th>Team</th>
-                <th>Position</th>
+                <th (click)="sortTable('name')" class="cursor-pointer">
+                  Name
+                  @if(sortBy() == 'name' ) {
+                    <span>
+                      {{ sortDirection() === 'asc' ? '↑' : '↓' }}
+                    </span>
+                  }
+                </th>
+                <th (click)="sortTable('number')" class="cursor-pointer">
+                  Number
+                  @if(sortBy() === 'number' ) {
+                    <span>
+                      {{ sortDirection() === 'asc' ? '↑' : '↓' }}
+                    </span>
+                  }
+                </th>
+                <th (click)="sortTable('team_id')" class="cursor-pointer">
+                  Team
+                  @if(sortBy() === 'team_id' ) {
+                    <span>
+                      {{ sortDirection() === 'asc' ? '↑' : '↓' }}
+                    </span>
+                  }
+                </th>
+                <th (click)="sortTable('position_id')" class="cursor-pointer">
+                  Position
+                  @if(sortBy() === 'position_id') {
+                    <span>
+                      {{ sortDirection() === 'asc' ? '↑' : '↓' }}
+                    </span>
+                  }
+                </th>
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody>
-              @for (player of players; track player.id) {
+              @for (player of players(); track player.id) {
                 <tr>
                   <td>{{ player.name }}</td>
                   <td>{{ player.number }}</td>
@@ -56,14 +137,14 @@
           <div class="join flex justify-center mt-4">
             <button
               class="join-item btn"
-              [disabled]="currentPage === 1"
+              [disabled]="currentPage() === 1"
               (click)="goToFirstPage()">
               First
             </button>
 
             <button
               class="join-item btn"
-              [disabled]="currentPage === 1"
+              [disabled]="currentPage() === 1"
               (click)="prevPage()">
               «
             </button>
@@ -71,26 +152,26 @@
             <button
               class="join-item btn btn-active"
               disabled>
-              {{ currentPage }}
+              {{ currentPage() }}
             </button>
 
             <button
               class="join-item btn"
-              [disabled]="currentPage === totalPages"
+              [disabled]="currentPage() === totalPages()"
               (click)="nextPage()">
               »
             </button>
 
             <button
               class="join-item btn"
-              [disabled]="currentPage === totalPages"
+              [disabled]="currentPage() === totalPages()"
               (click)="goToLastPage()">
               Last
             </button>
           </div>
 
           <div class="text-center text-sm mt-2">
-            Showing {{ (currentPage - 1) * pageSize + 1 }} to {{ getUpperBoundOfDisplayedEntries() }} of {{ totalCount }} entries
+            Showing {{ (currentPage() - 1) * pageSize() + 1 }} to {{ upperBoundOfDisplayedEntries() }} of {{ totalCount() }} entries
           </div>
         </div>
 

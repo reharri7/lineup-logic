@@ -1,10 +1,10 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, HostListener, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink, Router } from "@angular/router";
-import { PlayersService } from "../../../services/generated";
+import { PlayersService, TeamsService, PositionsService } from "../../../services/generated";
 import { ApiPlayersGet200ResponsePlayersInner } from "../../../services/generated";
-import {lastValueFrom} from "rxjs";
+import { lastValueFrom } from "rxjs";
 
 @Component({
   selector: 'app-players-summary',
@@ -14,17 +14,35 @@ import {lastValueFrom} from "rxjs";
   styleUrl: './players-summary.component.css'
 })
 export class PlayersSummaryComponent implements OnInit {
-  players: ApiPlayersGet200ResponsePlayersInner[] = [];
-  isLoading = false;
+  players = signal<ApiPlayersGet200ResponsePlayersInner[]>([]);
+  isLoading = signal<boolean>(false);
 
-  currentPage = 1;
-  totalPages = 1;
-  totalCount = 0;
-  pageSize = 25;
+  currentPage = signal<number>(1);
+  totalPages = signal<number>(1);
+  totalCount = signal<number>(0);
+  pageSize = signal<number>(25);
 
-  getUpperBoundOfDisplayedEntries(): number {
-    return Math.min(this.currentPage * this.pageSize, this.totalCount);
-  }
+  sortBy = signal<string>('name');
+  sortDirection = signal<string>('asc');
+
+  nameFilter = signal<string>('');
+  numberFilter = signal<number | null>(null);
+  teamId = signal<number | null>(null);
+  positionId = signal<number | null>(null);
+
+  teams = signal<any[]>([]);
+  positions = signal<any[]>([]);
+
+  filters = computed(() => ({
+    nameFilter: this.nameFilter(),
+    numberFilter: this.numberFilter(),
+    teamId: this.teamId(),
+    positionId: this.positionId()
+  }));
+
+  upperBoundOfDisplayedEntries = computed(() => {
+    return Math.min(this.currentPage() * this.pageSize(), this.totalCount());
+  });
 
   public isMac = /Mac|iPod|iPhone|iPad/.test(navigator.platform);
 
@@ -55,6 +73,8 @@ export class PlayersSummaryComponent implements OnInit {
 
   constructor(
     private playersService: PlayersService,
+    private teamsService: TeamsService,
+    private positionsService: PositionsService,
     private router: Router,
   ) {
   }
@@ -68,65 +88,131 @@ export class PlayersSummaryComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
+    await this.loadTeamsAndPositions();
     await this.loadPlayers();
   }
 
-  async loadPlayers() {
-    this.isLoading = true;
+  async loadTeamsAndPositions() {
     try {
-      const result = await lastValueFrom(this.playersService.apiPlayersGet(this.currentPage, this.pageSize));
+      const teamsResult = await lastValueFrom(this.teamsService.apiTeamsGet());
+      if (teamsResult && teamsResult.teams) {
+        this.teams.set(teamsResult.teams);
+      }
+
+      const positionsResult = await lastValueFrom(this.positionsService.apiPositionsGet());
+      if (positionsResult && positionsResult.positions) {
+        this.positions.set(positionsResult.positions);
+      }
+    } catch (error) {
+      console.error('Error loading teams or positions:', error);
+    }
+  }
+
+  async loadPlayers() {
+    this.isLoading.set(true);
+    try {
+      const filtersValue = this.filters();
+      const result = await lastValueFrom(this.playersService.apiPlayersGet(
+        this.currentPage(),
+        this.pageSize(),
+        filtersValue.nameFilter || undefined,
+        filtersValue.numberFilter || undefined,
+        filtersValue.teamId || undefined,
+        filtersValue.positionId || undefined,
+        this.sortBy(),
+        this.sortDirection()
+      ));
+
       if (!!result && !!result.players) {
-        this.players = result.players;
+        this.players.set(result.players);
 
         if (result.meta) {
-          this.currentPage = result.meta.current_page!;
-          this.totalPages = result.meta.total_pages!;
-          this.totalCount = result.meta.total_count!;
-          this.pageSize = result.meta.size!;
+          this.currentPage.set(result.meta.current_page!);
+          this.totalPages.set(result.meta.total_pages!);
+          this.totalCount.set(result.meta.total_count!);
+          this.pageSize.set(result.meta.size!);
         }
       } else {
-        this.players = [];
+        this.players.set([]);
       }
     } catch (error) {
       console.error('Error loading players:', error);
     } finally {
-      this.isLoading = false;
+      this.isLoading.set(false);
     }
-
   }
 
-  goToPage(page: number): void {
-    if (page >= 1 && page <= this.totalPages && page !== this.currentPage) {
-      this.currentPage = page;
-      this.loadPlayers();
+  sortTable(column: string): void {
+    if (this.sortBy() === column) {
+      this.sortDirection.set(this.sortDirection() === 'asc' ? 'desc' : 'asc');
+    } else {
+      this.sortBy.set(column);
+      this.sortDirection.set('asc');
     }
+
+    this.currentPage.set(1);
+    this.loadPlayers();
+  }
+
+  applyFilters(): void {
+    this.currentPage.set(1);
+    this.loadPlayers();
+  }
+
+  clearFilters(): void {
+    this.nameFilter.set('');
+    this.numberFilter.set(null);
+    this.teamId.set(null);
+    this.positionId.set(null);
+
+    this.applyFilters();
   }
 
   nextPage(): void {
-    if (this.currentPage < this.totalPages) {
-      this.currentPage++;
+    if (this.currentPage() < this.totalPages()) {
+      this.currentPage.set(this.currentPage() + 1);
       this.loadPlayers();
     }
   }
 
   prevPage(): void {
-    if (this.currentPage > 1) {
-      this.currentPage--;
+    if (this.currentPage() > 1) {
+      this.currentPage.set(this.currentPage() - 1);
       this.loadPlayers();
     }
   }
 
   goToFirstPage(): void {
-    if (this.currentPage !== 1) {
-      this.currentPage = 1;
+    if (this.currentPage() !== 1) {
+      this.currentPage.set(1);
       this.loadPlayers();
     }
   }
 
   goToLastPage(): void {
-    if (this.currentPage !== this.totalPages) {
-      this.currentPage = this.totalPages;
+    if (this.currentPage() !== this.totalPages()) {
+      this.currentPage.set(this.totalPages());
       this.loadPlayers();
     }
+  }
+
+  onNameFilterChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    this.nameFilter.set(input.value);
+  }
+
+  onNumberFilterChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    this.numberFilter.set(input.value ? +input.value : null);
+  }
+
+  onTeamChange(event: Event): void {
+    const select = event.target as HTMLSelectElement;
+    this.teamId.set(select.value ? +select.value : null);
+  }
+
+  onPositionChange(event: Event): void {
+    const select = event.target as HTMLSelectElement;
+    this.positionId.set(select.value ? +select.value : null);
   }
 }

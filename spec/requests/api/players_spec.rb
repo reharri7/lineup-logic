@@ -68,6 +68,12 @@ RSpec.describe 'api/players', type: :request do
       security [ bearerAuth: [] ]
       parameter name: :page, in: :query, type: :integer, required: false, description: 'Page number'
       parameter name: :size, in: :query, type: :integer, required: false, description: 'Number of items per page'
+      parameter name: :name_filter, in: :query, type: :string, required: false, description: 'Name to filter by'
+      parameter name: :number_filter, in: :query, type: :integer, required: false, description: 'Number to filter by'
+      parameter name: :team_id, in: :query, type: :integer, required: false, description: 'Team ID to filter by'
+      parameter name: :position_id, in: :query, type: :integer, required: false, description: 'Position ID to filter by'
+      parameter name: :sort_by, in: :query, type: :string, required: false, description: 'Field to sort by (name, number, team_id, position_id)'
+      parameter name: :sort_direction, in: :query, type: :string, required: false, description: 'Sort direction (asc, desc)'
 
       response(200, 'successful') do
         schema type: :object,
