@@ -14,7 +14,7 @@ class Api::PlayersController < ApplicationController
     @players = @players.where(team_id: params[:team_id]) if params[:team_id].present?
     @players = @players.where(position_id: params[:position_id]) if params[:position_id].present?
 
-    @players = @players.order("#{sort_by} #{sort_direction}")
+    @players = @players.order(sort_by => sort_direction)
 
     @players = @players.page(page).per(size)
 
