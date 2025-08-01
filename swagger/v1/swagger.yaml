@@ -86,6 +86,406 @@ paths:
                 properties:
                   error:
                     type: string
+  "/api/fantasy_teams/{fantasy_team_id}/players":
+    parameters:
+    - name: fantasy_team_id
+      in: path
+      required: true
+      schema:
+        type: integer
+    post:
+      summary: Adds a player to a fantasy team
+      tags:
+      - Fantasy Team Players
+      security:
+      - bearer_auth: []
+      parameters: []
+      responses:
+        '201':
+          description: player added to fantasy team
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  fantasy_team_player:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      fantasy_team_id:
+                        type: integer
+                      player_id:
+                        type: integer
+                      created_at:
+                        type: string
+                        format: date-time
+                      updated_at:
+                        type: string
+                        format: date-time
+                  player:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      name:
+                        type: string
+                      number:
+                        type: integer
+                      team_id:
+                        type: integer
+                      position_id:
+                        type: integer
+                      weekly_position_rank:
+                        type: integer
+                        nullable: true
+                      weekly_flex_rank:
+                        type: integer
+                        nullable: true
+                      created_at:
+                        type: string
+                        format: date-time
+                      updated_at:
+                        type: string
+                        format: date-time
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/unauthorized"
+        '403':
+          description: forbidden
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/forbidden"
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/not_found"
+        '422':
+          description: invalid request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/errors"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                player:
+                  type: object
+                  properties:
+                    player_id:
+                      type: integer
+                  required:
+                  - player_id
+  "/api/fantasy_teams/{fantasy_team_id}/players/{id}":
+    parameters:
+    - name: fantasy_team_id
+      in: path
+      required: true
+      schema:
+        type: integer
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: integer
+    delete:
+      summary: Removes a player from a fantasy team
+      tags:
+      - Fantasy Team Players
+      security:
+      - bearer_auth: []
+      responses:
+        '204':
+          description: player removed from fantasy team
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/unauthorized"
+        '403':
+          description: forbidden
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/forbidden"
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/not_found"
+  "/api/fantasy_teams":
+    get:
+      summary: Retrieves all fantasy teams for the current user
+      tags:
+      - Fantasy Teams
+      security:
+      - bearer_auth: []
+      responses:
+        '200':
+          description: fantasy teams found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  fantasy_teams:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        name:
+                          type: string
+                        user_id:
+                          type: integer
+                        created_at:
+                          type: string
+                          format: date-time
+                        updated_at:
+                          type: string
+                          format: date-time
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/unauthorized"
+    post:
+      summary: Creates a fantasy team
+      tags:
+      - Fantasy Teams
+      security:
+      - bearer_auth: []
+      parameters: []
+      responses:
+        '201':
+          description: fantasy team created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  fantasy_team:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      name:
+                        type: string
+                      user_id:
+                        type: integer
+                      created_at:
+                        type: string
+                        format: date-time
+                      updated_at:
+                        type: string
+                        format: date-time
+        '422':
+          description: invalid request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/errors"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                fantasy_team:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                  required:
+                  - name
+  "/api/fantasy_teams/{id}":
+    parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: integer
+    get:
+      summary: Retrieves a fantasy team
+      tags:
+      - Fantasy Teams
+      security:
+      - bearer_auth: []
+      responses:
+        '200':
+          description: fantasy team found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  fantasy_team:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      name:
+                        type: string
+                      user_id:
+                        type: integer
+                      created_at:
+                        type: string
+                        format: date-time
+                      updated_at:
+                        type: string
+                        format: date-time
+                  players:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        name:
+                          type: string
+                        number:
+                          type: integer
+                        team_id:
+                          type: integer
+                        position_id:
+                          type: integer
+                        weekly_position_rank:
+                          type: integer
+                          nullable: true
+                        weekly_flex_rank:
+                          type: integer
+                          nullable: true
+                        created_at:
+                          type: string
+                          format: date-time
+                        updated_at:
+                          type: string
+                          format: date-time
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/unauthorized"
+        '403':
+          description: forbidden
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/forbidden"
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/not_found"
+    put:
+      summary: Updates a fantasy team
+      tags:
+      - Fantasy Teams
+      security:
+      - bearer_auth: []
+      parameters: []
+      responses:
+        '200':
+          description: fantasy team updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  fantasy_team:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      name:
+                        type: string
+                      user_id:
+                        type: integer
+                      created_at:
+                        type: string
+                        format: date-time
+                      updated_at:
+                        type: string
+                        format: date-time
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/unauthorized"
+        '403':
+          description: forbidden
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/forbidden"
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/not_found"
+        '422':
+          description: invalid request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/errors"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                fantasy_team:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                  required:
+                  - name
+    delete:
+      summary: Deletes a fantasy team
+      tags:
+      - Fantasy Teams
+      security:
+      - bearer_auth: []
+      responses:
+        '204':
+          description: fantasy team deleted
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/unauthorized"
+        '403':
+          description: forbidden
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/forbidden"
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/not_found"
   "/api/players":
     post:
       summary: create player
@@ -936,3 +1336,32 @@ servers:
   variables:
     defaultHost:
       default: www.example.com
+components:
+  schemas:
+    errors:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: string
+    unauthorized:
+      type: object
+      properties:
+        error:
+          type: string
+    forbidden:
+      type: object
+      properties:
+        error:
+          type: string
+    not_found:
+      type: object
+      properties:
+        error:
+          type: string
+  securitySchemes:
+    bearer_auth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

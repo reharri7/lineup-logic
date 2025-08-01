@@ -12,10 +12,10 @@ import { HttpHeaders }                                       from '@angular/comm
 import { Observable }                                        from 'rxjs';
 
 import { ApiAuthLoginPost401Response } from '../model/models';
+import { ApiFantasyTeamsPostRequestFantasyTeam } from '../model/models';
 import { ApiPlayersGet422Response } from '../model/models';
 import { ApiTeamsGet200Response } from '../model/models';
 import { ApiTeamsPost201Response } from '../model/models';
-import { ApiTeamsPostRequest } from '../model/models';
 
 
 import { Configuration }                                     from '../configuration';
@@ -50,15 +50,15 @@ export interface TeamsServiceInterface {
      * update team
      * 
      * @param id team id
-     * @param apiTeamsPostRequest 
+     * @param apiFantasyTeamsPostRequestFantasyTeam 
      */
-    apiTeamsIdPut(id: number, apiTeamsPostRequest?: ApiTeamsPostRequest, extraHttpRequestParams?: any): Observable<ApiTeamsPost201Response>;
+    apiTeamsIdPut(id: number, apiFantasyTeamsPostRequestFantasyTeam?: ApiFantasyTeamsPostRequestFantasyTeam, extraHttpRequestParams?: any): Observable<ApiTeamsPost201Response>;
 
     /**
      * create team
      * 
-     * @param apiTeamsPostRequest 
+     * @param apiFantasyTeamsPostRequestFantasyTeam 
      */
-    apiTeamsPost(apiTeamsPostRequest?: ApiTeamsPostRequest, extraHttpRequestParams?: any): Observable<ApiTeamsPost201Response>;
+    apiTeamsPost(apiFantasyTeamsPostRequestFantasyTeam?: ApiFantasyTeamsPostRequestFantasyTeam, extraHttpRequestParams?: any): Observable<ApiTeamsPost201Response>;
 
 }

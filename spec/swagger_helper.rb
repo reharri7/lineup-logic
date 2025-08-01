@@ -31,7 +31,53 @@ RSpec.configure do |config|
             }
           }
         }
-      ]
+      ],
+      components: {
+        schemas: {
+          errors: {
+            type: 'object',
+            properties: {
+              errors: {
+                type: 'array',
+                items: {
+                  type: 'string'
+                }
+              }
+            }
+          },
+          unauthorized: {
+            type: 'object',
+            properties: {
+              error: {
+                type: 'string'
+              }
+            }
+          },
+          forbidden: {
+            type: 'object',
+            properties: {
+              error: {
+                type: 'string'
+              }
+            }
+          },
+          not_found: {
+            type: 'object',
+            properties: {
+              error: {
+                type: 'string'
+              }
+            }
+          }
+        },
+        securitySchemes: {
+          bearer_auth: {
+            type: 'http',
+            scheme: 'bearer',
+            bearerFormat: 'JWT'
+          }
+        }
+      }
     }
   }
 

@@ -1,6 +1,12 @@
 export * from './authentication.service';
 import { AuthenticationService } from './authentication.service';
 export * from './authentication.serviceInterface';
+export * from './fantasyTeamPlayers.service';
+import { FantasyTeamPlayersService } from './fantasyTeamPlayers.service';
+export * from './fantasyTeamPlayers.serviceInterface';
+export * from './fantasyTeams.service';
+import { FantasyTeamsService } from './fantasyTeams.service';
+export * from './fantasyTeams.serviceInterface';
 export * from './players.service';
 import { PlayersService } from './players.service';
 export * from './players.serviceInterface';
@@ -13,4 +19,4 @@ export * from './teams.serviceInterface';
 export * from './users.service';
 import { UsersService } from './users.service';
 export * from './users.serviceInterface';
-export const APIS = [AuthenticationService, PlayersService, PositionsService, TeamsService, UsersService];
+export const APIS = [AuthenticationService, FantasyTeamPlayersService, FantasyTeamsService, PlayersService, PositionsService, TeamsService, UsersService];
