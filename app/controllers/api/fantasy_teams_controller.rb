@@ -57,7 +57,11 @@
     private
 
     def set_fantasy_team
-      @fantasy_team = FantasyTeam.find(params[:id])
+      @fantasy_team = FantasyTeam.find_by(id: params[:id])
+      unless @fantasy_team
+        render json: { error: "Fantasy team not found" }, status: :not_found
+        return
+      end
     end
 
     def authorize_user!
