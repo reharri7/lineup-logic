@@ -12,9 +12,14 @@
 
     # GET /api/fantasy_teams/:id
     def show
+      players_with_fantasy_team_player_id = @fantasy_team.players.map do |player|
+        fantasy_team_player = @fantasy_team.fantasy_team_players.find_by(player_id: player.id)
+        player.as_json.merge(fantasy_team_player_id: fantasy_team_player.id)
+      end
+
       render json: {
         fantasy_team: @fantasy_team,
-        players: @fantasy_team.players
+        players: players_with_fantasy_team_player_id
       }
     end
 

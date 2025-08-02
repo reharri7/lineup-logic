@@ -1,0 +1,228 @@
+<div class="container mx-auto p-4">
+  <div class="mb-4">
+    <button class="btn btn-ghost" (click)="goBack()">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+      </svg>
+      Back to Teams
+    </button>
+  </div>
+  @if(loading) {
+    <div class="flex justify-center my-8">
+      <span class="loading loading-spinner loading-lg"></span>
+    </div>
+  }
+
+  @if(error) {
+    <div class="alert alert-error shadow-lg mb-4">
+      <div>
+        <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+        <span>{{ error }}</span>
+      </div>
+    </div>
+  }
+
+  @if(!loading && !error && fantasyTeam) {
+
+    <div>
+      <div class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-bold">{{ fantasyTeam.name }}</h1>
+        <div>
+          <button class="btn btn-primary mr-2" (click)="editTeam()">Edit Team</button>
+          <button class="btn btn-error" (click)="confirmDeleteTeam()">Delete Team</button>
+        </div>
+      </div>
+
+      <div class="card bg-base-100 shadow-xl mb-6">
+        <div class="card-body">
+          <h2 class="card-title">Team Players</h2>
+          @if(players && players.length > 0) {
+
+            <div class="overflow-x-auto">
+              <table class="table w-full">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Number</th>
+                    <th>Position</th>
+                    <th>Team</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                @for(player of players; track $index) {
+                  <tr>
+                    <td>{{ player.name }}</td>
+                    <td>{{ player.number }}</td>
+                    <td>{{ player.position?.position_name }}</td>
+                    <td>{{ player.team?.name }}</td>
+                    <td>
+                      <button class="btn btn-sm btn-error" (click)="removePlayer(player)">Remove</button>
+                    </td>
+                  </tr>
+                }
+                </tbody>
+              </table>
+            </div>
+          }
+          @if(!players || players.length === 0) {
+            <div class="text-center py-4">
+              <p>No players added to this team yet.</p>
+            </div>
+          }
+          <div class="card-actions justify-end mt-4">
+            <button class="btn btn-primary" (click)="openAddPlayerModal()">Add Player</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- Edit Team Modal -->
+  <div class="modal" [class.modal-open]="showEditModal">
+    <div class="modal-box">
+      <h3 class="font-bold text-lg">Edit Team</h3>
+      <form [formGroup]="teamForm" (ngSubmit)="saveTeam()">
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text">Team Name</span>
+          </label>
+          <input type="text" formControlName="name" class="input input-bordered" />
+          @if(teamForm.get('name')?.invalid && teamForm.get('name')?.touched) {
+            <div class="text-error text-sm mt-1">
+              Team name is required
+            </div>
+          }
+        </div>
+        <div class="modal-action">
+          <button type="button" class="btn btn-ghost" (click)="closeEditModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary" [disabled]="teamForm.invalid">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal" [class.modal-open]="showDeleteModal">
+    <div class="modal-box">
+      <h3 class="font-bold text-lg">Confirm Deletion</h3>
+      <p class="py-4">Are you sure you want to delete the team "{{ fantasyTeam?.name }}"? This action cannot be undone.</p>
+      <div class="modal-action">
+        <button class="btn btn-ghost" (click)="closeDeleteModal()">Cancel</button>
+        <button class="btn btn-error" (click)="deleteTeam()">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" [class.modal-open]="showAddPlayerModal">
+    <div class="modal-box">
+      <h3 class="font-bold text-lg">Add Player</h3>
+
+      <div class="mb-4">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-2">
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">Search by Name</span>
+            </label>
+            <input
+              type="text"
+              [(ngModel)]="playerNameFilter"
+              placeholder="Player name"
+              class="input input-bordered w-full"
+            />
+          </div>
+
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">Filter by Team</span>
+            </label>
+            <select
+              [(ngModel)]="selectedTeamId"
+              class="select select-bordered w-full"
+            >
+              <option [ngValue]="null">All Teams</option>
+              @for(team of teams; track $index) {
+                <option [ngValue]="team.id">{{ team.name }}</option>
+              }
+            </select>
+          </div>
+
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">Filter by Position</span>
+            </label>
+            <select
+              [(ngModel)]="selectedPositionId"
+              class="select select-bordered w-full"
+            >
+              <option [ngValue]="null">All Positions</option>
+              @for(position of positions; track $index) {
+                <option [ngValue]="position.id">{{ position.position_name }}</option>
+              }
+            </select>
+          </div>
+        </div>
+
+        <div class="flex justify-end space-x-2">
+          <button class="btn btn-sm" (click)="clearFilters()">Clear Filters</button>
+          <button class="btn btn-sm btn-primary" (click)="applyFilters()">Apply Filters</button>
+        </div>
+      </div>
+
+      @if(loadingPlayers) {
+        <div class="flex justify-center my-4">
+          <span class="loading loading-spinner loading-md"></span>
+        </div>
+      }
+
+      @if(!loadingPlayers && availablePlayers.length === 0) {
+        <div class="text-center py-4">
+          <p>No available players to add.</p>
+        </div>
+      }
+
+      @if(!loadingPlayers && availablePlayers.length > 0) {
+        <div class="overflow-x-auto max-h-96">
+          <table class="table w-full">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Number</th>
+                <th>Position</th>
+                <th>Team</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+            @for(player of availablePlayers; track $index) {
+              <tr>
+                <td>{{ player.name }}</td>
+                <td>{{ player.number }}</td>
+                <td>{{ player.position?.position_name }}</td>
+                <td>{{ player.team?.name }}</td>
+                <td>
+                  <button class="btn btn-sm btn-primary" (click)="addPlayer(player)">Add</button>
+                </td>
+              </tr>
+            }
+            </tbody>
+          </table>
+        </div>
+      }
+
+      <div class="modal-action">
+        <button class="btn btn-ghost" (click)="closeAddPlayerModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" [class.modal-open]="showRemovePlayerModal">
+    <div class="modal-box">
+      <h3 class="font-bold text-lg">Confirm Player Removal</h3>
+      <p class="py-4">Are you sure you want to remove {{ playerToRemove?.name }} from this team?</p>
+      <div class="modal-action">
+        <button class="btn btn-ghost" (click)="closeRemovePlayerModal()">Cancel</button>
+        <button class="btn btn-error" (click)="confirmRemovePlayer()">Remove</button>
+      </div>
+    </div>
+  </div>
+</div>

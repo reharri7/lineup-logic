@@ -1,0 +1,88 @@
+<div class="container mx-auto p-4">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold">My Fantasy Teams</h1>
+    <button class="btn btn-primary" (click)="openCreateTeamModal()">
+      Create New Team
+    </button>
+  </div>
+
+  @if(loading) {
+    <div class="flex justify-center my-8">
+      <span class="loading loading-spinner loading-lg"></span>
+    </div>
+  }
+
+  @if(error) {
+    <div class="alert alert-error shadow-lg mb-4">
+      <div>
+        <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+        <span>{{ error }}</span>
+      </div>
+    </div>
+  }
+
+  @if(!loading && !error && (!fantasyTeams || fantasyTeams.length === 0)) {
+    <div class="text-center my-12">
+      <div class="mb-4">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+        </svg>
+      </div>
+      <h2 class="text-xl font-semibold mb-2">You don't have any fantasy teams yet</h2>
+      <p class="text-gray-600 mb-4">Create your first fantasy team to get started</p>
+      <button class="btn btn-primary" (click)="openCreateTeamModal()">
+        Create Your First Team
+      </button>
+    </div>
+  }
+
+  @if(!loading && fantasyTeams && fantasyTeams.length > 0) {
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div *ngFor="let team of fantasyTeams" class="card bg-base-100 shadow-xl">
+        <div class="card-body">
+          <h2 class="card-title">{{ team.name }}</h2>
+          <p>Fantasy Team</p>
+          <div class="card-actions justify-end mt-4">
+            <button class="btn btn-sm btn-outline" (click)="viewTeamDetails(team.id)">View Details</button>
+            <button class="btn btn-sm btn-primary" (click)="editTeam(team)">Edit</button>
+            <button class="btn btn-sm btn-error" (click)="confirmDeleteTeam(team)">Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+
+  <div class="modal" [class.modal-open]="showTeamModal">
+    <div class="modal-box">
+      <h3 class="font-bold text-lg">{{ editingTeam ? 'Edit Team' : 'Create New Team' }}</h3>
+      <form [formGroup]="teamForm" (ngSubmit)="saveTeam()">
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text">Team Name</span>
+          </label>
+          <input type="text" formControlName="name" class="input input-bordered" />
+          @if(teamForm.get('name')?.invalid && teamForm.get('name')?.touched) {
+            <div class="text-error text-sm mt-1">
+              Team name is required
+            </div>
+          }
+        </div>
+        <div class="modal-action">
+          <button type="button" class="btn btn-ghost" (click)="closeTeamModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary" [disabled]="teamForm.invalid">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal" [class.modal-open]="showDeleteModal">
+    <div class="modal-box">
+      <h3 class="font-bold text-lg">Confirm Deletion</h3>
+      <p class="py-4">Are you sure you want to delete the team "{{ teamToDelete?.name }}"? This action cannot be undone.</p>
+      <div class="modal-action">
+        <button class="btn btn-ghost" (click)="closeDeleteModal()">Cancel</button>
+        <button class="btn btn-error" (click)="deleteTeam()">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
