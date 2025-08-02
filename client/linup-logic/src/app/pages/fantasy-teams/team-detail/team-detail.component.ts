@@ -273,7 +273,7 @@ export class TeamDetailComponent implements OnInit {
   confirmRemovePlayer(): void {
     if (!this.teamId || !this.playerToRemove) return;
 
-    const fantasyTeamPlayer = this.players.find(p => p.id === this.playerToRemove.id);
+    const fantasyTeamPlayer = this.players.find(p => p.fantasy_team_player_id === this.playerToRemove.fantasy_team_player_id);
     if (!fantasyTeamPlayer || !fantasyTeamPlayer.fantasy_team_player_id) {
       this.error = 'Could not find player association. Please try again.';
       this.closeRemovePlayerModal();
