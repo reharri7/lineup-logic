@@ -29,7 +29,7 @@
       if @fantasy_team.save
         render json: { fantasy_team: @fantasy_team }, status: :created
       else
-          render json: { errors: @fantasy_team.errors.full_messages }, status: :unprocessable_entity
+        render json: { errors: @fantasy_team.errors.full_messages }, status: :unprocessable_entity
       end
     end
 
