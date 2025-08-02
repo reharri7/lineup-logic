@@ -1,4 +1,3 @@
-  # app/controllers/api/fantasy_teams_controller.rb
   class Api::FantasyTeamsController < ApplicationController
     before_action :authenticate_user!
     before_action :set_fantasy_team, only: [ :show, :update, :destroy ]
