@@ -37,7 +37,10 @@ class Api::FantasyTeamPlayersController < ApplicationController
   end
 
   def set_fantasy_team_player
-    @fantasy_team_player = @fantasy_team.fantasy_team_players.find(params[:id])
+    @fantasy_team_player = @fantasy_team.fantasy_team_players.find_by(id: params[:id])
+    unless @fantasy_team_player
+      render json: { error: "Fantasy team player not found" }, status: :not_found
+    end
   end
 
   def authorize_user!
