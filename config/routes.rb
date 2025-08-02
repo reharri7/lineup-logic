@@ -20,6 +20,10 @@ Rails.application.routes.draw do
     resources :teams
     resources :positions
     resources :players
+
+    resources :fantasy_teams do
+      resources :players, only: [ :create, :destroy ], controller: "fantasy_team_players"
+    end
   end
 
   # Defines the root path route ("/")

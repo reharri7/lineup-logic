@@ -16,6 +16,8 @@ class ApplicationController < ActionController::API
     end
   end
 
+  alias authenticate_user! authenticate_request
+
   def find_user_by_token
     auth_header = request.headers["Authorization"]
     if auth_header

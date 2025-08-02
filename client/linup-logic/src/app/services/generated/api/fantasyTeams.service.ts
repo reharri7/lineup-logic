@@ -17,46 +17,55 @@ import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 // @ts-ignore
-import { ApiAuthLoginPost401Response } from '../model/apiAuthLoginPost401Response';
+import { ApiFantasyTeamsGet200Response } from '../model/apiFantasyTeamsGet200Response';
 // @ts-ignore
-import { ApiFantasyTeamsPostRequestFantasyTeam } from '../model/apiFantasyTeamsPostRequestFantasyTeam';
+import { ApiFantasyTeamsIdGet200Response } from '../model/apiFantasyTeamsIdGet200Response';
 // @ts-ignore
-import { ApiPlayersGet422Response } from '../model/apiPlayersGet422Response';
+import { ApiFantasyTeamsPost201Response } from '../model/apiFantasyTeamsPost201Response';
 // @ts-ignore
-import { ApiTeamsGet200Response } from '../model/apiTeamsGet200Response';
+import { ApiFantasyTeamsPostRequest } from '../model/apiFantasyTeamsPostRequest';
 // @ts-ignore
-import { ApiTeamsPost201Response } from '../model/apiTeamsPost201Response';
+import { Errors } from '../model/errors';
+// @ts-ignore
+import { Forbidden } from '../model/forbidden';
+// @ts-ignore
+import { NotFound } from '../model/notFound';
+// @ts-ignore
+import { Unauthorized } from '../model/unauthorized';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
 import { BaseService } from '../api.base.service';
 import {
-    TeamsServiceInterface
-} from './teams.serviceInterface';
+    FantasyTeamsServiceInterface
+} from './fantasyTeams.serviceInterface';
 
 
 
 @Injectable({
   providedIn: 'root'
 })
-export class TeamsService extends BaseService implements TeamsServiceInterface {
+export class FantasyTeamsService extends BaseService implements FantasyTeamsServiceInterface {
 
     constructor(protected httpClient: HttpClient, @Optional() @Inject(BASE_PATH) basePath: string|string[], @Optional() configuration?: Configuration) {
         super(basePath, configuration);
     }
 
     /**
-     * get teams
+     * Retrieves all fantasy teams for the current user
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public apiTeamsGet(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiTeamsGet200Response>;
-    public apiTeamsGet(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiTeamsGet200Response>>;
-    public apiTeamsGet(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiTeamsGet200Response>>;
-    public apiTeamsGet(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public apiFantasyTeamsGet(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiFantasyTeamsGet200Response>;
+    public apiFantasyTeamsGet(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiFantasyTeamsGet200Response>>;
+    public apiFantasyTeamsGet(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiFantasyTeamsGet200Response>>;
+    public apiFantasyTeamsGet(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer_auth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer_auth', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
             'application/json'
@@ -81,9 +90,9 @@ export class TeamsService extends BaseService implements TeamsServiceInterface {
             }
         }
 
-        let localVarPath = `/api/teams/`;
+        let localVarPath = `/api/fantasy_teams`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<ApiTeamsGet200Response>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<ApiFantasyTeamsGet200Response>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -97,20 +106,23 @@ export class TeamsService extends BaseService implements TeamsServiceInterface {
     }
 
     /**
-     * delete team
-     * @param id team id
+     * Deletes a fantasy team
+     * @param id 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public apiTeamsIdDelete(id: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public apiTeamsIdDelete(id: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public apiTeamsIdDelete(id: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public apiTeamsIdDelete(id: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public apiFantasyTeamsIdDelete(id: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public apiFantasyTeamsIdDelete(id: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public apiFantasyTeamsIdDelete(id: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public apiFantasyTeamsIdDelete(id: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling apiTeamsIdDelete.');
+            throw new Error('Required parameter id was null or undefined when calling apiFantasyTeamsIdDelete.');
         }
 
         let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer_auth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer_auth', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
             'application/json'
@@ -135,7 +147,7 @@ export class TeamsService extends BaseService implements TeamsServiceInterface {
             }
         }
 
-        let localVarPath = `/api/teams/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: undefined})}`;
+        let localVarPath = `/api/fantasy_teams/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
             {
@@ -151,20 +163,23 @@ export class TeamsService extends BaseService implements TeamsServiceInterface {
     }
 
     /**
-     * get team by id
-     * @param id team id
+     * Retrieves a fantasy team
+     * @param id 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public apiTeamsIdGet(id: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiTeamsPost201Response>;
-    public apiTeamsIdGet(id: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiTeamsPost201Response>>;
-    public apiTeamsIdGet(id: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiTeamsPost201Response>>;
-    public apiTeamsIdGet(id: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public apiFantasyTeamsIdGet(id: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiFantasyTeamsIdGet200Response>;
+    public apiFantasyTeamsIdGet(id: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiFantasyTeamsIdGet200Response>>;
+    public apiFantasyTeamsIdGet(id: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiFantasyTeamsIdGet200Response>>;
+    public apiFantasyTeamsIdGet(id: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling apiTeamsIdGet.');
+            throw new Error('Required parameter id was null or undefined when calling apiFantasyTeamsIdGet.');
         }
 
         let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer_auth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer_auth', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
             'application/json'
@@ -189,9 +204,9 @@ export class TeamsService extends BaseService implements TeamsServiceInterface {
             }
         }
 
-        let localVarPath = `/api/teams/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: undefined})}`;
+        let localVarPath = `/api/fantasy_teams/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<ApiTeamsPost201Response>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<ApiFantasyTeamsIdGet200Response>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -205,21 +220,24 @@ export class TeamsService extends BaseService implements TeamsServiceInterface {
     }
 
     /**
-     * update team
-     * @param id team id
-     * @param apiFantasyTeamsPostRequestFantasyTeam 
+     * Updates a fantasy team
+     * @param id 
+     * @param apiFantasyTeamsPostRequest 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public apiTeamsIdPut(id: number, apiFantasyTeamsPostRequestFantasyTeam?: ApiFantasyTeamsPostRequestFantasyTeam, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiTeamsPost201Response>;
-    public apiTeamsIdPut(id: number, apiFantasyTeamsPostRequestFantasyTeam?: ApiFantasyTeamsPostRequestFantasyTeam, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiTeamsPost201Response>>;
-    public apiTeamsIdPut(id: number, apiFantasyTeamsPostRequestFantasyTeam?: ApiFantasyTeamsPostRequestFantasyTeam, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiTeamsPost201Response>>;
-    public apiTeamsIdPut(id: number, apiFantasyTeamsPostRequestFantasyTeam?: ApiFantasyTeamsPostRequestFantasyTeam, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public apiFantasyTeamsIdPut(id: number, apiFantasyTeamsPostRequest?: ApiFantasyTeamsPostRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiFantasyTeamsPost201Response>;
+    public apiFantasyTeamsIdPut(id: number, apiFantasyTeamsPostRequest?: ApiFantasyTeamsPostRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiFantasyTeamsPost201Response>>;
+    public apiFantasyTeamsIdPut(id: number, apiFantasyTeamsPostRequest?: ApiFantasyTeamsPostRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiFantasyTeamsPost201Response>>;
+    public apiFantasyTeamsIdPut(id: number, apiFantasyTeamsPostRequest?: ApiFantasyTeamsPostRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling apiTeamsIdPut.');
+            throw new Error('Required parameter id was null or undefined when calling apiFantasyTeamsIdPut.');
         }
 
         let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer_auth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer_auth', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
             'application/json'
@@ -253,12 +271,12 @@ export class TeamsService extends BaseService implements TeamsServiceInterface {
             }
         }
 
-        let localVarPath = `/api/teams/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: undefined})}`;
+        let localVarPath = `/api/fantasy_teams/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<ApiTeamsPost201Response>('put', `${basePath}${localVarPath}`,
+        return this.httpClient.request<ApiFantasyTeamsPost201Response>('put', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: apiFantasyTeamsPostRequestFantasyTeam,
+                body: apiFantasyTeamsPostRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
@@ -270,17 +288,20 @@ export class TeamsService extends BaseService implements TeamsServiceInterface {
     }
 
     /**
-     * create team
-     * @param apiFantasyTeamsPostRequestFantasyTeam 
+     * Creates a fantasy team
+     * @param apiFantasyTeamsPostRequest 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public apiTeamsPost(apiFantasyTeamsPostRequestFantasyTeam?: ApiFantasyTeamsPostRequestFantasyTeam, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiTeamsPost201Response>;
-    public apiTeamsPost(apiFantasyTeamsPostRequestFantasyTeam?: ApiFantasyTeamsPostRequestFantasyTeam, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiTeamsPost201Response>>;
-    public apiTeamsPost(apiFantasyTeamsPostRequestFantasyTeam?: ApiFantasyTeamsPostRequestFantasyTeam, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiTeamsPost201Response>>;
-    public apiTeamsPost(apiFantasyTeamsPostRequestFantasyTeam?: ApiFantasyTeamsPostRequestFantasyTeam, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public apiFantasyTeamsPost(apiFantasyTeamsPostRequest?: ApiFantasyTeamsPostRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiFantasyTeamsPost201Response>;
+    public apiFantasyTeamsPost(apiFantasyTeamsPostRequest?: ApiFantasyTeamsPostRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiFantasyTeamsPost201Response>>;
+    public apiFantasyTeamsPost(apiFantasyTeamsPostRequest?: ApiFantasyTeamsPostRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiFantasyTeamsPost201Response>>;
+    public apiFantasyTeamsPost(apiFantasyTeamsPostRequest?: ApiFantasyTeamsPostRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer_auth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer_auth', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
             'application/json'
@@ -314,12 +335,12 @@ export class TeamsService extends BaseService implements TeamsServiceInterface {
             }
         }
 
-        let localVarPath = `/api/teams`;
+        let localVarPath = `/api/fantasy_teams`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<ApiTeamsPost201Response>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<ApiFantasyTeamsPost201Response>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: apiFantasyTeamsPostRequestFantasyTeam,
+                body: apiFantasyTeamsPostRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
