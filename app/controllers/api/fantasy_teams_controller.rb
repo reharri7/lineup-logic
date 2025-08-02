@@ -13,7 +13,13 @@
     def show
       players_with_fantasy_team_player_id = @fantasy_team.players.map do |player|
         fantasy_team_player = @fantasy_team.fantasy_team_players.find_by(player_id: player.id)
-        player.as_json.merge(fantasy_team_player_id: fantasy_team_player.id)
+        player.as_json(
+          only: [ :id, :name, :number ],
+          include: {
+            team: { only: [ :id, :name ] },
+            position: { only: [ :id, :position_name ] }
+          }
+        ).merge(fantasy_team_player_id: fantasy_team_player.id)
       end
 
       render json: {

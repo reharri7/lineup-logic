@@ -219,6 +219,10 @@
     <div class="modal-box">
       <h3 class="font-bold text-lg">Confirm Player Removal</h3>
       <p class="py-4">Are you sure you want to remove {{ playerToRemove?.name }} from this team?</p>
+      <div class="py-2">
+        <p><strong>Position:</strong> {{ playerToRemove?.position?.position_name }}</p>
+        <p><strong>Team:</strong> {{ playerToRemove?.team?.name }}</p>
+      </div>
       <div class="modal-action">
         <button class="btn btn-ghost" (click)="closeRemovePlayerModal()">Cancel</button>
         <button class="btn btn-error" (click)="confirmRemovePlayer()">Remove</button>
