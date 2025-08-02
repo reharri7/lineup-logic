@@ -60,7 +60,7 @@
       @fantasy_team = FantasyTeam.find_by(id: params[:id])
       unless @fantasy_team
         render json: { error: "Fantasy team not found" }, status: :not_found
-        return
+        nil
       end
     end
 
