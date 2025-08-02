@@ -22,7 +22,7 @@ Rails.application.routes.draw do
     resources :players
 
     resources :fantasy_teams do
-      resources :players, only: [:create, :destroy], controller: 'fantasy_team_players'
+      resources :players, only: [ :create, :destroy ], controller: "fantasy_team_players"
     end
   end
 

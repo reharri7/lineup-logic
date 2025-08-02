@@ -6,7 +6,7 @@ RSpec.describe 'Fantasy Team Players API', type: :request do
 
     post 'Adds a player to a fantasy team' do
       tags 'Fantasy Team Players'
-      security [{ bearer_auth: [] }]
+      security [ { bearer_auth: [] } ]
       consumes 'application/json'
       produces 'application/json'
       parameter name: :player, in: :body, schema: {
@@ -17,7 +17,7 @@ RSpec.describe 'Fantasy Team Players API', type: :request do
             properties: {
               player_id: { type: :integer }
             },
-            required: ['player_id']
+            required: [ 'player_id' ]
           }
         }
       }
@@ -81,7 +81,7 @@ RSpec.describe 'Fantasy Team Players API', type: :request do
 
     delete 'Removes a player from a fantasy team' do
       tags 'Fantasy Team Players'
-      security [{ bearer_auth: [] }]
+      security [ { bearer_auth: [] } ]
       produces 'application/json'
 
       response '204', 'player removed from fantasy team' do

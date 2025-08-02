@@ -4,7 +4,7 @@ RSpec.describe 'Fantasy Teams API', type: :request do
   path '/api/fantasy_teams' do
     get 'Retrieves all fantasy teams for the current user' do
       tags 'Fantasy Teams'
-      security [{ bearer_auth: [] }]
+      security [ { bearer_auth: [] } ]
       produces 'application/json'
 
       response '200', 'fantasy teams found' do
@@ -35,7 +35,7 @@ RSpec.describe 'Fantasy Teams API', type: :request do
 
     post 'Creates a fantasy team' do
       tags 'Fantasy Teams'
-      security [{ bearer_auth: [] }]
+      security [ { bearer_auth: [] } ]
       consumes 'application/json'
       produces 'application/json'
       parameter name: :fantasy_team, in: :body, schema: {
@@ -46,7 +46,7 @@ RSpec.describe 'Fantasy Teams API', type: :request do
             properties: {
               name: { type: :string }
             },
-            required: ['name']
+            required: [ 'name' ]
           }
         }
       }
@@ -80,7 +80,7 @@ RSpec.describe 'Fantasy Teams API', type: :request do
 
     get 'Retrieves a fantasy team' do
       tags 'Fantasy Teams'
-      security [{ bearer_auth: [] }]
+      security [ { bearer_auth: [] } ]
       produces 'application/json'
 
       response '200', 'fantasy team found' do
@@ -135,7 +135,7 @@ RSpec.describe 'Fantasy Teams API', type: :request do
 
     put 'Updates a fantasy team' do
       tags 'Fantasy Teams'
-      security [{ bearer_auth: [] }]
+      security [ { bearer_auth: [] } ]
       consumes 'application/json'
       produces 'application/json'
       parameter name: :fantasy_team, in: :body, schema: {
@@ -146,7 +146,7 @@ RSpec.describe 'Fantasy Teams API', type: :request do
             properties: {
               name: { type: :string }
             },
-            required: ['name']
+            required: [ 'name' ]
           }
         }
       }
@@ -191,7 +191,7 @@ RSpec.describe 'Fantasy Teams API', type: :request do
 
     delete 'Deletes a fantasy team' do
       tags 'Fantasy Teams'
-      security [{ bearer_auth: [] }]
+      security [ { bearer_auth: [] } ]
       produces 'application/json'
 
       response '204', 'fantasy team deleted' do
