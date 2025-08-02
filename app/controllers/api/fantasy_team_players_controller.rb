@@ -29,6 +29,8 @@ class Api::FantasyTeamPlayersController < ApplicationController
 
   def set_fantasy_team
     @fantasy_team = FantasyTeam.find(params[:fantasy_team_id])
+  rescue ActiveRecord::RecordNotFound
+    render json: { error: "Fantasy team not found" }, status: :not_found
   end
 
   def set_fantasy_team_player
