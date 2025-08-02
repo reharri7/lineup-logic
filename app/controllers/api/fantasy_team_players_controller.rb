@@ -6,7 +6,10 @@ class Api::FantasyTeamPlayersController < ApplicationController
 
   # POST /api/fantasy_teams/:fantasy_team_id/players
   def create
-    @player = Player.find(player_params[:player_id])
+    @player = Player.find_by(id: player_params[:player_id])
+    unless @player
+      render json: { error: "Player not found" }, status: :not_found and return
+    end
     @fantasy_team_player = @fantasy_team.fantasy_team_players.build(player: @player)
 
     if @fantasy_team_player.save
