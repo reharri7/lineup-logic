@@ -26,6 +26,16 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   {
+    path: 'player-rankings',
+    loadComponent: () => import('./pages/player-rankings/player-rankings.component').then(m => m.PlayerRankingsComponent),
+    canActivate: [authGuard]
+  },
+  {
+    path: 'optimal-lineup',
+    loadComponent: () => import('./pages/optimal-lineup/optimal-lineup.component').then(m => m.OptimalLineupComponent),
+    canActivate: [authGuard]
+  },
+  {
     path: 'admin',
     loadChildren: () => import('./pages/admin/admin.routes').then(m => m.ADMIN_ROUTES),
     canActivate: [authGuard]

@@ -1,0 +1,229 @@
+<div class="container mx-auto p-4">
+  <h1 class="text-2xl font-bold mb-6">Optimal Lineup Generator</h1>
+
+  <div class="mb-6">
+    <label class="form-control w-full max-w-xs">
+      <span class="label-text">Select Fantasy Team</span>
+      <select [(ngModel)]="selectedTeamId" (change)="onTeamChange()" class="select select-bordered">
+        <option [ngValue]="null">Select Team</option>
+        @for(team of fantasyTeams; track team.id) {
+          <option [ngValue]="team.id">{{ team.name }}</option>
+        }
+      </select>
+    </label>
+  </div>
+
+  @if(loadingTeams) {
+    <div class="flex justify-center my-8">
+      <span class="loading loading-spinner loading-lg"></span>
+    </div>
+  }
+
+  @if(error) {
+    <div class="alert alert-error shadow-lg mb-4">
+      <div>
+        <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+        <span>{{ error }}</span>
+      </div>
+    </div>
+  }
+
+  @if(loading) {
+    <div class="flex justify-center my-8">
+      <span class="loading loading-spinner loading-lg"></span>
+    </div>
+  }
+
+  @if(optimalLineup && !loading) {
+    <div class="card bg-base-100 shadow-xl">
+      <div class="card-body">
+        <h2 class="card-title">Optimal Lineup for {{ getSelectedTeamName() }}</h2>
+        <p class="text-sm text-gray-500 mb-4">
+          This lineup is generated based on your personal player rankings.
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- QB -->
+          <div class="card bg-base-200">
+            <div class="card-body">
+              <h3 class="card-title">Quarterback</h3>
+              @if(optimalLineup.quarterback) {
+                <div class="flex items-center space-x-3">
+                  <div class="avatar placeholder">
+                    <div class="bg-neutral text-neutral-content rounded-full w-12">
+                      <span>QB</span>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="font-bold">{{ optimalLineup.quarterback.name }}</div>
+                    <div class="text-sm opacity-50">{{ optimalLineup.quarterback.team.name }}</div>
+                  </div>
+                </div>
+              } @else {
+                <p class="text-gray-500">No quarterback available</p>
+              }
+            </div>
+          </div>
+
+          <!-- RBs -->
+          <div class="card bg-base-200">
+            <div class="card-body">
+              <h3 class="card-title">Running Backs</h3>
+              @if(checkForRunningBacks()) {
+                @for(rb of optimalLineup.runningBacks; track rb.id) {
+                  <div class="flex items-center space-x-3 mb-2">
+                    <div class="avatar placeholder">
+                      <div class="bg-neutral text-neutral-content rounded-full w-12">
+                        <span>RB</span>
+                      </div>
+                    </div>
+                    <div>
+                      <div class="font-bold">{{ rb.name }}</div>
+                      <div class="text-sm opacity-50">{{ rb.team.name }}</div>
+                    </div>
+                  </div>
+                }
+              } @else {
+                <p class="text-gray-500">No running backs available</p>
+              }
+            </div>
+          </div>
+
+          <!-- WRs -->
+          <div class="card bg-base-200">
+            <div class="card-body">
+              <h3 class="card-title">Wide Receivers</h3>
+              @if(checkForWideReceivers()) {
+                @for(wr of optimalLineup.wideReceivers; track wr.id) {
+                  <div class="flex items-center space-x-3 mb-2">
+                    <div class="avatar placeholder">
+                      <div class="bg-neutral text-neutral-content rounded-full w-12">
+                        <span>WR</span>
+                      </div>
+                    </div>
+                    <div>
+                      <div class="font-bold">{{ wr.name }}</div>
+                      <div class="text-sm opacity-50">{{ wr.team.name }}</div>
+                    </div>
+                  </div>
+                }
+              } @else {
+                <p class="text-gray-500">No wide receivers available</p>
+              }
+            </div>
+          </div>
+
+          <!-- TE -->
+          <div class="card bg-base-200">
+            <div class="card-body">
+              <h3 class="card-title">Tight End</h3>
+              @if(optimalLineup.tightEnd) {
+                <div class="flex items-center space-x-3">
+                  <div class="avatar placeholder">
+                    <div class="bg-neutral text-neutral-content rounded-full w-12">
+                      <span>TE</span>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="font-bold">{{ optimalLineup.tightEnd.name }}</div>
+                    <div class="text-sm opacity-50">{{ optimalLineup.tightEnd.team.name }}</div>
+                  </div>
+                </div>
+              } @else {
+                <p class="text-gray-500">No tight end available</p>
+              }
+            </div>
+          </div>
+
+          <!-- FLEX -->
+          <div class="card bg-base-200">
+            <div class="card-body">
+              <h3 class="card-title">Flex (RB/WR/TE)</h3>
+              @if(optimalLineup.flex) {
+                <div class="flex items-center space-x-3">
+                  <div class="avatar placeholder">
+                    <div class="bg-neutral text-neutral-content rounded-full w-12">
+                      <span>{{ optimalLineup.flex.position.position_name }}</span>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="font-bold">{{ optimalLineup.flex.name }}</div>
+                    <div class="text-sm opacity-50">{{ optimalLineup.flex.team.name }}</div>
+                    <div class="text-sm opacity-50">{{ getPositionDisplayName(optimalLineup.flex.position.position_name) }}</div>
+                  </div>
+                </div>
+              } @else {
+                <p class="text-gray-500">No flex player available</p>
+              }
+            </div>
+          </div>
+
+          <!-- K -->
+          <div class="card bg-base-200">
+            <div class="card-body">
+              <h3 class="card-title">Kicker</h3>
+              @if(optimalLineup.kicker) {
+                <div class="flex items-center space-x-3">
+                  <div class="avatar placeholder">
+                    <div class="bg-neutral text-neutral-content rounded-full w-12">
+                      <span>K</span>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="font-bold">{{ optimalLineup.kicker.name }}</div>
+                    <div class="text-sm opacity-50">{{ optimalLineup.kicker.team.name }}</div>
+                  </div>
+                </div>
+              } @else {
+                <p class="text-gray-500">No kicker available</p>
+              }
+            </div>
+          </div>
+
+          <!-- DEF -->
+          <div class="card bg-base-200">
+            <div class="card-body">
+              <h3 class="card-title">Defense</h3>
+              @if(optimalLineup.defense) {
+                <div class="flex items-center space-x-3">
+                  <div class="avatar placeholder">
+                    <div class="bg-neutral text-neutral-content rounded-full w-12">
+                      <span>DEF</span>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="font-bold">{{ optimalLineup.defense.name }}</div>
+                    <div class="text-sm opacity-50">{{ optimalLineup.defense.team.name }}</div>
+                  </div>
+                </div>
+              } @else {
+                <p class="text-gray-500">No defense available</p>
+              }
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-6">
+          <div class="alert alert-info">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            <span>To improve your lineup, update your player rankings in the <a routerLink="/player-rankings" class="link link-primary">Player Rankings</a> page.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+
+  @if(!optimalLineup && !loading && selectedTeamId) {
+    <div class="alert alert-warning">
+      <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+      <span>No players found for this team. Add players to your team to generate an optimal lineup.</span>
+    </div>
+  }
+
+  @if(!selectedTeamId && !loadingTeams && fantasyTeams.length === 0) {
+    <div class="alert alert-warning">
+      <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+      <span>You don't have any fantasy teams yet. Create a fantasy team first.</span>
+    </div>
+  }
+</div>
