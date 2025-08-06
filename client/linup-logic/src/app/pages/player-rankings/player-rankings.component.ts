@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
@@ -14,7 +14,7 @@ import { PlayerRankingsService } from 'src/app/services/player-rankings.service'
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, FormsModule, DragDropModule]
 })
-export class PlayerRankingsComponent implements OnInit {
+export class PlayerRankingsComponent implements OnInit, AfterViewInit, OnDestroy {
   positions: any[] = [];
   selectedPosition: string = '';
   availablePlayers: any[] = [];
@@ -34,6 +34,15 @@ export class PlayerRankingsComponent implements OnInit {
   importError: string | null = null;
   importSuccess = false;
 
+  // Pagination properties
+  currentPage: number = 1;
+  pageSize: number = 25;
+  totalPages: number = 0;
+  isLoadingMore: boolean = false;
+
+  // Intersection Observer
+  private observer: IntersectionObserver | null = null;
+
   constructor(
     private playersService: PlayersService,
     private positionsService: PositionsService,
@@ -44,6 +53,22 @@ export class PlayerRankingsComponent implements OnInit {
   ngOnInit(): void {
     this.loadPositions();
     this.loadTeams();
+  }
+
+  ngAfterViewInit(): void {
+    // Initial setup will happen after players are loaded
+  }
+
+  ngOnDestroy(): void {
+    // Clean up the observer when the component is destroyed
+    this.disconnectObserver();
+  }
+
+  private disconnectObserver(): void {
+    if (this.observer) {
+      this.observer.disconnect();
+      this.observer = null;
+    }
   }
 
   loadPositions(): void {
@@ -79,18 +104,26 @@ export class PlayerRankingsComponent implements OnInit {
     this.loadPlayersByPosition();
   }
 
-  loadPlayersByPosition(): void {
+  loadPlayersByPosition(loadMore: boolean = false): void {
     if (!this.selectedPosition) return;
 
-    this.loading = true;
+    if (loadMore) {
+      this.isLoadingMore = true;
+    } else {
+      this.loading = true;
+      this.currentPage = 1; // Reset to first page when not loading more
+      // Disconnect any existing observer when starting a new load
+      this.disconnectObserver();
+    }
+
     this.error = null;
 
     const position = this.positions.find(p => p.position_name === this.selectedPosition);
     const positionId = position?.id;
 
     this.playersService.apiPlayersGet(
-      undefined,
-      undefined,
+      this.currentPage,
+      this.pageSize,
       this.playerNameFilter || undefined,
       undefined,
       this.selectedTeamId || undefined,
@@ -98,40 +131,93 @@ export class PlayerRankingsComponent implements OnInit {
     ).subscribe({
       next: (response) => {
         const savedRankings = this.playerRankingsService.getRankings(this.selectedPosition);
-        const allPlayers = response.players || [];
+        const newPlayers = response.players || [];
 
-        const playerMap = new Map(allPlayers.map(p => [p.id, p]));
-
-        if (savedRankings.length > 0) {
-          this.selectedPlayers = savedRankings
-            .filter(id => playerMap.has(id))
-            .map(id => playerMap.get(id));
-
-          const selectedPlayerIds = new Set(this.selectedPlayers.map(p => p.id));
-
-          this.availablePlayers = allPlayers.filter(p => !selectedPlayerIds.has(p.id));
-        } else {
-          this.availablePlayers = [...allPlayers];
-          this.selectedPlayers = [];
+        // Update pagination metadata
+        if (response.meta) {
+          this.totalPages = response.meta.total_pages || 0;
         }
 
-        this.loading = false;
+        const playerMap = new Map(newPlayers.map(p => [p.id, p]));
+
+        // Get all selected player IDs to filter them out from available players
+        const selectedPlayerIds = new Set(this.selectedPlayers.map(p => p.id));
+
+        // Filter out already selected players from the new batch
+        const newAvailablePlayers = newPlayers.filter(p => !selectedPlayerIds.has(p.id));
+
+        if (loadMore) {
+          // Append new players to existing list
+          this.availablePlayers = [...this.availablePlayers, ...newAvailablePlayers];
+          this.isLoadingMore = false;
+        } else {
+          // First load - handle selected players
+          if (savedRankings.length > 0) {
+            this.selectedPlayers = savedRankings
+              .filter(id => playerMap.has(id))
+              .map(id => playerMap.get(id));
+
+            this.availablePlayers = newAvailablePlayers;
+          } else {
+            this.availablePlayers = newAvailablePlayers;
+            this.selectedPlayers = [];
+          }
+          this.loading = false;
+        }
+
+        // Set up the intersection observer after the data is loaded
+        // Use setTimeout to ensure the DOM has been updated
+        setTimeout(() => this.setupIntersectionObserver(), 0);
       },
       error: (err) => {
         this.error = 'Failed to load players. Please try again.';
         console.error('Error loading players:', err);
         this.loading = false;
+        this.isLoadingMore = false;
       }
     });
   }
 
+  private setupIntersectionObserver(): void {
+    // Disconnect any existing observer first
+    this.disconnectObserver();
+
+    // Only set up the observer if there are more pages to load
+    if (this.currentPage >= this.totalPages) {
+      return;
+    }
+
+    // Find the sentinel element
+    const sentinel = document.getElementById('player-list-sentinel');
+    if (!sentinel) {
+      console.error('Sentinel element not found');
+      return;
+    }
+
+    // Create the observer
+    this.observer = new IntersectionObserver((entries) => {
+      // If the sentinel is visible and we're not already loading more data
+      if (entries[0].isIntersecting && !this.isLoadingMore && this.currentPage < this.totalPages) {
+        this.loadMorePlayers();
+      }
+    }, {
+      root: document.querySelector('.overflow-y-auto'), // The scrollable container
+      threshold: 0.1 // Trigger when at least 10% of the sentinel is visible
+    });
+
+    // Start observing the sentinel
+    this.observer.observe(sentinel);
+  }
+
   applyFilters(): void {
+    this.currentPage = 1; // Reset to first page
     this.refreshPlayerLists();
   }
 
   clearFilters(): void {
     this.playerNameFilter = '';
     this.selectedTeamId = null;
+    this.currentPage = 1; // Reset to first page
     this.refreshPlayerLists();
   }
 
@@ -249,6 +335,14 @@ export class PlayerRankingsComponent implements OnInit {
   refreshPlayerLists(): void {
     if (this.selectedPosition) {
       this.loadPlayersByPosition();
+    }
+  }
+
+  loadMorePlayers(): void {
+    // Only load more if we're not already loading and there are more pages
+    if (!this.isLoadingMore && this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.loadPlayersByPosition(true);
     }
   }
 }

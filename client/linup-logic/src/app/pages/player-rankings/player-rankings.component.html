@@ -123,6 +123,18 @@
                           </td>
                         </tr>
                       }
+                      @if(isLoadingMore) {
+                        <tr>
+                          <td colspan="3" class="text-center py-4">
+                            <span class="loading loading-spinner loading-sm"></span>
+                            <span class="ml-2">Loading more players...</span>
+                          </td>
+                        </tr>
+                      }
+                      <!-- Sentinel element for intersection observer -->
+                      <tr id="player-list-sentinel" style="height: 1px;">
+                        <td colspan="3"></td>
+                      </tr>
                     </tbody>
                   </table>
                 </div>
