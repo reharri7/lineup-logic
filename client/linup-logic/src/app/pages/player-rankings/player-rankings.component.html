@@ -1,0 +1,266 @@
+<div class="container mx-auto p-4">
+  <h1 class="text-2xl font-bold mb-6">Player Rankings</h1>
+
+  <div class="mb-6">
+    <label class="form-control w-full max-w-xs">
+      <span class="label-text">Select Position to Rank</span>
+      <select [(ngModel)]="selectedPosition" (change)="onPositionChange()" class="select select-bordered">
+        <option value="">Select Position</option>
+        @for(position of positions; track position.id) {
+          <option [value]="position.position_name">{{ position.position_name }}</option>
+        }
+        <option value="FLEX">Flex Players (RB/WR/TE)</option>
+      </select>
+    </label>
+  </div>
+
+  @if(loading) {
+    <div class="flex justify-center my-8">
+      <span class="loading loading-spinner loading-lg"></span>
+    </div>
+  }
+
+  @if(error) {
+    <div class="alert alert-error shadow-lg mb-4">
+      <div>
+        <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+        <span>{{ error }}</span>
+      </div>
+    </div>
+  }
+
+  @if(selectedPosition && !loading) {
+    <div class="card bg-base-100 shadow-xl">
+      <div class="card-body flex flex-col flex-none">
+        <div class="flex justify-between items-center mb-3">
+          <h2 class="card-title">{{ selectedPosition }} Rankings</h2>
+          <div class="flex space-x-2">
+            <button class="btn btn-sm btn-outline" (click)="openExportModal()">Export</button>
+            <button class="btn btn-sm btn-outline" (click)="openImportModal()">Import</button>
+            <button class="btn btn-sm btn-error" (click)="clearCurrentRankings()">Clear Rankings</button>
+          </div>
+        </div>
+
+        <p class="text-sm text-gray-500 mb-4">
+          Drag players up or down to set your personal rankings. These rankings will be used to generate optimal lineups.
+        </p>
+
+        <div class="mb-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-2">
+            <div class="form-control">
+              <label class="label">
+                <span class="label-text">Search by Name</span>
+              </label>
+              <input
+                type="text"
+                [(ngModel)]="playerNameFilter"
+                placeholder="Player name"
+                class="input input-bordered w-full"
+              />
+            </div>
+
+            <div class="form-control">
+              <label class="label">
+                <span class="label-text">Filter by Team</span>
+              </label>
+              <select
+                [(ngModel)]="selectedTeamId"
+                class="select select-bordered w-full"
+              >
+                <option [ngValue]="null">All Teams</option>
+                @for(team of teams; track team.id) {
+                  <option [ngValue]="team.id">{{ team.name }}</option>
+                }
+              </select>
+            </div>
+          </div>
+
+          <div class="flex justify-end space-x-2">
+            <button class="btn btn-sm" (click)="clearFilters()">Clear Filters</button>
+            <button class="btn btn-sm btn-primary" (click)="applyFilters()">Apply Filters</button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="card bg-base-100 shadow-md border-l-4 border-info">
+            <div class="card-body flex flex-col flex-none">
+              <div class="flex justify-between items-center mb-2">
+                <h3 class="card-title text-lg">Available Players</h3>
+                <span class="badge badge-info">{{ availablePlayers.length }}</span>
+              </div>
+              <p class="text-sm text-gray-500 mb-4">Select players to add to your rankings</p>
+
+              @if(availablePlayers.length === 0) {
+                <div class="text-center py-8">
+                  <p>No available players found.</p>
+                </div>
+              }
+
+              @if(availablePlayers.length > 0) {
+                <div class="overflow-x-auto max-h-[500px] overflow-y-auto">
+                  <table class="table w-full">
+                    <thead>
+                      <tr>
+                        <th>Name</th>
+                        <th>Team</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @for(player of availablePlayers; track player.id) {
+                        <tr class="hover:bg-base-200">
+                          <td>
+                            <div>
+                              <div class="font-bold">{{ player.name }}</div>
+                              <div class="text-sm opacity-50">{{ player.position?.position_name }}</div>
+                            </div>
+                          </td>
+                          <td>{{ player.team?.name }}</td>
+                          <td>
+                            <button class="btn btn-sm btn-primary" (click)="addPlayerToRankings(player)">
+                              Add
+                            </button>
+                          </td>
+                        </tr>
+                      }
+                      @if(isLoadingMore) {
+                        <tr>
+                          <td colspan="3" class="text-center py-4">
+                            <span class="loading loading-spinner loading-sm"></span>
+                            <span class="ml-2">Loading more players...</span>
+                          </td>
+                        </tr>
+                      }
+                      <!-- Sentinel element for intersection observer -->
+                      <tr id="player-list-sentinel" style="height: 1px;">
+                        <td colspan="3"></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              }
+            </div>
+          </div>
+
+          <div class="card bg-base-100 shadow-md border-l-4 border-primary">
+            <div class="card-body flex flex-col flex-none">
+              <div class="flex justify-between items-center mb-2">
+                <h3 class="card-title text-lg">Player Rankings</h3>
+                <span class="badge badge-primary">{{ selectedPlayers.length }}</span>
+              </div>
+              <p class="text-sm text-gray-500 mb-4">Drag players to reorder your rankings</p>
+
+              @if(selectedPlayers.length === 0) {
+                <div class="text-center py-8">
+                  <p>No players added to rankings yet.</p>
+                </div>
+              }
+
+              @if(selectedPlayers.length > 0) {
+                <div class="overflow-x-auto max-h-[500px] overflow-y-auto">
+                  <table class="table w-full">
+                    <thead>
+                      <tr>
+                        <th>Rank</th>
+                        <th>Name</th>
+                        <th>Team</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody cdkDropList (cdkDropListDropped)="onDrop($event)">
+                      @for(player of selectedPlayers; track player.id; let i = $index) {
+                        <tr cdkDrag class="cursor-move hover:bg-base-200">
+                          <td>{{ i + 1 }}</td>
+                          <td>
+                            <div class="flex items-center space-x-3">
+                              <!-- Drag handle -->
+                              <div cdkDragHandle class="cursor-move">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16" />
+                                </svg>
+                              </div>
+                              <div>
+                                <div class="font-bold">{{ player.name }}</div>
+                                <div class="text-sm opacity-50">{{ player.position?.position_name }}</div>
+                              </div>
+                            </div>
+                          </td>
+                          <td>{{ player.team?.name }}</td>
+                          <td>
+                            <div class="flex space-x-1">
+                              <button class="btn btn-sm btn-circle" (click)="movePlayerUp(i)" [disabled]="$first">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+                                </svg>
+                              </button>
+                              <button class="btn btn-sm btn-circle" (click)="movePlayerDown(i)" [disabled]="$last">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                </svg>
+                              </button>
+                              <button class="btn btn-sm btn-circle btn-error" (click)="removePlayerFromRankings(player)">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      }
+                    </tbody>
+                  </table>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+
+  <div class="modal" [class.modal-open]="showExportModal">
+    <div class="modal-box">
+      <h3 class="font-bold text-lg">Export Rankings</h3>
+      <p class="py-4">Copy the text below to save your rankings. You can import this later to restore your rankings.</p>
+
+      <textarea class="textarea textarea-bordered w-full h-32" readonly>{{ exportedRankings }}</textarea>
+
+      <div class="modal-action">
+        <button class="btn btn-primary" (click)="copyToClipboard()">Copy to Clipboard</button>
+        <button class="btn" (click)="closeExportModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" [class.modal-open]="showImportModal">
+    <div class="modal-box">
+      <h3 class="font-bold text-lg">Import Rankings</h3>
+      <p class="py-4">Paste your exported rankings below to import them.</p>
+
+      @if(importError) {
+        <div class="alert alert-error mb-4">
+          <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+          <span>{{ importError }}</span>
+        </div>
+      }
+
+      @if(importSuccess) {
+        <div class="alert alert-success mb-4">
+          <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+          <span>Rankings imported successfully!</span>
+        </div>
+      }
+
+      <textarea
+        class="textarea textarea-bordered w-full h-32"
+        [(ngModel)]="importRankings"
+        placeholder="Paste your exported rankings here"
+      ></textarea>
+
+      <div class="modal-action">
+        <button class="btn btn-primary" (click)="submitImport()">Import</button>
+        <button class="btn" (click)="closeImportModal()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

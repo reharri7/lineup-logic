@@ -213,8 +213,14 @@ export class TeamDetailComponent implements OnInit {
     )
       .subscribe({
         next: (response) => {
-          const currentPlayerIds = this.players.map(p => p.id);
-          this.availablePlayers = (response.players || []).filter(p => !currentPlayerIds.includes(p.id));
+          const currentPlayerIds = this.players.map(p => p.id).filter((id): id is number => id !== undefined);
+
+          const playersWithDefinedIds = (response.players || []).filter(p => p.id !== undefined);
+
+          this.availablePlayers = playersWithDefinedIds.filter(p => {
+            const playerId = p.id as number;
+            return !currentPlayerIds.includes(playerId);
+          });
           this.loadingPlayers = false;
         },
         error: (err) => {
