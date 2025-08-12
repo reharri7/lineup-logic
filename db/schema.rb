@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_16_062717) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_11_183854) do
   create_table "fantasy_team_players", force: :cascade do |t|
     t.integer "fantasy_team_id", null: false
     t.integer "player_id", null: false
@@ -62,6 +62,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_16_062717) do
     t.datetime "updated_at", null: false
     t.string "auth_token"
     t.datetime "token_expires_at"
+    t.string "password_reset_token"
+    t.datetime "password_reset_token_expires_at"
     t.index ["auth_token"], name: "index_users_on_auth_token", unique: true
   end
 
