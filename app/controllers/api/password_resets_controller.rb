@@ -11,7 +11,7 @@ class Api::PasswordResetsController < ApplicationController
       PasswordResetMailer.reset_password_email(@user).deliver_now
       render json: { message: "Password reset instructions sent to your email" }, status: :ok
     else
-      render json: { error: "Email not found"}, status: :not_found
+      render json: { error: "Email not found" }, status: :not_found
     end
   end
 
@@ -23,16 +23,15 @@ class Api::PasswordResetsController < ApplicationController
       if @user.update(password_params)
         @user.clear_password_reset_token
         render json: { message: "Password has been reset successfully" }, status: :ok
-        else
-          render json: { errors: @user.errors.full_messages }, status: :unprocessable_entity
-        end
       else
-        render json: { error: "Invalid or expired token"}, status: :unprocessable_entity
+          render json: { errors: @user.errors.full_messages }, status: :unprocessable_entity
+      end
+    else
+        render json: { error: "Invalid or expired token" }, status: :unprocessable_entity
     end
   end
 
   def password_params
     params.permit(:password, :password_confirmation)
   end
-
 end

@@ -18,7 +18,7 @@ Rails.application.routes.draw do
     post "/signup", to: "users#create"
 
     # Password reset routes
-    resources :password_resets, only: [:create, :update], param: :token
+    resources :password_resets, only: [ :create, :update ], param: :token
 
     # Admin routes
     resources :teams

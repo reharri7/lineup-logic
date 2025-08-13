@@ -8,7 +8,7 @@ Rack::Attack.cache.store = Rails.cache
 # Allow all local traffic
 Rack::Attack.safelist("allow-localhost") do |req|
   # 127.0.0.1, ::1 and unix socket
-  ["127.0.0.1", "::1"].include?(req.ip)
+  [ "127.0.0.1", "::1" ].include?(req.ip)
 end
 
 # Throttle requests to 100 requests per 5 minutes per IP (general safety net)
@@ -55,7 +55,7 @@ Rack::Attack.throttled_response = lambda do |env|
     "Retry-After" => retry_after.to_s
   }
 
-  [429, headers, [body]]
+  [ 429, headers, [ body ] ]
 end
 
 ActiveSupport::Notifications.subscribe("rack.attack") do |name, start, finish, id, payload|
