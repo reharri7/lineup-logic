@@ -14,9 +14,11 @@
             class="input input-bordered"
             formControlName="email"
           />
-          <label *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" class="label">
-            <span class="label-text-alt text-error">Please enter a valid email address</span>
-          </label>
+          @if(loginForm.get('email')?.invalid && loginForm.get('email')?.touched) {
+            <label class="label">
+              <span class="label-text-alt text-error">Please enter a valid email address</span>
+            </label>
+          }
         </div>
 
         <div class="form-control mt-4">
@@ -68,9 +70,11 @@
           class="input input-bordered"
           formControlName="email"
         />
-        <label *ngIf="createAccountForm.get('email')?.invalid && createAccountForm.get('email')?.touched" class="label">
-          <span class="label-text-alt text-error">Please enter a valid email address</span>
-        </label>
+        @if(createAccountForm.get('email')?.invalid && createAccountForm.get('email')?.touched) {
+          <label class="label">
+            <span class="label-text-alt text-error">Please enter a valid email address</span>
+          </label>
+        }
       </div>
 
       <div class="form-control mt-4">
@@ -83,9 +87,11 @@
           class="input input-bordered"
           formControlName="username"
         />
-        <label *ngIf="createAccountForm.get('username')?.invalid && createAccountForm.get('username')?.touched" class="label">
-          <span class="label-text-alt text-error">Username is required</span>
-        </label>
+        @if(createAccountForm.get('username')?.invalid && createAccountForm.get('username')?.touched) {
+          <label class="label">
+            <span class="label-text-alt text-error">Username is required</span>
+          </label>
+        }
       </div>
 
       <div class="form-control mt-4">
@@ -98,9 +104,11 @@
           class="input input-bordered"
           formControlName="password"
         />
-        <label *ngIf="createAccountForm.get('password')?.invalid && createAccountForm.get('password')?.touched" class="label">
-          <span class="label-text-alt text-error">Password is required</span>
-        </label>
+        @if(createAccountForm.get('password')?.invalid && createAccountForm.get('password')?.touched) {
+          <label class="label">
+            <span class="label-text-alt text-error">Password is required</span>
+          </label>
+        }
       </div>
 
       <div class="form-control mt-4">
@@ -113,12 +121,16 @@
           class="input input-bordered"
           formControlName="password_confirmation"
         />
-        <label *ngIf="createAccountForm.get('password_confirmation')?.invalid && createAccountForm.get('password_confirmation')?.touched" class="label">
-          <span class="label-text-alt text-error">Password confirmation is required</span>
-        </label>
-        <label *ngIf="createAccountForm.errors?.['passwordMismatch'] && createAccountForm.get('password_confirmation')?.touched" class="label">
-          <span class="label-text-alt text-error">Passwords do not match</span>
-        </label>
+        @if(createAccountForm.get('password_confirmation')?.invalid && createAccountForm.get('password_confirmation')?.touched) {
+          <label class="label">
+            <span class="label-text-alt text-error">Password confirmation is required</span>
+          </label>
+        }
+        @if(createAccountForm.errors?.['passwordMismatch'] && createAccountForm.get('password_confirmation')?.touched) {
+          <label class="label">
+            <span class="label-text-alt text-error">Passwords do not match</span>
+          </label>
+        }
       </div>
 
       <div class="modal-action">
