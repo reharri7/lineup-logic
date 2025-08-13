@@ -15,7 +15,7 @@ RSpec.describe 'api/password_resets', type: :request do
       }
 
       response(200, 'password reset email sent when email exists') do
-        let!(:user) { User.create!(username: 'jane', email: 'user@example.com', password: 'Password1!', role: 'user') }
+        let!(:user) { User.create!(username: 'jane', email: 'user@example.com', password: '', role: 'user') }
         let(:payload) { { email: 'user@example.com' } }
 
         run_test! do |response|
@@ -54,12 +54,12 @@ RSpec.describe 'api/password_resets', type: :request do
 
       response(200, 'password reset successfully') do
         let!(:user) do
-          User.create!(username: 'jane', email: 'user2@example.com', password: 'Password1!', role: 'user').tap do |u|
+          User.create!(username: 'jane', email: 'user2@example.com', password: '', role: 'user').tap do |u|
             u.generate_password_reset_token
           end
         end
         let(:token) { user.password_reset_token }
-        let(:payload) { { password: 'NewP@ssw0rd', password_confirmation: 'NewP@ssw0rd' } }
+        let(:payload) { { password: '', password_confirmation: '' } }
 
         run_test! do |response|
           data = JSON.parse(response.body)
@@ -69,7 +69,7 @@ RSpec.describe 'api/password_resets', type: :request do
 
       response(422, 'invalid or expired token') do
         let(:token) { 'invalid-token' }
-        let(:payload) { { password: 'NewP@ssw0rd', password_confirmation: 'NewP@ssw0rd' } }
+        let(:payload) { { password: '', password_confirmation: '' } }
 
         run_test! do |response|
           data = JSON.parse(response.body)
@@ -79,12 +79,12 @@ RSpec.describe 'api/password_resets', type: :request do
 
       response(422, 'validation errors when passwords do not match') do
         let!(:user) do
-          User.create!(username: 'john', email: 'user3@example.com', password: 'Password1!', role: 'user').tap do |u|
+          User.create!(username: 'john', email: 'user3@example.com', password: '', role: 'user').tap do |u|
             u.generate_password_reset_token
           end
         end
         let(:token) { user.password_reset_token }
-        let(:payload) { { password: 'NewP@ssw0rd', password_confirmation: 'Different1!' } }
+        let(:payload) { { password: '', password_confirmation: '' } }
 
         run_test! do |response|
           data = JSON.parse(response.body)
