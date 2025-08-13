@@ -14,6 +14,8 @@ export * from './apiFantasyTeamsIdGet200Response';
 export * from './apiFantasyTeamsPost201Response';
 export * from './apiFantasyTeamsPostRequest';
 export * from './apiFantasyTeamsPostRequestFantasyTeam';
+export * from './apiPasswordResetsPostRequest';
+export * from './apiPasswordResetsTokenPutRequest';
 export * from './apiPlayersGet200Response';
 export * from './apiPlayersGet200ResponseMeta';
 export * from './apiPlayersGet200ResponsePlayersInner';

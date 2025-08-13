@@ -9,6 +9,8 @@ api/fantasyTeamPlayers.service.ts
 api/fantasyTeamPlayers.serviceInterface.ts
 api/fantasyTeams.service.ts
 api/fantasyTeams.serviceInterface.ts
+api/passwordResets.service.ts
+api/passwordResets.serviceInterface.ts
 api/players.service.ts
 api/players.serviceInterface.ts
 api/positions.service.ts
@@ -37,6 +39,8 @@ model/apiFantasyTeamsIdGet200Response.ts
 model/apiFantasyTeamsPost201Response.ts
 model/apiFantasyTeamsPostRequest.ts
 model/apiFantasyTeamsPostRequestFantasyTeam.ts
+model/apiPasswordResetsPostRequest.ts
+model/apiPasswordResetsTokenPutRequest.ts
 model/apiPlayersGet200Response.ts
 model/apiPlayersGet200ResponseMeta.ts
 model/apiPlayersGet200ResponsePlayersInner.ts

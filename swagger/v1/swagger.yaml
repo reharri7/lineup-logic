@@ -486,6 +486,63 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/not_found"
+  "/api/password_resets":
+    post:
+      summary: Request password reset email
+      tags:
+      - PasswordResets
+      parameters: []
+      responses:
+        '200':
+          description: password reset email sent when email exists
+        '404':
+          description: email not found
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - email
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: user@example.com
+  "/api/password_resets/{token}":
+    parameters:
+    - name: token
+      in: path
+      description: Password reset token
+      required: true
+      schema:
+        type: string
+    put:
+      summary: Reset password with token
+      tags:
+      - PasswordResets
+      parameters: []
+      responses:
+        '200':
+          description: password reset successfully
+        '422':
+          description: validation errors when passwords do not match
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - password
+              - password_confirmation
+              properties:
+                password:
+                  type: string
+                  minLength: 8
+                  example: NewP@ssw0rd
+                password_confirmation:
+                  type: string
+                  example: NewP@ssw0rd
   "/api/players":
     post:
       summary: create player
