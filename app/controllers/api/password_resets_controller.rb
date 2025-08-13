@@ -2,7 +2,7 @@
 class Api::PasswordResetsController < ApplicationController
   skip_before_action :authenticate_request
 
-  # POST /api/password_resets_controller
+  # POST /api/password_resets
   def create
     @user = User.find_by(email: params[:email])
 
