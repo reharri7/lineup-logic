@@ -1152,13 +1152,6 @@ paths:
       security:
       - bearer_auth: []
       parameters:
-      - name: Authorization
-        in: header
-        required: true
-        description: Bearer token
-        example: Bearer <token>
-        schema:
-          type: string
       - name: resolved
         in: query
         schema:
@@ -1183,14 +1176,7 @@ paths:
       - SupportTickets
       security:
       - bearer_auth: []
-      parameters:
-      - name: Authorization
-        in: header
-        required: true
-        description: Bearer token
-        example: Bearer <token>
-        schema:
-          type: string
+      parameters: []
       responses:
         '200':
           description: updated

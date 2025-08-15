@@ -42,27 +42,20 @@ export class SupportTicketsService extends BaseService implements SupportTickets
 
     /**
      * list support tickets
-     * @param authorization Bearer token
      * @param resolved Filter by resolved status
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public apiSupportTicketsGet(authorization: string, resolved?: boolean, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public apiSupportTicketsGet(authorization: string, resolved?: boolean, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public apiSupportTicketsGet(authorization: string, resolved?: boolean, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public apiSupportTicketsGet(authorization: string, resolved?: boolean, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (authorization === null || authorization === undefined) {
-            throw new Error('Required parameter authorization was null or undefined when calling apiSupportTicketsGet.');
-        }
+    public apiSupportTicketsGet(resolved?: boolean, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public apiSupportTicketsGet(resolved?: boolean, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public apiSupportTicketsGet(resolved?: boolean, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public apiSupportTicketsGet(resolved?: boolean, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
         localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
           <any>resolved, 'resolved');
 
         let localVarHeaders = this.defaultHeaders;
-        if (authorization !== undefined && authorization !== null) {
-            localVarHeaders = localVarHeaders.set('Authorization', String(authorization));
-        }
 
         // authentication (bearer_auth) required
         localVarHeaders = this.configuration.addCredentialToHeaders('bearer_auth', 'Authorization', localVarHeaders, 'Bearer ');
@@ -108,26 +101,19 @@ export class SupportTicketsService extends BaseService implements SupportTickets
     /**
      * update support ticket
      * @param id SupportTicket ID
-     * @param authorization Bearer token
      * @param apiSupportTicketsIdPatchRequest 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public apiSupportTicketsIdPatch(id: number, authorization: string, apiSupportTicketsIdPatchRequest?: ApiSupportTicketsIdPatchRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public apiSupportTicketsIdPatch(id: number, authorization: string, apiSupportTicketsIdPatchRequest?: ApiSupportTicketsIdPatchRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public apiSupportTicketsIdPatch(id: number, authorization: string, apiSupportTicketsIdPatchRequest?: ApiSupportTicketsIdPatchRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public apiSupportTicketsIdPatch(id: number, authorization: string, apiSupportTicketsIdPatchRequest?: ApiSupportTicketsIdPatchRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public apiSupportTicketsIdPatch(id: number, apiSupportTicketsIdPatchRequest?: ApiSupportTicketsIdPatchRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public apiSupportTicketsIdPatch(id: number, apiSupportTicketsIdPatchRequest?: ApiSupportTicketsIdPatchRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public apiSupportTicketsIdPatch(id: number, apiSupportTicketsIdPatchRequest?: ApiSupportTicketsIdPatchRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public apiSupportTicketsIdPatch(id: number, apiSupportTicketsIdPatchRequest?: ApiSupportTicketsIdPatchRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling apiSupportTicketsIdPatch.');
         }
-        if (authorization === null || authorization === undefined) {
-            throw new Error('Required parameter authorization was null or undefined when calling apiSupportTicketsIdPatch.');
-        }
 
         let localVarHeaders = this.defaultHeaders;
-        if (authorization !== undefined && authorization !== null) {
-            localVarHeaders = localVarHeaders.set('Authorization', String(authorization));
-        }
 
         // authentication (bearer_auth) required
         localVarHeaders = this.configuration.addCredentialToHeaders('bearer_auth', 'Authorization', localVarHeaders, 'Bearer ');

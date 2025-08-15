@@ -26,19 +26,17 @@ export interface SupportTicketsServiceInterface {
     /**
      * list support tickets
      * 
-     * @param authorization Bearer token
      * @param resolved Filter by resolved status
      */
-    apiSupportTicketsGet(authorization: string, resolved?: boolean, extraHttpRequestParams?: any): Observable<{}>;
+    apiSupportTicketsGet(resolved?: boolean, extraHttpRequestParams?: any): Observable<{}>;
 
     /**
      * update support ticket
      * 
      * @param id SupportTicket ID
-     * @param authorization Bearer token
      * @param apiSupportTicketsIdPatchRequest 
      */
-    apiSupportTicketsIdPatch(id: number, authorization: string, apiSupportTicketsIdPatchRequest?: ApiSupportTicketsIdPatchRequest, extraHttpRequestParams?: any): Observable<{}>;
+    apiSupportTicketsIdPatch(id: number, apiSupportTicketsIdPatchRequest?: ApiSupportTicketsIdPatchRequest, extraHttpRequestParams?: any): Observable<{}>;
 
     /**
      * create support ticket

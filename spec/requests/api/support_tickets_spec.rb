@@ -49,7 +49,6 @@ RSpec.describe 'api/support_tickets', type: :request do
       produces 'application/json'
       security [ bearer_auth: [] ]
 
-      parameter name: :Authorization, in: :header, type: :string, required: true, description: 'Bearer token', example: 'Bearer <token>'
       parameter name: :resolved, in: :query, schema: { type: :boolean }, description: 'Filter by resolved status'
 
       response(200, 'successful') do
@@ -84,7 +83,6 @@ RSpec.describe 'api/support_tickets', type: :request do
       produces 'application/json'
       security [ bearer_auth: [] ]
 
-      parameter name: :Authorization, in: :header, type: :string, required: true, description: 'Bearer token', example: 'Bearer <token>'
       parameter name: :support_ticket, in: :body, schema: {
         type: :object,
         required: %w[resolved],

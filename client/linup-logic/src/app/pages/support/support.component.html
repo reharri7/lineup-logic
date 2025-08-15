@@ -1,0 +1,64 @@
+<div class="min-h-[60vh] flex items-center justify-center p-4">
+  <div class="card w-full max-w-2xl bg-base-100 shadow-xl">
+    <div class="card-body">
+      <h2 class="card-title">Contact Support</h2>
+      <p class="text-sm text-base-content/70">Have a question or need help? Send us a message and we’ll get back to you.</p>
+
+      <form (ngSubmit)="submit()" [formGroup]="form" class="space-y-4 mt-4">
+        <!-- Email -->
+        <div class="form-control">
+          <label class="label" for="reply_to">
+            <span class="label-text">Email</span>
+          </label>
+          <input id="reply_to" type="email" class="input input-bordered" placeholder="you@example.com" formControlName="reply_to" [class.input-error]="email?.invalid && (email?.touched || email?.dirty)" />
+          @if(email?.invalid && (email?.touched || email?.dirty)) {
+            <div class="label">
+              @if(email?.errors?.['required']) {
+                <span class="label-text-alt text-error">Email is required</span>
+              }
+              @if(email?.errors?.['email']) {
+                <span class="label-text-alt text-error">Please enter a valid email</span>
+              }
+            </div>
+          }
+        </div>
+
+        <!-- Message -->
+        <div class="form-control">
+          <label class="label" for="message">
+            <span class="label-text">Message</span>
+          </label>
+          <textarea id="message" class="textarea textarea-bordered h-40" placeholder="Tell us how we can help" formControlName="message" [class.textarea-error]="message?.invalid && (message?.touched || message?.dirty)"></textarea>
+          @if(message?.invalid && (message?.touched || message?.dirty)) {
+            <div class="label">
+              @if(message?.errors?.['required']) {
+                <span class="label-text-alt text-error">Message is required</span>
+              }
+              @if(message?.errors?.['minlength']) {
+                <span class="label-text-alt text-error">Message must be at least 10 characters</span>
+              }
+              @if(message?.errors?.['maxlength']) {
+                <span class="label-text-alt text-error">Message is too long</span>
+              }
+            </div>
+          }
+        </div>
+
+        <!-- Honeypot (hidden) -->
+        <div class="hidden">
+          <label for="hp">Do not fill this field</label>
+          <input id="hp" type="text" formControlName="honeypot" autocomplete="off" tabindex="-1" />
+        </div>
+
+        <div class="card-actions justify-end pt-2">
+          <button class="btn btn-primary" type="submit" [disabled]="loading || form.invalid">
+            @if(loading) {
+              <span class="loading loading-spinner"></span>
+            }
+            <span>Send message</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
