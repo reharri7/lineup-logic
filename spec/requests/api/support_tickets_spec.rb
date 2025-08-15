@@ -39,7 +39,6 @@ RSpec.describe 'api/support_tickets', type: :request do
           expect(data['errors']).to be_an(Array)
         end
       end
-
     end
   end
 

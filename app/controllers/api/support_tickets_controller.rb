@@ -1,14 +1,14 @@
 # app/controllers/api/support_tickets_controller.rb
 class Api::SupportTicketsController < ApplicationController
   # Public create endpoint; listing and updating require authentication via ApplicationController
-  skip_before_action :authenticate_request, only: [:create]
+  skip_before_action :authenticate_request, only: [ :create ]
 
   # POST /api/support_tickets
   def create
     # Simple honeypot spam mitigation: if hidden field provided, accept without processing
     # Note: Using fetch chain with rescue to handle string/symbol keys and missing nesting
     honeypot_value = begin
-      (params[:support_ticket] || params['support_ticket'])&.[](:honeypot) || (params[:support_ticket] || params['support_ticket'])&.[]('honeypot')
+      (params[:support_ticket] || params["support_ticket"])&.[](:honeypot) || (params[:support_ticket] || params["support_ticket"])&.[]("honeypot")
     rescue
       nil
     end
@@ -64,6 +64,6 @@ class Api::SupportTicketsController < ApplicationController
   end
 
   def serialize(ticket)
-    ticket.as_json(only: [:id, :reply_to, :message, :resolved, :resolved_at, :created_at, :updated_at])
+    ticket.as_json(only: [ :id, :reply_to, :message, :resolved, :resolved_at, :created_at, :updated_at ])
   end
 end
