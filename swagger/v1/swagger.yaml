@@ -1115,6 +1115,99 @@ paths:
                 properties:
                   error:
                     type: string
+  "/api/support_tickets":
+    post:
+      summary: create support ticket
+      tags:
+      - SupportTickets
+      parameters: []
+      responses:
+        '201':
+          description: created
+        '422':
+          description: validation errors
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - reply_to
+              - message
+              properties:
+                reply_to:
+                  type: string
+                  format: email
+                  example: user@example.com
+                message:
+                  type: string
+                  example: I need help with my lineup.
+                honeypot:
+                  type: string
+                  description: Leave blank (spam honeypot). Hidden field.
+    get:
+      summary: list support tickets
+      tags:
+      - SupportTickets
+      security:
+      - bearer_auth: []
+      parameters:
+      - name: Authorization
+        in: header
+        required: true
+        description: Bearer token
+        example: Bearer <token>
+        schema:
+          type: string
+      - name: resolved
+        in: query
+        schema:
+          type: boolean
+        description: Filter by resolved status
+      responses:
+        '200':
+          description: successful
+        '401':
+          description: unauthorized
+  "/api/support_tickets/{id}":
+    parameters:
+    - name: id
+      in: path
+      description: SupportTicket ID
+      required: true
+      schema:
+        type: integer
+    patch:
+      summary: update support ticket
+      tags:
+      - SupportTickets
+      security:
+      - bearer_auth: []
+      parameters:
+      - name: Authorization
+        in: header
+        required: true
+        description: Bearer token
+        example: Bearer <token>
+        schema:
+          type: string
+      responses:
+        '200':
+          description: updated
+        '404':
+          description: not found
+        '401':
+          description: unauthorized
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - resolved
+              properties:
+                resolved:
+                  type: boolean
   "/api/teams":
     post:
       summary: create team

@@ -6,7 +6,7 @@ import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-
 import { PlayersService } from 'src/app/services/generated/api/players.service';
 import { PositionsService } from 'src/app/services/generated/api/positions.service';
 import { TeamsService } from 'src/app/services/generated/api/teams.service';
-import { PlayerRankingsService } from 'src/app/services/player-rankings.service';
+import { PlayerRankingsService } from 'src/app/shared/services/player-rankings.service';
 
 @Component({
   selector: 'app-player-rankings',

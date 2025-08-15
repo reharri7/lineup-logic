@@ -1,0 +1,10 @@
+New Support Ticket
+
+From: <%= @ticket.reply_to %>
+Submitted at: <%= @ticket.created_at.to_fs(:long) %>
+
+Message:
+
+<%= @ticket.message %>
+
+You can reply directly to this email to contact the user.

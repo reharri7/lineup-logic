@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_11_183854) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_15_143000) do
   create_table "fantasy_team_players", force: :cascade do |t|
     t.integer "fantasy_team_id", null: false
     t.integer "player_id", null: false
@@ -45,6 +45,17 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_11_183854) do
     t.string "position_name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "support_tickets", force: :cascade do |t|
+    t.string "reply_to", null: false
+    t.text "message", null: false
+    t.boolean "resolved", default: false, null: false
+    t.datetime "resolved_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["reply_to"], name: "index_support_tickets_on_reply_to"
+    t.index ["resolved"], name: "index_support_tickets_on_resolved"
   end
 
   create_table "teams", force: :cascade do |t|

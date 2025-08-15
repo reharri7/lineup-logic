@@ -20,6 +20,9 @@ Rails.application.routes.draw do
     # Password reset routes
     resources :password_resets, only: [ :create, :update ], param: :token
 
+    # Support tickets routes
+    resources :support_tickets, only: [:create, :index, :update]
+
     # Admin routes
     resources :teams
     resources :positions
