@@ -31,6 +31,13 @@ Rack::Attack.throttle("password_resets/ip", limit: 5, period: 1.hour) do |req|
   end
 end
 
+# Throttle support ticket creation to 10 req per hour per IP (adjust as needed)
+Rack::Attack.throttle("support_tickets/ip", limit: 10, period: 1.hour) do |req|
+  if req.post? && req.path.start_with?("/api/support_tickets")
+    req.ip
+  end
+end
+
 # You can also throttle token refreshes if it is sensitive
 Rack::Attack.throttle("refresh_token/ip", limit: 20, period: 10.minutes) do |req|
   if req.post? && req.path.start_with?("/api/refresh_token")

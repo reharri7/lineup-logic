@@ -6,7 +6,7 @@ import { RouterLink } from "@angular/router";
 import { FantasyTeamsService } from 'src/app/services/generated/api/fantasyTeams.service';
 import { TeamsService } from 'src/app/services/generated/api/teams.service';
 import { PositionsService } from 'src/app/services/generated/api/positions.service';
-import { LineupOptimizerService, OptimalLineup } from 'src/app/services/lineup-optimizer.service';
+import { LineupOptimizerService, OptimalLineup } from 'src/app/shared/services/lineup-optimizer.service';
 import { ApiFantasyTeamsFantasyTeamIdPlayersPost201ResponsePlayer } from 'src/app/services/generated/model/apiFantasyTeamsFantasyTeamIdPlayersPost201ResponsePlayer';
 
 // Define the Player interface to match what's expected by the LineupOptimizerService

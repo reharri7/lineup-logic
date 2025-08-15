@@ -1,0 +1,70 @@
+<div class="p-4">
+  <div class="flex items-center justify-between mb-4">
+    <h1 class="text-2xl font-semibold">Support Tickets</h1>
+    <div class="flex items-center gap-2">
+      <select class="select select-bordered" [value]="filter()" (change)="onFilterChange($any($event.target).value)">
+        <option value="all">All</option>
+        <option value="open">Open</option>
+        <option value="resolved">Resolved</option>
+      </select>
+      <button class="btn" (click)="loadTickets()">
+        <span class="loading loading-spinner" *ngIf="loading()"></span>
+        Refresh
+      </button>
+    </div>
+  </div>
+
+  <div class="overflow-x-auto rounded-box shadow">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Email</th>
+          <th>Message</th>
+          <th>Date Sent</th>
+          <th>Status</th>
+          <th>Resolved At</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @if (paged().length === 0 && !loading()) {
+          <tr>
+            <td colspan="6" class="text-center text-base-content/70">No tickets found</td>
+          </tr>
+        } @else {
+          @for (t of paged(); track t.id) {
+            <tr>
+              <td class="whitespace-nowrap">{{ t.reply_to }}</td>
+              <td class="max-w-[400px]">{{ firstN(t.message, 120) }}</td>
+              <td>{{ t.created_at | date:'medium' }}</td>
+              <td>
+                <div class="badge" [class.badge-success]="t.resolved" [class.badge-neutral]="!t.resolved">
+                  {{ t.resolved ? 'Resolved' : 'Open' }}
+                </div>
+              </td>
+              <td>{{ t.resolved_at ? (t.resolved_at | date:'short') : '-' }}</td>
+              <td class="text-right">
+                <button class="btn btn-sm" [class.btn-success]="!t.resolved" [class.btn-ghost]="t.resolved"
+                        (click)="toggleResolved(t)" [disabled]="updatingId() === t.id">
+                  <span class="loading loading-spinner loading-xs" *ngIf="updatingId() === t.id"></span>
+                  {{ t.resolved ? 'Reopen' : 'Mark Resolved' }}
+                </button>
+              </td>
+            </tr>
+          }
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Pagination -->
+  <div class="flex items-center justify-between mt-4">
+    <div class="text-sm opacity-70">
+      Page {{ page() }} of {{ totalPages() }} — Showing {{ paged().length }} of {{ filtered().length }}
+    </div>
+    <div class="join">
+      <button class="btn join-item" (click)="prevPage()" [disabled]="page() === 1">Prev</button>
+      <button class="btn join-item" (click)="nextPage()" [disabled]="page() === totalPages()">Next</button>
+    </div>
+  </div>
+</div>

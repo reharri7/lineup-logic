@@ -47,5 +47,9 @@ export const ADMIN_ROUTES: Routes = [
   {
     path: 'players/new',
     component: PlayerComponent,
+  },
+  {
+    path: 'support-tickets',
+    loadComponent: () => import('./support-tickets/admin-support-tickets.component').then(m => m.AdminSupportTicketsComponent)
   }
 ];

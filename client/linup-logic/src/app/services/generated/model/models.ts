@@ -32,6 +32,8 @@ export * from './apiPositionsPostRequest';
 export * from './apiSignupPost201Response';
 export * from './apiSignupPost201ResponseUser';
 export * from './apiSignupPostRequest';
+export * from './apiSupportTicketsIdPatchRequest';
+export * from './apiSupportTicketsPostRequest';
 export * from './apiTeamsGet200Response';
 export * from './apiTeamsPost201Response';
 export * from './apiUsersGet200ResponseInner';
