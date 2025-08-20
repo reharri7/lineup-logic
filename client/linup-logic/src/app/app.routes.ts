@@ -4,10 +4,15 @@ import { LoginComponent } from "./pages/login/login.component";
 import { authGuard } from "./shared/guards/auth.guard";
 import { DashboardComponent } from "./pages/fantasy-teams/dashboard/dashboard.component";
 import { TeamDetailComponent } from "./pages/fantasy-teams/team-detail/team-detail.component";
+import { LandingComponent } from "./pages/landing/landing.component";
 
 export const routes: Routes = [
   {
     path: '',
+    component: LandingComponent
+  },
+  {
+    path: 'home',
     component: HomeComponent,
     canActivate: [authGuard]
   },
