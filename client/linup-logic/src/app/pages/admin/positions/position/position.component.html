@@ -9,8 +9,13 @@
       <span class="loading loading-spinner loading-lg"></span>
     </div>
   }
-  <form [formGroup]="formGroup">
-    <input type="text" placeholder="Position Name" formControlName="position_name">
+  <form [formGroup]="formGroup" class="space-y-6">
+    <div class="form-control w-full">
+      <label class="label" for="position_name">
+        <span class="label-text">Position Name</span>
+      </label>
+      <input id="position_name" type="text" placeholder="Position Name" formControlName="position_name" class="input input-bordered w-full">
+    </div>
   </form>
 
   <div class="flex gap-2 mt-4">

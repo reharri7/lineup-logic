@@ -2,16 +2,18 @@
   <h1 class="text-2xl font-bold mb-6">Player Rankings</h1>
 
   <div class="mb-6">
-    <label class="form-control w-full max-w-xs">
-      <span class="label-text">Select Position to Rank</span>
-      <select [(ngModel)]="selectedPosition" (change)="onPositionChange()" class="select select-bordered">
+    <div class="form-control w-full max-w-xs">
+      <label class="label" for="position-select">
+        <span class="label-text">Select Position to Rank</span>
+      </label>
+      <select id="position-select" [(ngModel)]="selectedPosition" (change)="onPositionChange()" class="select select-bordered w-full">
         <option value="">Select Position</option>
         @for(position of positions; track position.id) {
           <option [value]="position.position_name">{{ position.position_name }}</option>
         }
         <option value="FLEX">Flex Players (RB/WR/TE)</option>
       </select>
-    </label>
+    </div>
   </div>
 
   @if(loading) {
