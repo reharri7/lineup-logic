@@ -1,8 +1,9 @@
 <div class="p-4">
-  <div class="flex items-center justify-between mb-4">
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
     <h1 class="text-2xl font-semibold">Support Tickets</h1>
     <div class="flex items-center gap-2">
-      <select class="select select-bordered" [value]="filter()" (change)="onFilterChange($any($event.target).value)">
+      <label for="ticket-filter" class="sr-only">Filter tickets</label>
+      <select id="ticket-filter" class="select select-bordered" [value]="filter()" (change)="onFilterChange($any($event.target).value)">
         <option value="all">All</option>
         <option value="open">Open</option>
         <option value="resolved">Resolved</option>

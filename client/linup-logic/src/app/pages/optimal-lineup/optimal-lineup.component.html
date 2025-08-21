@@ -2,15 +2,17 @@
   <h1 class="text-2xl font-bold mb-6">Optimal Lineup Generator</h1>
 
   <div class="mb-6">
-    <label class="form-control w-full max-w-xs">
-      <span class="label-text">Select Fantasy Team</span>
-      <select [(ngModel)]="selectedTeamId" (change)="onTeamChange()" class="select select-bordered">
+    <div class="form-control w-full max-w-xs">
+      <label class="label" for="team-select">
+        <span class="label-text">Select Fantasy Team</span>
+      </label>
+      <select id="team-select" [(ngModel)]="selectedTeamId" (change)="onTeamChange()" class="select select-bordered w-full">
         <option [ngValue]="null">Select Team</option>
         @for(team of fantasyTeams; track team.id) {
           <option [ngValue]="team.id">{{ team.name }}</option>
         }
       </select>
-    </label>
+    </div>
   </div>
 
   @if(loadingTeams) {

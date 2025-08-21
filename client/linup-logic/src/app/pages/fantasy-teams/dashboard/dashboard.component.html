@@ -55,12 +55,12 @@
   <div class="modal" [class.modal-open]="showTeamModal">
     <div class="modal-box">
       <h3 class="font-bold text-lg">{{ editingTeam ? 'Edit Team' : 'Create New Team' }}</h3>
-      <form [formGroup]="teamForm" (ngSubmit)="saveTeam()">
+      <form [formGroup]="teamForm" (ngSubmit)="saveTeam()" class="space-y-6">
         <div class="form-control">
-          <label class="label">
+          <label class="label mb-2" for="dashboard_team_name">
             <span class="label-text">Team Name</span>
           </label>
-          <input type="text" formControlName="name" class="input input-bordered" />
+          <input id="dashboard_team_name" type="text" formControlName="name" class="input input-bordered w-full" />
           @if(teamForm.get('name')?.invalid && teamForm.get('name')?.touched) {
             <div class="text-error text-sm mt-1">
               Team name is required

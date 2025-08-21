@@ -1,0 +1,146 @@
+<section class="bg-base-100">
+  <!-- Hero -->
+  <div class="relative overflow-hidden">
+    <div class="absolute inset-0 -z-10 bg-gradient-to-br from-primary/10 via-secondary/10 to-accent/10"></div>
+    <div class="container mx-auto px-4 py-16 md:py-24">
+      <div class="grid md:grid-cols-2 gap-10 items-center">
+        <div>
+          <span class="badge badge-primary badge-lg mb-4">Fantasy Football</span>
+          <h1 class="text-4xl md:text-6xl font-extrabold leading-tight">
+            Lineup Logic
+          </h1>
+          <p class="mt-4 text-lg opacity-80">
+            Make smarter lineup decisions across all your teams — using your own rankings and rosters.
+          </p>
+          <div class="mt-8 flex flex-col sm:flex-row gap-3">
+            <a routerLink="/login" class="btn btn-primary btn-lg">Get Started</a>
+            <a href="#features" class="btn btn-ghost btn-lg">Explore Features</a>
+          </div>
+          <div class="mt-6 grid grid-cols-3 gap-4 text-center">
+            <div class="stat bg-base-200 rounded-box">
+              <div class="stat-title">Teams</div>
+              <div class="stat-value text-primary">Manual</div>
+              <div class="stat-desc">Quick roster entry</div>
+            </div>
+            <div class="stat bg-base-200 rounded-box">
+              <div class="stat-title">Rankings</div>
+              <div class="stat-value text-secondary">Yours</div>
+              <div class="stat-desc">Bring your board</div>
+            </div>
+            <div class="stat bg-base-200 rounded-box">
+              <div class="stat-title">Lineups</div>
+              <div class="stat-value text-accent">Suggestions</div>
+              <div class="stat-desc">Based on your inputs</div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="mockup-window border bg-base-200">
+            <div class="px-6 py-8 bg-base-100">
+              <picture>
+                <source type="image/webp" srcset="/assets/hero.webp">
+                <img
+                  src="/assets/hero.webp"
+                  alt="Lineup Logic dashboard showing teams, rankings, and lineup suggestions"
+                  class="w-full rounded-box"
+                  width="1200" height="675"
+                  loading="eager" decoding="async" />
+              </picture>
+              <div class="mt-4 flex gap-2">
+                <div class="badge badge-outline">Player Rankings</div>
+                <div class="badge badge-outline">Optimal Lineup</div>
+                <div class="badge badge-outline">Fantasy Teams</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Features -->
+  <div id="features" class="container mx-auto px-4 py-16">
+    <h2 class="text-3xl md:text-4xl font-bold text-center">Everything you need to win</h2>
+    <p class="mt-3 text-center opacity-80 max-w-2xl mx-auto">Streamlined tools to organize your teams, apply your own rankings, and get lineup suggestions based on your inputs.</p>
+
+    <div class="mt-10 grid md:grid-cols-3 gap-6">
+      <div class="card bg-base-200 shadow">
+        <div class="card-body">
+          <div class="flex items-center gap-3">
+            <h3 class="card-title">Unified Team Hub</h3>
+          </div>
+          <p>Manually add your fantasy teams and manage them in one place.</p>
+          <div class="card-actions justify-end">
+            <a routerLink="/fantasy-teams" class="btn btn-ghost btn-sm">View Teams</a>
+          </div>
+        </div>
+      </div>
+      <div class="card bg-base-200 shadow">
+        <div class="card-body">
+          <div class="flex items-center gap-3">
+            <h3 class="card-title">Player Rankings</h3>
+          </div>
+          <p>Enter your own rankings and tiers, then use them across the app.</p>
+          <div class="card-actions justify-end">
+            <a routerLink="/player-rankings" class="btn btn-ghost btn-sm">See Rankings</a>
+          </div>
+        </div>
+      </div>
+      <div class="card bg-base-200 shadow">
+        <div class="card-body">
+          <div class="flex items-center gap-3">
+            <h3 class="card-title">Optimal Lineups</h3>
+          </div>
+          <p>Get lineup suggestions based on your teams and the rankings you provide.</p>
+          <div class="card-actions justify-end">
+            <a routerLink="/optimal-lineup" class="btn btn-ghost btn-sm">Optimize Now</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Social Proof / Testimonials -->
+  <div class="bg-base-200">
+    <div class="container mx-auto px-4 py-16">
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="card bg-base-100 shadow">
+          <div class="card-body">
+            <p class="italic">“Lineup Logic helped me win two leagues last season. The optimal lineup tool is a cheat code.”</p>
+            <div class="mt-4 font-semibold">— Alex P.</div>
+          </div>
+        </div>
+        <div class="card bg-base-100 shadow">
+          <div class="card-body">
+            <p class="italic">“I love having all my teams in one place. The lineup suggestions help me decide faster.”</p>
+            <div class="mt-4 font-semibold">— Taylor R.</div>
+          </div>
+        </div>
+        <div class="card bg-base-100 shadow">
+          <div class="card-body">
+            <p class="italic">“The tools are straightforward and the UI is clean and fast.”</p>
+            <div class="mt-4 font-semibold">— Jordan K.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-12 text-center">
+        <a routerLink="/login" class="btn btn-primary btn-lg">Start Free</a>
+        <a routerLink="/support" class="btn btn-ghost btn-lg">Have Questions?</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="container mx-auto px-4 py-10">
+    <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+      <div class="font-bold">Lineup Logic</div>
+      <div class="text-sm opacity-70">© {{ currentYear }} Lineup Logic. All rights reserved.</div>
+      <div class="flex gap-4">
+        <a routerLink="/support" class="link link-hover">Support</a>
+        <a href="#features" class="link link-hover">Features</a>
+        <a routerLink="/login" class="link link-hover">Login</a>
+      </div>
+    </div>
+  </footer>
+</section>

@@ -4,13 +4,13 @@
       <h2 class="card-title">Contact Support</h2>
       <p class="text-sm text-base-content/70">Have a question or need help? Send us a message and we’ll get back to you.</p>
 
-      <form (ngSubmit)="submit()" [formGroup]="form" class="space-y-4 mt-4">
+      <form (ngSubmit)="submit()" [formGroup]="form" class="space-y-6 mt-4">
         <!-- Email -->
         <div class="form-control">
-          <label class="label" for="reply_to">
+          <label class="label mb-2" for="reply_to">
             <span class="label-text">Email</span>
           </label>
-          <input id="reply_to" type="email" class="input input-bordered" placeholder="you@example.com" formControlName="reply_to" [class.input-error]="email?.invalid && (email?.touched || email?.dirty)" />
+          <input id="reply_to" type="email" class="input input-bordered w-full" placeholder="you@example.com" formControlName="reply_to" [class.input-error]="email?.invalid && (email?.touched || email?.dirty)" />
           @if(email?.invalid && (email?.touched || email?.dirty)) {
             <div class="label">
               @if(email?.errors?.['required']) {
@@ -25,10 +25,10 @@
 
         <!-- Message -->
         <div class="form-control">
-          <label class="label" for="message">
+          <label class="label mb-2" for="message">
             <span class="label-text">Message</span>
           </label>
-          <textarea id="message" class="textarea textarea-bordered h-40" placeholder="Tell us how we can help" formControlName="message" [class.textarea-error]="message?.invalid && (message?.touched || message?.dirty)"></textarea>
+          <textarea id="message" class="textarea textarea-bordered h-40 w-full" placeholder="Tell us how we can help" formControlName="message" [class.textarea-error]="message?.invalid && (message?.touched || message?.dirty)"></textarea>
           @if(message?.invalid && (message?.touched || message?.dirty)) {
             <div class="label">
               @if(message?.errors?.['required']) {
