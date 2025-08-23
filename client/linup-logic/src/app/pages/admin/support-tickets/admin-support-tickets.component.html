@@ -3,11 +3,13 @@
     <h1 class="text-2xl font-semibold">Support Tickets</h1>
     <div class="flex items-center gap-2">
       <label for="ticket-filter" class="sr-only">Filter tickets</label>
-      <select id="ticket-filter" class="select select-bordered" [value]="filter()" (change)="onFilterChange($any($event.target).value)">
-        <option value="all">All</option>
-        <option value="open">Open</option>
-        <option value="resolved">Resolved</option>
-      </select>
+      <app-select
+        id="ticket-filter"
+        label=""
+        [formControl]="filterCtrl"
+        [options]="filterOptions"
+        [includeBlankOption]="false"
+      ></app-select>
       <button class="btn" (click)="loadTickets()">
         <span class="loading loading-spinner" *ngIf="loading()"></span>
         Refresh

@@ -9,12 +9,14 @@ import {NotificationService} from "../../../../shared/services/notification.serv
 import {ModalService} from "../../../../shared/services/modal.service";
 import {ApiTeamsPost201ResponseTeam} from "../../../../services/generated/model/apiTeamsPost201ResponseTeam";
 import {ApiTeamsPostRequest} from "../../../../services/generated/model/apiTeamsPostRequest";
+import { InputComponent } from '../../../../components/input/input.component';
 
 @Component({
   selector: 'app-team',
   imports: [
     ReactiveFormsModule,
-    RouterLink
+    RouterLink,
+    InputComponent
   ],
   templateUrl: './team.component.html',
   styleUrl: './team.component.css'

@@ -5,44 +5,21 @@
       <p class="text-sm text-base-content/70">Have a question or need help? Send us a message and we’ll get back to you.</p>
 
       <form (ngSubmit)="submit()" [formGroup]="form" class="space-y-6 mt-4">
-        <!-- Email -->
-        <div class="form-control">
-          <label class="label mb-2" for="reply_to">
-            <span class="label-text">Email</span>
-          </label>
-          <input id="reply_to" type="email" class="input input-bordered w-full" placeholder="you@example.com" formControlName="reply_to" [class.input-error]="email?.invalid && (email?.touched || email?.dirty)" />
-          @if(email?.invalid && (email?.touched || email?.dirty)) {
-            <div class="label">
-              @if(email?.errors?.['required']) {
-                <span class="label-text-alt text-error">Email is required</span>
-              }
-              @if(email?.errors?.['email']) {
-                <span class="label-text-alt text-error">Please enter a valid email</span>
-              }
-            </div>
-          }
-        </div>
+        <app-input
+          label="Email"
+          type="email"
+          placeholder="you@example.com"
+          formControlName="reply_to"
+          [required]="true">
+        </app-input>
 
-        <!-- Message -->
-        <div class="form-control">
-          <label class="label mb-2" for="message">
-            <span class="label-text">Message</span>
-          </label>
-          <textarea id="message" class="textarea textarea-bordered h-40 w-full" placeholder="Tell us how we can help" formControlName="message" [class.textarea-error]="message?.invalid && (message?.touched || message?.dirty)"></textarea>
-          @if(message?.invalid && (message?.touched || message?.dirty)) {
-            <div class="label">
-              @if(message?.errors?.['required']) {
-                <span class="label-text-alt text-error">Message is required</span>
-              }
-              @if(message?.errors?.['minlength']) {
-                <span class="label-text-alt text-error">Message must be at least 10 characters</span>
-              }
-              @if(message?.errors?.['maxlength']) {
-                <span class="label-text-alt text-error">Message is too long</span>
-              }
-            </div>
-          }
-        </div>
+        <app-textarea
+          label="Message"
+          placeholder="Tell us how we can help"
+          formControlName="message"
+          [rows]="8"
+          [required]="true">
+        </app-textarea>
 
         <!-- Honeypot (hidden) -->
         <div class="hidden">

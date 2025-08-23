@@ -1,7 +1,9 @@
 import { Component, computed, effect, signal } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
+import { ReactiveFormsModule, FormControl } from '@angular/forms';
 import { SupportTicketsService } from '../../../services/generated';
 import { NotificationService } from '../../../shared/services/notification.service';
+import { SelectComponent } from '../../../components/select/select.component';
 import {lastValueFrom} from "rxjs";
 
 interface SupportTicketDto {
@@ -16,7 +18,7 @@ interface SupportTicketDto {
 @Component({
   selector: 'app-admin-support-tickets',
   standalone: true,
-  imports: [CommonModule, DatePipe],
+  imports: [CommonModule, DatePipe, ReactiveFormsModule, SelectComponent],
   templateUrl: './admin-support-tickets.component.html',
   styleUrls: ['./admin-support-tickets.component.css']
 })
@@ -25,17 +27,19 @@ export class AdminSupportTicketsComponent {
   loading = signal(false);
   updatingId = signal<number | null>(null);
 
-  // Filter: 'all' | 'open' | 'resolved'
   filter = signal<'all' | 'open' | 'resolved'>('all');
+  filterCtrl = new FormControl<'all' | 'open' | 'resolved'>('all', { nonNullable: true });
+  filterOptions = [
+    { label: 'All', value: 'all' },
+    { label: 'Open', value: 'open' },
+    { label: 'Resolved', value: 'resolved' }
+  ];
 
-  // Pagination
   page = signal(1);
   perPage = signal(10);
 
-  // Data
   tickets = signal<SupportTicketDto[]>([]);
 
-  // Derived
   filtered = computed(() => {
     const f = this.filter();
     const items = this.tickets();
@@ -60,14 +64,14 @@ export class AdminSupportTicketsComponent {
     private supportTicketsService: SupportTicketsService,
     private notify: NotificationService
   ) {
-    // Reload when filter changes back to 'all' or on init
     effect(() => {
-      // reading filter() makes it reactive; when filter changes to anything we reload from server
       this.filter();
       this.loadTickets();
-      // reset to first page on filter change
       this.page.set(1);
     });
+
+    this.filterCtrl.setValue(this.filter(), { emitEvent: false });
+    this.filterCtrl.valueChanges.subscribe(v => this.filter.set(v));
   }
 
   onFilterChange(value: string): void {

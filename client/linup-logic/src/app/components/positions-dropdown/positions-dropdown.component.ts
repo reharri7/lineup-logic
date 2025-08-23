@@ -3,13 +3,14 @@ import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { PositionsService } from '../../services/generated/api/positions.service';
 import { ApiPositionsPost201ResponsePosition } from '../../services/generated/model/apiPositionsPost201ResponsePosition';
-import {lastValueFrom} from "rxjs";
-import {ApiPlayersGet200ResponsePlayersInnerPosition} from "../../services/generated";
+import { lastValueFrom } from 'rxjs';
+import { ApiPlayersGet200ResponsePlayersInnerPosition } from '../../services/generated';
+import { SelectComponent } from '../select/select.component';
 
 @Component({
   selector: 'app-positions-dropdown',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, SelectComponent],
   templateUrl: './positions-dropdown.component.html',
   styleUrls: ['./positions-dropdown.component.css']
 })
@@ -29,14 +30,14 @@ export class PositionsDropdownComponent implements OnInit {
     this.isLoading = true;
     try {
       const result = await lastValueFrom(this.positionsService.apiPositionsGet());
-          if (!!result && !!result.positions?.length) {
-            this.positions = result.positions;
-          } else {
-            this.positions = [];
-          }
+      if (!!result && !!result.positions?.length) {
+        this.positions = result.positions;
+      } else {
+        this.positions = [];
+      }
     } catch (e) {
-          console.error('Error loading positions:', e);
-          this.positions = [];
+      console.error('Error loading positions:', e);
+      this.positions = [];
     } finally {
       this.isLoading = false;
     }
