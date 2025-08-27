@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component, Input, forwardRef, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR, NgControl, ReactiveFormsModule } from '@angular/forms';
+import { ControlValueAccessor, NgControl, ReactiveFormsModule } from '@angular/forms';
 import { ErrorMessageOverrides, ShowErrorWhen, getFirstErrorMessage } from '../../shared/utils/validation-messages';
 import { uniqueId } from '../../shared/utils/unique-id';
 
@@ -10,11 +10,6 @@ import { uniqueId } from '../../shared/utils/unique-id';
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './select.component.html',
   styles: [],
-  providers: [{
-    provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(() => SelectComponent),
-    multi: true
-  }],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SelectComponent implements ControlValueAccessor {
@@ -45,6 +40,12 @@ export class SelectComponent implements ControlValueAccessor {
 
   private _id?: string;
   get selectId(): string { return this.id || (this._id ||= uniqueId('sel')); }
+
+  constructor() {
+    if (this.ngControl) {
+      (this.ngControl as any).valueAccessor = this;
+    }
+  }
 
   get describedBy(): string | null {
     const ids: string[] = [];

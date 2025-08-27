@@ -9,12 +9,14 @@ import { TeamsService } from 'src/app/services/generated/api/teams.service';
 import { PositionsService } from 'src/app/services/generated/api/positions.service';
 import { ApiFantasyTeamsIdGet200Response } from 'src/app/services/generated/model/apiFantasyTeamsIdGet200Response';
 import { ApiFantasyTeamsGet200ResponseFantasyTeamsInner } from 'src/app/services/generated/model/apiFantasyTeamsGet200ResponseFantasyTeamsInner';
+import { InputComponent } from '../../../components/input/input.component';
+import { SelectComponent } from '../../../components/select/select.component';
 
 @Component({
   selector: 'app-team-detail',
   templateUrl: './team-detail.component.html',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule]
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, InputComponent, SelectComponent]
 })
 export class TeamDetailComponent implements OnInit {
   fantasyTeam: ApiFantasyTeamsGet200ResponseFantasyTeamsInner | null = null;

@@ -1,6 +1,6 @@
-import { Component, Input, forwardRef, ChangeDetectionStrategy, inject, ViewChild, ElementRef } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy, inject, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR, NgControl, ReactiveFormsModule } from '@angular/forms';
+import { ControlValueAccessor, NgControl, ReactiveFormsModule } from '@angular/forms';
 import { ShowErrorWhen, ErrorMessageOverrides, getFirstErrorMessage } from '../../shared/utils/validation-messages';
 import { uniqueId } from '../../shared/utils/unique-id';
 
@@ -10,15 +10,11 @@ import { uniqueId } from '../../shared/utils/unique-id';
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './input.component.html',
   styles: [],
-  providers: [{
-    provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(() => InputComponent),
-    multi: true
-  }],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class InputComponent implements ControlValueAccessor {
   private readonly ngControl = inject(NgControl, { optional: true, self: true });
+  private readonly cdr = inject(ChangeDetectorRef);
   @ViewChild('innerInput') innerInput?: ElementRef<HTMLInputElement>;
 
   @Input() label = '';
@@ -43,6 +39,12 @@ export class InputComponent implements ControlValueAccessor {
     return this.id || (this._id ||= uniqueId('in'));
   }
   private _id?: string;
+
+  constructor() {
+    if (this.ngControl) {
+      (this.ngControl as any).valueAccessor = this;
+    }
+  }
 
   get describedBy(): string | null {
     const ids: string[] = [];
@@ -89,10 +91,10 @@ export class InputComponent implements ControlValueAccessor {
   get errorId(): string { return `${this.inputId}-error`; }
 
   // CVA
-  writeValue(value: any): void { this.value = value; }
+  writeValue(value: any): void { this.value = value; this.cdr.markForCheck(); }
   registerOnChange(fn: any): void { this.onChange = fn; }
   registerOnTouched(fn: any): void { this.onTouched = fn; }
-  setDisabledState(isDisabled: boolean): void { this.disabled = isDisabled; }
+  setDisabledState(isDisabled: boolean): void { this.disabled = isDisabled; this.cdr.markForCheck(); }
 
   focus(): void {
     try {
