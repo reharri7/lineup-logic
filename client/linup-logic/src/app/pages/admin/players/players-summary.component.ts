@@ -1,15 +1,16 @@
 import { Component, OnInit, HostListener, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink, Router } from "@angular/router";
 import { PlayersService, TeamsService, PositionsService } from "../../../services/generated";
 import { ApiPlayersGet200ResponsePlayersInner } from "../../../services/generated";
 import { lastValueFrom } from "rxjs";
+import { SelectComponent } from "../../../components/select/select.component";
 
 @Component({
   selector: 'app-players-summary',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, SelectComponent],
   templateUrl: './players-summary.component.html',
   styleUrl: './players-summary.component.css'
 })
@@ -29,6 +30,10 @@ export class PlayersSummaryComponent implements OnInit {
   numberFilter = signal<number | null>(null);
   teamId = signal<number | null>(null);
   positionId = signal<number | null>(null);
+
+  // Reactive form controls for filters
+  teamCtrl = new FormControl<number | null>(null);
+  positionCtrl = new FormControl<number | null>(null);
 
   teams = signal<any[]>([]);
   positions = signal<any[]>([]);
@@ -88,6 +93,12 @@ export class PlayersSummaryComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
+    this.teamCtrl.setValue(this.teamId(), { emitEvent: false });
+    this.positionCtrl.setValue(this.positionId(), { emitEvent: false });
+
+    this.teamCtrl.valueChanges.subscribe(v => this.teamId.set(v ?? null));
+    this.positionCtrl.valueChanges.subscribe(v => this.positionId.set(v ?? null));
+
     await this.loadTeamsAndPositions();
     await this.loadPlayers();
   }
@@ -164,6 +175,9 @@ export class PlayersSummaryComponent implements OnInit {
     this.numberFilter.set(null);
     this.teamId.set(null);
     this.positionId.set(null);
+
+    this.teamCtrl.setValue(null, { emitEvent: false });
+    this.positionCtrl.setValue(null, { emitEvent: false });
 
     this.applyFilters();
   }

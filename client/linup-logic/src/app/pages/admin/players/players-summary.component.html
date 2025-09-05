@@ -41,22 +41,26 @@
 
         <div class="form-control">
           <label class="label">Team</label>
-          <select class="select select-bordered" [value]="teamId()" (change)="onTeamChange($event)">
-            <option [value]="null">All Teams</option>
-            @for (team of teams(); track team.id) {
-              <option [value]="team.id">{{ team.name }}</option>
-            }
-          </select>
+          <app-select
+            [formControl]="teamCtrl"
+            [options]="teams()"
+            [labelKey]="'name'"
+            [valueKey]="'id'"
+            placeholder="All Teams"
+            [includeBlankOption]="true"
+          ></app-select>
         </div>
 
         <div class="form-control">
           <label class="label">Position</label>
-          <select class="select select-bordered" [value]="positionId()" (change)="onPositionChange($event)">
-            <option [value]="null">All Positions</option>
-            @for (position of positions(); track position.id) {
-              <option [value]="position.id">{{ position.position_name }}</option>
-            }
-          </select>
+          <app-select
+            [formControl]="positionCtrl"
+            [options]="positions()"
+            [labelKey]="'position_name'"
+            [valueKey]="'id'"
+            placeholder="All Positions"
+            [includeBlankOption]="true"
+          ></app-select>
         </div>
       </div>
 

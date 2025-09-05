@@ -1,0 +1,38 @@
+<div class="form-control w-full">
+  @if(label) {
+    <label class="label" [attr.for]="textareaId">
+      <span class="label-text">
+        {{ label }}
+        @if(required) { <span class="text-error" aria-hidden="true">*</span> }
+      </span>
+    </label>
+  }
+
+  <textarea
+    class="textarea textarea-bordered w-full {{ controlSizeClass }}"
+    [class.textarea-error]="invalid"
+    [id]="textareaId"
+    [attr.placeholder]="placeholder || null"
+    [attr.aria-invalid]="invalid"
+    [attr.aria-required]="required || null"
+    [attr.aria-describedby]="describedBy"
+    [disabled]="disabled"
+    [rows]="rows"
+    [readOnly]="readonly"
+    [attr.maxLength]="maxLength ?? null"
+    (input)="onInput($event)"
+    (blur)="onBlur()"
+  >{{ value }}</textarea>
+
+  @if(hint) {
+    <label class="label">
+      <span class="label-text-alt text-base-content/70" [id]="hintId">{{ hint }}</span>
+    </label>
+  }
+
+  @if(errorText) {
+    <label class="label">
+      <span class="label-text-alt text-error" [id]="errorId">{{ errorText }}</span>
+    </label>
+  }
+</div>

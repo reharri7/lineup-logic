@@ -8,6 +8,7 @@ import { TeamsService } from 'src/app/services/generated/api/teams.service';
 import { PositionsService } from 'src/app/services/generated/api/positions.service';
 import { LineupOptimizerService, OptimalLineup } from 'src/app/shared/services/lineup-optimizer.service';
 import { ApiFantasyTeamsFantasyTeamIdPlayersPost201ResponsePlayer } from 'src/app/services/generated/model/apiFantasyTeamsFantasyTeamIdPlayersPost201ResponsePlayer';
+import { SelectComponent } from '../../components/select/select.component';
 
 // Define the Player interface to match what's expected by the LineupOptimizerService
 interface Player {
@@ -27,7 +28,7 @@ interface Player {
   selector: 'app-optimal-lineup',
   templateUrl: './optimal-lineup.component.html',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink]
+  imports: [CommonModule, FormsModule, RouterLink, SelectComponent]
 })
 export class OptimalLineupComponent implements OnInit {
   fantasyTeams: any[] = [];

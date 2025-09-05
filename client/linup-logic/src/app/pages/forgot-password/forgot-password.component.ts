@@ -5,11 +5,12 @@ import { Router, RouterModule } from '@angular/router';
 import { lastValueFrom } from 'rxjs';
 import { PasswordResetsService } from '../../services/generated';
 import { NotificationService } from '../../shared/services/notification.service';
+import { InputComponent } from '../../components/input/input.component';
 
 @Component({
   selector: 'app-forgot-password',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, InputComponent],
   templateUrl: './forgot-password.component.html'
 })
 export class ForgotPasswordComponent {

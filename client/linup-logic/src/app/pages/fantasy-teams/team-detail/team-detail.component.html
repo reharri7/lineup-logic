@@ -83,17 +83,12 @@
     <div class="modal-box">
       <h3 class="font-bold text-lg">Edit Team</h3>
       <form [formGroup]="teamForm" (ngSubmit)="saveTeam()" class="space-y-6">
-        <div class="form-control">
-          <label class="label mb-2" for="edit_team_name">
-            <span class="label-text">Team Name</span>
-          </label>
-          <input id="edit_team_name" type="text" formControlName="name" class="input input-bordered w-full" />
-          @if(teamForm.get('name')?.invalid && teamForm.get('name')?.touched) {
-            <div class="text-error text-sm mt-1">
-              Team name is required
-            </div>
-          }
-        </div>
+        <app-input
+          label="Team Name"
+          placeholder="Team Name"
+          formControlName="name"
+          [required]="true">
+        </app-input>
         <div class="modal-action">
           <button type="button" class="btn btn-ghost" (click)="closeEditModal()">Cancel</button>
           <button type="submit" class="btn btn-primary" [disabled]="teamForm.invalid">Save</button>
@@ -119,47 +114,35 @@
 
       <div class="mb-4">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-2">
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text">Search by Name</span>
-            </label>
-            <input
-              type="text"
-              [(ngModel)]="playerNameFilter"
-              placeholder="Player name"
-              class="input input-bordered w-full"
-            />
-          </div>
+          <app-input
+            label="Search by Name"
+            placeholder="Player name"
+            [(ngModel)]="playerNameFilter">
+          </app-input>
 
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text">Filter by Team</span>
-            </label>
-            <select
-              [(ngModel)]="selectedTeamId"
-              class="select select-bordered w-full"
-            >
-              <option [ngValue]="null">All Teams</option>
-              @for(team of teams; track $index) {
-                <option [ngValue]="team.id">{{ team.name }}</option>
-              }
-            </select>
-          </div>
+          <app-select
+            label="Filter by Team"
+            [(ngModel)]="selectedTeamId"
+            [options]="teams"
+            [labelKey]="'name'"
+            [valueKey]="'id'"
+            placeholder="All Teams"
+            [includeBlankOption]="true"
+            [disabled]="loadingTeams"
+            [hint]="loadingTeams ? 'Loading teams...' : undefined">
+          </app-select>
 
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text">Filter by Position</span>
-            </label>
-            <select
-              [(ngModel)]="selectedPositionId"
-              class="select select-bordered w-full"
-            >
-              <option [ngValue]="null">All Positions</option>
-              @for(position of positions; track $index) {
-                <option [ngValue]="position.id">{{ position.position_name }}</option>
-              }
-            </select>
-          </div>
+          <app-select
+            label="Filter by Position"
+            [(ngModel)]="selectedPositionId"
+            [options]="positions"
+            [labelKey]="'position_name'"
+            [valueKey]="'id'"
+            placeholder="All Positions"
+            [includeBlankOption]="true"
+            [disabled]="loadingPositions"
+            [hint]="loadingPositions ? 'Loading positions...' : undefined">
+          </app-select>
         </div>
 
         <div class="flex justify-end space-x-2">
