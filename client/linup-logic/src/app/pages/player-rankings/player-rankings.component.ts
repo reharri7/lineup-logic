@@ -9,16 +9,20 @@ import { PlayersService } from 'src/app/services/generated/api/players.service';
 import { PositionsService } from 'src/app/services/generated/api/positions.service';
 import { TeamsService } from 'src/app/services/generated/api/teams.service';
 import { PlayerRankingsService } from 'src/app/shared/services/player-rankings.service';
+import { InputComponent } from '../../components/input/input.component';
+import { SelectComponent } from '../../components/select/select.component';
+import { TextareaComponent } from '../../components/textarea/textarea.component';
 
 @Component({
   selector: 'app-player-rankings',
   templateUrl: './player-rankings.component.html',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, DragDropModule]
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, DragDropModule, InputComponent, SelectComponent, TextareaComponent]
 })
 export class PlayerRankingsComponent implements OnInit, AfterViewInit, OnDestroy {
   positions: any[] = [];
   selectedPosition: string = '';
+  positionOptions: string[] = [];
   availablePlayers: any[] = [];
   selectedPlayers: any[] = [];
   loading = false;
@@ -84,6 +88,9 @@ export class PlayerRankingsComponent implements OnInit, AfterViewInit, OnDestroy
       .subscribe({
         next: (response) => {
           this.positions = response.positions || [];
+          const names = (this.positions || []).map((p: any) => p.position_name).filter((n: any) => !!n);
+          const withFlex = [...names, 'FLEX'];
+          this.positionOptions = Array.from(new Set(withFlex));
         },
         error: (err) => {
           this.error = 'Failed to load positions. Please try again.';

@@ -3,12 +3,13 @@ import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { TeamsService } from '../../services/generated/api/teams.service';
 import { ApiTeamsPost201ResponseTeam } from '../../services/generated/model/apiTeamsPost201ResponseTeam';
-import {lastValueFrom} from "rxjs";
+import { lastValueFrom } from 'rxjs';
+import { SelectComponent } from '../select/select.component';
 
 @Component({
   selector: 'app-teams-dropdown',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, SelectComponent],
   templateUrl: './teams-dropdown.component.html',
   styleUrls: ['./teams-dropdown.component.css']
 })

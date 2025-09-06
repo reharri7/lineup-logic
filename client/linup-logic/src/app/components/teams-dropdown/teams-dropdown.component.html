@@ -1,22 +1,13 @@
 <div class="form-control w-full">
-  <select
-    class="select select-bordered w-full"
-    [formControl]="control">
-    <option value="">Select a team</option>
-    @for(team of teams; track team.id) {
-      <option [value]="team.id">
-        {{ team.name }}
-      </option>
-    }
-  </select>
-  @if(isLoading) {
-    <div class="mt-2 text-sm text-gray-500">
-      Loading teams...
-    </div>
-  }
-  @if(control.touched && control.invalid) {
-    <div class="mt-2 text-sm text-error">
-      Please select a team
-    </div>
-  }
+  <app-select
+    [formControl]="control"
+    [options]="teams"
+    label=""
+    placeholder="Select a team"
+    [labelKey]="'name'"
+    [valueKey]="'id'"
+    [disabled]="isLoading"
+    [hint]="isLoading ? 'Loading teams...' : undefined"
+    [errorMessages]="{ required: 'Please select a team' }"
+  ></app-select>
 </div>

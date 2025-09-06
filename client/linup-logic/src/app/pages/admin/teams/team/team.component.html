@@ -10,12 +10,11 @@
     </div>
   }
   <form [formGroup]="formGroup" class="space-y-6">
-    <div class="form-control w-full">
-      <label class="label" for="team_name">
-        <span class="label-text">Team Name</span>
-      </label>
-      <input id="team_name" type="text" placeholder="Team Name" formControlName="name" class="input input-bordered w-full">
-    </div>
+    <app-input
+      label="Team Name"
+      placeholder="Team Name"
+      formControlName="name">
+    </app-input>
   </form>
 
   <div class="flex gap-2 mt-4">

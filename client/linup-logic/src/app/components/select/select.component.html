@@ -1,0 +1,42 @@
+<div class="form-control w-full">
+  @if(label) {
+    <label class="label" [attr.for]="selectId">
+      <span class="label-text">
+        {{ label }}
+        @if(required) { <span class="text-error" aria-hidden="true">*</span> }
+      </span>
+    </label>
+  }
+
+  <select
+    class="select select-bordered w-full {{ controlSizeClass }}"
+    [class.select-error]="invalid"
+    [id]="selectId"
+    [multiple]="multiple"
+    [disabled]="disabled"
+    [attr.aria-invalid]="invalid"
+    [attr.aria-required]="required || null"
+    [attr.aria-describedby]="describedBy"
+    (change)="onChangeSelection($event)"
+    (blur)="onBlur()"
+  >
+    @if(!multiple && includeBlankOption && placeholder) {
+      <option value="">{{ placeholder }}</option>
+    }
+    @for(opt of options; track $index) {
+      <option [selected]="isSelected(opt)" [attr.data-index]="$index">{{ optionLabel(opt) }}</option>
+    }
+  </select>
+
+  @if(hint) {
+    <label class="label">
+      <span class="label-text-alt text-base-content/70" [id]="hintId">{{ hint }}</span>
+    </label>
+  }
+
+  @if(errorText) {
+    <label class="label">
+      <span class="label-text-alt text-error" [id]="errorId">{{ errorText }}</span>
+    </label>
+  }
+</div>

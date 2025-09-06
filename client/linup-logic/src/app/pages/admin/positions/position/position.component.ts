@@ -9,13 +9,15 @@ import {NotificationService} from "../../../../shared/services/notification.serv
 import {ModalService} from "../../../../shared/services/modal.service";
 import {ApiPositionsPost201ResponsePosition} from "../../../../services/generated/model/apiPositionsPost201ResponsePosition";
 import {ApiPositionsPostRequest} from "../../../../services/generated/model/apiPositionsPostRequest";
+import { InputComponent } from '../../../../components/input/input.component';
 
 @Component({
   selector: 'app-position',
   standalone: true,
   imports: [
     ReactiveFormsModule,
-    RouterLink
+    RouterLink,
+    InputComponent
   ],
   templateUrl: './position.component.html',
   styleUrl: './position.component.css'

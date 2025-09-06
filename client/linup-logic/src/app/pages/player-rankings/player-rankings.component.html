@@ -6,13 +6,14 @@
       <label class="label" for="position-select">
         <span class="label-text">Select Position to Rank</span>
       </label>
-      <select id="position-select" [(ngModel)]="selectedPosition" (change)="onPositionChange()" class="select select-bordered w-full">
-        <option value="">Select Position</option>
-        @for(position of positions; track position.id) {
-          <option [value]="position.position_name">{{ position.position_name }}</option>
-        }
-        <option value="FLEX">Flex Players (RB/WR/TE)</option>
-      </select>
+      <app-select
+        id="position-select"
+        [(ngModel)]="selectedPosition"
+        (ngModelChange)="onPositionChange()"
+        [options]="positionOptions"
+        placeholder="Select Position"
+        [includeBlankOption]="true"
+      ></app-select>
     </div>
   </div>
 
@@ -50,30 +51,27 @@
         <div class="mb-4">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-2">
             <div class="form-control">
-              <label class="label">
-                <span class="label-text">Search by Name</span>
-              </label>
-              <input
-                type="text"
-                [(ngModel)]="playerNameFilter"
+              <app-input
+                label="Search by Name"
                 placeholder="Player name"
-                class="input input-bordered w-full"
-              />
+                [(ngModel)]="playerNameFilter"
+              ></app-input>
             </div>
 
             <div class="form-control">
               <label class="label">
                 <span class="label-text">Filter by Team</span>
               </label>
-              <select
+              <app-select
                 [(ngModel)]="selectedTeamId"
-                class="select select-bordered w-full"
-              >
-                <option [ngValue]="null">All Teams</option>
-                @for(team of teams; track team.id) {
-                  <option [ngValue]="team.id">{{ team.name }}</option>
-                }
-              </select>
+                [options]="teams"
+                [labelKey]="'name'"
+                [valueKey]="'id'"
+                placeholder="All Teams"
+                [includeBlankOption]="true"
+                [disabled]="loadingTeams"
+                [hint]="loadingTeams ? 'Loading teams...' : undefined"
+              ></app-select>
             </div>
           </div>
 
@@ -225,7 +223,11 @@
       <h3 class="font-bold text-lg">Export Rankings</h3>
       <p class="py-4">Copy the text below to save your rankings. You can import this later to restore your rankings.</p>
 
-      <textarea class="textarea textarea-bordered w-full h-32" readonly>{{ exportedRankings }}</textarea>
+      <app-textarea
+        [readonly]="true"
+        [rows]="8"
+        [(ngModel)]="exportedRankings"
+      ></app-textarea>
 
       <div class="modal-action">
         <button class="btn btn-primary" (click)="copyToClipboard()">Copy to Clipboard</button>
@@ -253,11 +255,11 @@
         </div>
       }
 
-      <textarea
-        class="textarea textarea-bordered w-full h-32"
+      <app-textarea
+        [rows]="8"
         [(ngModel)]="importRankings"
         placeholder="Paste your exported rankings here"
-      ></textarea>
+      ></app-textarea>
 
       <div class="modal-action">
         <button class="btn btn-primary" (click)="submitImport()">Import</button>

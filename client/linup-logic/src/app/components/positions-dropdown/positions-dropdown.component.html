@@ -1,23 +1,13 @@
 <div class="form-control w-full">
-  <select
-    class="select select-bordered w-full"
+  <app-select
+    [formControl]="control"
+    [options]="positions"
+    label=""
+    placeholder="Select a position"
+    [labelKey]="'position_name'"
+    [valueKey]="'id'"
     [disabled]="isLoading"
-    [formControl]="control">
-    <option value="">Select a position</option>
-    @for(position of positions; track position.id) {
-      <option [value]="position.id">
-        {{ position.position_name }}
-      </option>
-    }
-  </select>
-  @if(isLoading) {
-    <div class="mt-2 text-sm text-gray-500">
-      Loading positions...
-    </div>
-  }
-  @if(control.touched && control.invalid) {
-    <div class="mt-2 text-sm text-error">
-      Please select a position
-    </div>
-  }
+    [hint]="isLoading ? 'Loading positions...' : undefined"
+    [errorMessages]="{ required: 'Please select a position' }"
+  ></app-select>
 </div>

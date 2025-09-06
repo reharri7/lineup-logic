@@ -38,14 +38,25 @@
 
   @if(!loading && fantasyTeams && fantasyTeams.length > 0) {
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <div *ngFor="let team of fantasyTeams" class="card bg-base-100 shadow-xl">
-        <div class="card-body">
+      <div *ngFor="let team of fantasyTeams; let i = index; trackBy: trackByTeamId" class="card bg-base-100 shadow-xl">
+        <div class="card-body" [formGroup]="teamGroupAt(i)">
           <h2 class="card-title">{{ team.name }}</h2>
-          <p>Fantasy Team</p>
-          <div class="card-actions justify-end mt-4">
-            <button class="btn btn-sm btn-outline" (click)="viewTeamDetails(team.id)">View Details</button>
-            <button class="btn btn-sm btn-primary" (click)="editTeam(team)">Edit</button>
-            <button class="btn btn-sm btn-error" (click)="confirmDeleteTeam(team)">Delete</button>
+          <app-input
+            label="Team Name"
+            placeholder="Team Name"
+            formControlName="name"
+            [required]="true">
+          </app-input>
+
+          <div class="card-actions justify-between mt-4">
+            <div class="flex gap-2">
+              <button class="btn btn-sm btn-outline" type="button" (click)="viewTeamDetails(team.id)">View Details</button>
+              <button class="btn btn-sm btn-error" type="button" (click)="confirmDeleteTeam(team)">Delete</button>
+            </div>
+            <div class="flex gap-2">
+              <button class="btn btn-sm btn-ghost" type="button" (click)="resetTeamAt(i)" [disabled]="teamGroupAt(i).pristine">Reset</button>
+              <button class="btn btn-sm btn-primary" type="button" (click)="saveTeamAt(i)" [disabled]="teamGroupAt(i).invalid || teamGroupAt(i).pristine">Save</button>
+            </div>
           </div>
         </div>
       </div>
@@ -56,17 +67,12 @@
     <div class="modal-box">
       <h3 class="font-bold text-lg">{{ editingTeam ? 'Edit Team' : 'Create New Team' }}</h3>
       <form [formGroup]="teamForm" (ngSubmit)="saveTeam()" class="space-y-6">
-        <div class="form-control">
-          <label class="label mb-2" for="dashboard_team_name">
-            <span class="label-text">Team Name</span>
-          </label>
-          <input id="dashboard_team_name" type="text" formControlName="name" class="input input-bordered w-full" />
-          @if(teamForm.get('name')?.invalid && teamForm.get('name')?.touched) {
-            <div class="text-error text-sm mt-1">
-              Team name is required
-            </div>
-          }
-        </div>
+        <app-input
+          label="Team Name"
+          placeholder="Team Name"
+          formControlName="name"
+          [required]="true">
+        </app-input>
         <div class="modal-action">
           <button type="button" class="btn btn-ghost" (click)="closeTeamModal()">Cancel</button>
           <button type="submit" class="btn btn-primary" [disabled]="teamForm.invalid">Save</button>

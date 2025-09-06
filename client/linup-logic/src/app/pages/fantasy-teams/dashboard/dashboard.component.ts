@@ -1,15 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormArray, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FantasyTeamsService } from 'src/app/services/generated/api/fantasyTeams.service';
+import { InputComponent } from '../../../components/input/input.component';
 import { ApiFantasyTeamsGet200ResponseFantasyTeamsInner } from 'src/app/services/generated/model/apiFantasyTeamsGet200ResponseFantasyTeamsInner';
 
 @Component({
   selector: 'app-fantasy-teams-dashboard',
   templateUrl: './dashboard.component.html',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule]
+  imports: [CommonModule, ReactiveFormsModule, InputComponent]
 })
 export class DashboardComponent implements OnInit {
   fantasyTeams: ApiFantasyTeamsGet200ResponseFantasyTeamsInner[] = [];
@@ -19,7 +20,11 @@ export class DashboardComponent implements OnInit {
   showTeamModal = false;
   showDeleteModal = false;
 
+  // Modal form for creating (and optionally editing) a team
   teamForm: FormGroup;
+
+  // New: FormArray containing a FormGroup per fantasy team
+  teamsForm: FormArray<FormGroup> = new FormArray<FormGroup>([]);
 
   editingTeam: ApiFantasyTeamsGet200ResponseFantasyTeamsInner | null = null;
   teamToDelete: ApiFantasyTeamsGet200ResponseFantasyTeamsInner | null = null;
@@ -38,6 +43,14 @@ export class DashboardComponent implements OnInit {
     this.loadFantasyTeams();
   }
 
+  private buildTeamsForm(): void {
+    const groups: FormGroup[] = (this.fantasyTeams || []).map(team => new FormGroup({
+      id: new FormControl(team.id),
+      name: new FormControl(team.name ?? '', { validators: [Validators.required] })
+    }));
+    this.teamsForm = new FormArray<FormGroup>(groups);
+  }
+
   loadFantasyTeams(): void {
     this.loading = true;
     this.error = null;
@@ -46,6 +59,7 @@ export class DashboardComponent implements OnInit {
       .subscribe({
         next: (response) => {
           this.fantasyTeams = response.fantasy_teams || [];
+          this.buildTeamsForm();
           this.loading = false;
         },
         error: (err) => {
@@ -62,6 +76,7 @@ export class DashboardComponent implements OnInit {
     this.showTeamModal = true;
   }
 
+  // Keeping editTeam for backward compatibility, but inline editing is preferred.
   editTeam(team: ApiFantasyTeamsGet200ResponseFantasyTeamsInner): void {
     this.editingTeam = team;
     this.teamForm.patchValue({
@@ -136,6 +151,39 @@ export class DashboardComponent implements OnInit {
         }
       });
   }
+
+  // Helpers for per-row editing
+  teamGroupAt(index: number): FormGroup {
+    return this.teamsForm.at(index) as FormGroup;
+  }
+
+  saveTeamAt(index: number): void {
+    const group = this.teamGroupAt(index);
+    if (group.invalid) return;
+
+    const id = group.value.id as number | undefined;
+    if (!id) return;
+
+    const payload = { fantasy_team: { name: group.value.name } };
+    this.fantasyTeamsService.apiFantasyTeamsIdPut(id, payload).subscribe({
+      next: () => {
+        group.markAsPristine();
+      },
+      error: (err) => {
+        this.error = 'Failed to update team. Please try again.';
+        console.error('Error updating team:', err);
+      }
+    });
+  }
+
+  resetTeamAt(index: number): void {
+    const original = this.fantasyTeams[index];
+    const group = this.teamGroupAt(index);
+    group.patchValue({ name: original?.name ?? '' });
+    group.markAsPristine();
+  }
+
+  trackByTeamId = (_: number, item: ApiFantasyTeamsGet200ResponseFantasyTeamsInner) => item.id;
 
   viewTeamDetails(teamId: number | undefined): void {
     if (teamId) {

@@ -6,11 +6,12 @@ import { lastValueFrom } from 'rxjs';
 import { PasswordResetsService } from '../../services/generated';
 import { NotificationService } from '../../shared/services/notification.service';
 import { passwordMatchValidator } from '../../shared/validators';
+import { InputComponent } from '../../components/input/input.component';
 
 @Component({
   selector: 'app-reset-password',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, InputComponent],
   templateUrl: './reset-password.component.html'
 })
 export class ResetPasswordComponent implements OnInit {

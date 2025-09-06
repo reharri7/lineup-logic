@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, HostListener, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
 import {ApiPlayersPost201ResponsePlayer, PlayersService} from "../../../../services/generated";
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { NotificationService } from "../../../../shared/services/notification.service";

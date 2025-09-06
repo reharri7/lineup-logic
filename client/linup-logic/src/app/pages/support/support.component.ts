@@ -5,11 +5,13 @@ import { lastValueFrom } from 'rxjs';
 import { NotificationService } from '../../shared/services/notification.service';
 import { SupportTicketsService } from '../../services/generated';
 import { ApiSupportTicketsPostRequest } from '../../services/generated/model/apiSupportTicketsPostRequest';
+import { InputComponent } from '../../components/input/input.component';
+import { TextareaComponent } from '../../components/textarea/textarea.component';
 
 @Component({
   selector: 'app-support',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, InputComponent, TextareaComponent],
   templateUrl: './support.component.html',
   styleUrls: ['./support.component.css']
 })

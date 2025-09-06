@@ -6,12 +6,18 @@
       <label class="label" for="team-select">
         <span class="label-text">Select Fantasy Team</span>
       </label>
-      <select id="team-select" [(ngModel)]="selectedTeamId" (change)="onTeamChange()" class="select select-bordered w-full">
-        <option [ngValue]="null">Select Team</option>
-        @for(team of fantasyTeams; track team.id) {
-          <option [ngValue]="team.id">{{ team.name }}</option>
-        }
-      </select>
+      <app-select
+        id="team-select"
+        [(ngModel)]="selectedTeamId"
+        (ngModelChange)="onTeamChange()"
+        [options]="fantasyTeams"
+        [labelKey]="'name'"
+        [valueKey]="'id'"
+        placeholder="Select Team"
+        [includeBlankOption]="true"
+        [disabled]="loadingTeams"
+        [hint]="loadingTeams ? 'Loading teams...' : undefined"
+      ></app-select>
     </div>
   </div>
 
