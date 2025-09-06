@@ -2,6 +2,8 @@ import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
+import { forkJoin, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 import { PlayersService } from 'src/app/services/generated/api/players.service';
 import { PositionsService } from 'src/app/services/generated/api/positions.service';
@@ -39,6 +41,12 @@ export class PlayerRankingsComponent implements OnInit, AfterViewInit, OnDestroy
   pageSize: number = 25;
   totalPages: number = 0;
   isLoadingMore: boolean = false;
+
+  // Selection persistence helpers
+  selectedPlayerIds: number[] = [];
+  lastSavedIds: number[] = [];
+  private playerCache: Map<number, any> = new Map<number, any>();
+  private saveDebounceHandle: any = null;
 
   // Intersection Observer
   private observer: IntersectionObserver | null = null;
@@ -101,7 +109,21 @@ export class PlayerRankingsComponent implements OnInit, AfterViewInit, OnDestroy
   }
 
   onPositionChange(): void {
-    this.loadPlayersByPosition();
+    // Reset pagination and lists
+    this.currentPage = 1;
+    this.availablePlayers = [];
+    this.selectedPlayers = [];
+    this.disconnectObserver();
+
+    // Load saved IDs for the selected position
+    if (this.selectedPosition) {
+      this.selectedPlayerIds = this.playerRankingsService.getRankings(this.selectedPosition) || [];
+      this.lastSavedIds = [...this.selectedPlayerIds];
+      // Attempt to populate selectedPlayers based on saved IDs
+      this.buildSelectedPlayersFromIds();
+      // Load first page of available players
+      this.loadPlayersByPosition(false);
+    }
   }
 
   loadPlayersByPosition(loadMore: boolean = false): void {
@@ -111,9 +133,11 @@ export class PlayerRankingsComponent implements OnInit, AfterViewInit, OnDestroy
       this.isLoadingMore = true;
     } else {
       this.loading = true;
-      this.currentPage = 1; // Reset to first page when not loading more
-      // Disconnect any existing observer when starting a new load
-      this.disconnectObserver();
+      if (this.currentPage === 1) {
+        // When not loading more and starting fresh, clear available list and observer
+        this.availablePlayers = [];
+        this.disconnectObserver();
+      }
     }
 
     this.error = null;
@@ -130,7 +154,6 @@ export class PlayerRankingsComponent implements OnInit, AfterViewInit, OnDestroy
       positionId !== undefined ? positionId : undefined
     ).subscribe({
       next: (response) => {
-        const savedRankings = this.playerRankingsService.getRankings(this.selectedPosition);
         const newPlayers = response.players || [];
 
         // Update pagination metadata
@@ -138,32 +161,31 @@ export class PlayerRankingsComponent implements OnInit, AfterViewInit, OnDestroy
           this.totalPages = response.meta.total_pages || 0;
         }
 
-        const playerMap = new Map(newPlayers.map(p => [p.id, p]));
-
-        // Get all selected player IDs to filter them out from available players
-        const selectedPlayerIds = new Set(this.selectedPlayers.map(p => p.id));
+        // Build a set from selectedPlayerIds to filter available players
+        const selectedIdSet = new Set(this.selectedPlayerIds);
 
         // Filter out already selected players from the new batch
-        const newAvailablePlayers = newPlayers.filter(p => !selectedPlayerIds.has(p.id));
+        const newAvailablePlayers = newPlayers.filter(p => !selectedIdSet.has(p.id || 0));
 
         if (loadMore) {
           // Append new players to existing list
           this.availablePlayers = [...this.availablePlayers, ...newAvailablePlayers];
           this.isLoadingMore = false;
         } else {
-          // First load - handle selected players
-          if (savedRankings.length > 0) {
-            this.selectedPlayers = savedRankings
-              .filter(id => playerMap.has(id))
-              .map(id => playerMap.get(id));
-
-            this.availablePlayers = newAvailablePlayers;
-          } else {
-            this.availablePlayers = newAvailablePlayers;
-            this.selectedPlayers = [];
-          }
+          // Replace available players list on fresh load
+          this.availablePlayers = newAvailablePlayers;
           this.loading = false;
         }
+
+        // Cache any newly loaded selected players (for when they appear in paging)
+        newPlayers.forEach(p => {
+          if (p && p.id != null) {
+            this.playerCache.set(p.id, p);
+          }
+        });
+
+        // Ensure selectedPlayers are in correct order based on selectedPlayerIds and cache
+        this.rebuildSelectedPlayersFromCache();
 
         // Set up the intersection observer after the data is loaded
         // Use setTimeout to ensure the DOM has been updated
@@ -176,6 +198,75 @@ export class PlayerRankingsComponent implements OnInit, AfterViewInit, OnDestroy
         this.isLoadingMore = false;
       }
     });
+  }
+
+  private buildSelectedPlayersFromIds(): void {
+    const ids = this.selectedPlayerIds || [];
+    if (ids.length === 0) {
+      this.selectedPlayers = [];
+      this.lastSavedIds = [];
+      return;
+    }
+
+    // Use cache for existing, collect missing
+    const missingIds: number[] = [];
+    const initialSelected: any[] = [];
+    ids.forEach(id => {
+      const cached = this.playerCache.get(id);
+      if (cached) {
+        initialSelected.push(cached);
+      } else {
+        missingIds.push(id);
+      }
+    });
+    this.selectedPlayers = initialSelected;
+
+    if (missingIds.length === 0) {
+      this.lastSavedIds = [...ids];
+      return;
+    }
+
+    const requests = missingIds.map(id =>
+      this.playersService.apiPlayersIdGet(id).pipe(
+        catchError(err => {
+          console.warn('Failed to load player by ID', id, err);
+          return of(null as any);
+        })
+      )
+    );
+
+    forkJoin(requests).subscribe(results => {
+      let removedAny = false;
+      results.forEach((res: any, idx: number) => {
+        const id = missingIds[idx];
+        const player = res && res.player ? res.player : null;
+        if (player && player.id != null) {
+          this.playerCache.set(id, player);
+        } else {
+          // Remove ID that no longer exists
+          this.selectedPlayerIds = this.selectedPlayerIds.filter(pid => pid !== id);
+          removedAny = true;
+        }
+      });
+
+      this.rebuildSelectedPlayersFromCache();
+
+      if (removedAny) {
+        // Persist corrected list once
+        this.doSaveRankings();
+      } else {
+        this.lastSavedIds = [...this.selectedPlayerIds];
+      }
+    });
+  }
+
+  private rebuildSelectedPlayersFromCache(): void {
+    const list: any[] = [];
+    this.selectedPlayerIds.forEach(id => {
+      const player = this.playerCache.get(id);
+      if (player) list.push(player);
+    });
+    this.selectedPlayers = list;
   }
 
   private setupIntersectionObserver(): void {
@@ -223,7 +314,9 @@ export class PlayerRankingsComponent implements OnInit, AfterViewInit, OnDestroy
 
   onDrop(event: CdkDragDrop<any[]>): void {
     moveItemInArray(this.selectedPlayers, event.previousIndex, event.currentIndex);
-    this.saveRankings();
+    // Reflect new order in IDs and schedule save
+    this.selectedPlayerIds = this.selectedPlayers.map(p => p.id).filter((id): id is number => id != null);
+    this.scheduleSave();
   }
 
   movePlayerUp(index: number): void {
@@ -232,8 +325,9 @@ export class PlayerRankingsComponent implements OnInit, AfterViewInit, OnDestroy
       [this.selectedPlayers[index - 1], this.selectedPlayers[index]] =
         [this.selectedPlayers[index], this.selectedPlayers[index - 1]];
 
-      // Save the new rankings
-      this.saveRankings();
+      // Reflect new order in IDs and schedule save
+      this.selectedPlayerIds = this.selectedPlayers.map(p => p.id).filter((id): id is number => id != null);
+      this.scheduleSave();
     }
   }
 
@@ -242,15 +336,36 @@ export class PlayerRankingsComponent implements OnInit, AfterViewInit, OnDestroy
       [this.selectedPlayers[index], this.selectedPlayers[index + 1]] =
         [this.selectedPlayers[index + 1], this.selectedPlayers[index]];
 
-      this.saveRankings();
+      // Reflect new order in IDs and schedule save
+      this.selectedPlayerIds = this.selectedPlayers.map(p => p.id).filter((id): id is number => id != null);
+      this.scheduleSave();
     }
   }
 
   saveRankings(): void {
-    if (!this.selectedPosition) return;
+    // Kept for compatibility; internally uses debounced change-detected save
+    this.scheduleSave();
+  }
 
-    const playerIds = this.selectedPlayers.map(p => p.id).filter((id): id is number => id !== undefined);
-    this.playerRankingsService.saveRankings(this.selectedPosition, playerIds);
+  private scheduleSave(delay: number = 200): void {
+    if (!this.selectedPosition) return;
+    // Change detection
+    const current = this.selectedPlayerIds;
+    const changed = current.length !== this.lastSavedIds.length || current.some((id, i) => id !== this.lastSavedIds[i]);
+    if (!changed) return;
+
+    // Debounce
+    if (this.saveDebounceHandle) {
+      clearTimeout(this.saveDebounceHandle);
+    }
+    this.saveDebounceHandle = setTimeout(() => this.doSaveRankings(), delay);
+  }
+
+  private doSaveRankings(): void {
+    if (!this.selectedPosition) return;
+    const ids = this.selectedPlayerIds;
+    this.playerRankingsService.saveRankings(this.selectedPosition, ids);
+    this.lastSavedIds = [...ids];
   }
 
   addPlayerToRankings(player: any): void {
@@ -258,7 +373,10 @@ export class PlayerRankingsComponent implements OnInit, AfterViewInit, OnDestroy
     if (index !== -1) {
       this.availablePlayers.splice(index, 1);
       this.selectedPlayers.push(player);
-      this.saveRankings();
+      if (player && player.id != null) {
+        this.selectedPlayerIds.push(player.id);
+      }
+      this.scheduleSave();
     }
   }
 
@@ -267,7 +385,9 @@ export class PlayerRankingsComponent implements OnInit, AfterViewInit, OnDestroy
     if (index !== -1) {
       this.selectedPlayers.splice(index, 1);
       this.availablePlayers.push(player);
-      this.saveRankings();
+      // Remove from IDs
+      this.selectedPlayerIds = this.selectedPlayerIds.filter(id => id !== player.id);
+      this.scheduleSave();
     }
   }
 
@@ -278,6 +398,8 @@ export class PlayerRankingsComponent implements OnInit, AfterViewInit, OnDestroy
 
     this.availablePlayers = [...this.availablePlayers, ...this.selectedPlayers];
     this.selectedPlayers = [];
+    this.selectedPlayerIds = [];
+    this.lastSavedIds = [];
   }
 
   openExportModal(): void {
@@ -325,7 +447,13 @@ export class PlayerRankingsComponent implements OnInit, AfterViewInit, OnDestroy
       this.importSuccess = true;
 
       if (this.selectedPosition) {
-        this.loadPlayersByPosition();
+        // Sync IDs from storage and rebuild selected list
+        this.selectedPlayerIds = this.playerRankingsService.getRankings(this.selectedPosition) || [];
+        this.lastSavedIds = [...this.selectedPlayerIds];
+        this.buildSelectedPlayersFromIds();
+        // Refresh available players for current filters/page (reset to first page)
+        this.currentPage = 1;
+        this.loadPlayersByPosition(false);
       }
     } else {
       this.importError = 'Failed to import rankings. Please check the format and try again.';

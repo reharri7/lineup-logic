@@ -153,6 +153,7 @@ export class OptimalLineupComponent implements OnInit {
           });
 
           this.optimalLineup = this.lineupOptimizerService.generateOptimalLineup(players);
+          console.log('Optimal Lineup:', this.optimalLineup);
           this.loading = false;
         },
         error: (err) => {
