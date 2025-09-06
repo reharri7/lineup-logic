@@ -51,11 +51,6 @@
               <h3 class="card-title">Quarterback</h3>
               @if(optimalLineup.quarterback) {
                 <div class="flex items-center space-x-3">
-                  <div class="avatar placeholder">
-                    <div class="bg-neutral text-neutral-content rounded-full w-12">
-                      <span>QB</span>
-                    </div>
-                  </div>
                   <div>
                     <div class="font-bold">{{ optimalLineup.quarterback.name }}</div>
                     <div class="text-sm opacity-50">{{ optimalLineup.quarterback.team.name }}</div>
@@ -74,11 +69,6 @@
               @if(checkForRunningBacks()) {
                 @for(rb of optimalLineup.runningBacks; track rb.id) {
                   <div class="flex items-center space-x-3 mb-2">
-                    <div class="avatar placeholder">
-                      <div class="bg-neutral text-neutral-content rounded-full w-12">
-                        <span>RB</span>
-                      </div>
-                    </div>
                     <div>
                       <div class="font-bold">{{ rb.name }}</div>
                       <div class="text-sm opacity-50">{{ rb.team.name }}</div>
@@ -98,11 +88,6 @@
               @if(checkForWideReceivers()) {
                 @for(wr of optimalLineup.wideReceivers; track wr.id) {
                   <div class="flex items-center space-x-3 mb-2">
-                    <div class="avatar placeholder">
-                      <div class="bg-neutral text-neutral-content rounded-full w-12">
-                        <span>WR</span>
-                      </div>
-                    </div>
                     <div>
                       <div class="font-bold">{{ wr.name }}</div>
                       <div class="text-sm opacity-50">{{ wr.team.name }}</div>
@@ -121,11 +106,6 @@
               <h3 class="card-title">Tight End</h3>
               @if(optimalLineup.tightEnd) {
                 <div class="flex items-center space-x-3">
-                  <div class="avatar placeholder">
-                    <div class="bg-neutral text-neutral-content rounded-full w-12">
-                      <span>TE</span>
-                    </div>
-                  </div>
                   <div>
                     <div class="font-bold">{{ optimalLineup.tightEnd.name }}</div>
                     <div class="text-sm opacity-50">{{ optimalLineup.tightEnd.team.name }}</div>
@@ -143,11 +123,6 @@
               <h3 class="card-title">Flex (RB/WR/TE)</h3>
               @if(optimalLineup.flex) {
                 <div class="flex items-center space-x-3">
-                  <div class="avatar placeholder">
-                    <div class="bg-neutral text-neutral-content rounded-full w-12">
-                      <span>{{ optimalLineup.flex.position.position_name }}</span>
-                    </div>
-                  </div>
                   <div>
                     <div class="font-bold">{{ optimalLineup.flex.name }}</div>
                     <div class="text-sm opacity-50">{{ optimalLineup.flex.team.name }}</div>
@@ -166,11 +141,6 @@
               <h3 class="card-title">Kicker</h3>
               @if(optimalLineup.kicker) {
                 <div class="flex items-center space-x-3">
-                  <div class="avatar placeholder">
-                    <div class="bg-neutral text-neutral-content rounded-full w-12">
-                      <span>K</span>
-                    </div>
-                  </div>
                   <div>
                     <div class="font-bold">{{ optimalLineup.kicker.name }}</div>
                     <div class="text-sm opacity-50">{{ optimalLineup.kicker.team.name }}</div>
@@ -188,11 +158,6 @@
               <h3 class="card-title">Defense</h3>
               @if(optimalLineup.defense) {
                 <div class="flex items-center space-x-3">
-                  <div class="avatar placeholder">
-                    <div class="bg-neutral text-neutral-content rounded-full w-12">
-                      <span>DEF</span>
-                    </div>
-                  </div>
                   <div>
                     <div class="font-bold">{{ optimalLineup.defense.name }}</div>
                     <div class="text-sm opacity-50">{{ optimalLineup.defense.team.name }}</div>

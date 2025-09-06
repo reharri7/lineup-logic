@@ -127,33 +127,22 @@ export class OptimalLineupComponent implements OnInit {
     this.fantasyTeamsService.apiFantasyTeamsIdGet(this.selectedTeamId)
       .subscribe({
         next: (response) => {
-          const players: Player[] = [];
-
-          (response.players || []).forEach(player => {
-            if (player.position_id && player.team_id &&
-                this.positionMap.has(player.position_id) &&
-                this.teamMap.has(player.team_id)) {
-
-              const position = this.positionMap.get(player.position_id)!;
-              const team = this.teamMap.get(player.team_id)!;
-
-              players.push({
-                id: player.id || 0,
-                name: player.name || '',
-                position: {
-                  id: position.id,
-                  position_name: position.position_name
-                },
-                team: {
-                  id: team.id,
-                  name: team.name
-                }
-              });
-            }
-          });
+          const players: Player[] = (response.players || [])
+            .filter((p: any) => p && p.id != null && p.position && p.team)
+            .map((p: any) => ({
+              id: p.id || 0,
+              name: p.name || '',
+              position: {
+                id: (p.position && p.position.id) || 0,
+                position_name: (p.position && p.position.position_name) || ''
+              },
+              team: {
+                id: (p.team && p.team.id) || 0,
+                name: (p.team && p.team.name) || ''
+              }
+            }));
 
           this.optimalLineup = this.lineupOptimizerService.generateOptimalLineup(players);
-          console.log('Optimal Lineup:', this.optimalLineup);
           this.loading = false;
         },
         error: (err) => {

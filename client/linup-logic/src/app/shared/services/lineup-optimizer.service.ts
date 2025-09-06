@@ -31,6 +31,19 @@ export class LineupOptimizerService {
 
   constructor(private playerRankingsService: PlayerRankingsService) {}
 
+  private normalizePositionCode(name: string | undefined | null): string {
+    const n = (name || '').toUpperCase().replace(/\s|-/g, '');
+    const map: Record<string, string> = {
+      'QB': 'QB', 'QUARTERBACK': 'QB',
+      'RB': 'RB', 'RUNNINGBACK': 'RB',
+      'WR': 'WR', 'WIDERECEIVER': 'WR',
+      'TE': 'TE', 'TIGHTEND': 'TE',
+      'K': 'K', 'KICKER': 'K',
+      'DEF': 'DEF', 'DST': 'DEF', 'DEFENSE': 'DEF', 'D/ST': 'DEF'
+    };
+    return map[n] || (name ? name.toUpperCase() : '');
+  }
+
   /**
    * Generate an optimal lineup based on player rankings
    * @param teamPlayers Array of players on the fantasy team
@@ -59,13 +72,13 @@ export class LineupOptimizerService {
     const defRankings = this.playerRankingsService.getRankings('DEF');
     const flexRankings = this.playerRankingsService.getRankings('FLEX');
 
-    // Group players by position
-    const qbs = teamPlayers.filter(p => p.position.position_name === 'QB');
-    const rbs = teamPlayers.filter(p => p.position.position_name === 'RB');
-    const wrs = teamPlayers.filter(p => p.position.position_name === 'WR');
-    const tes = teamPlayers.filter(p => p.position.position_name === 'TE');
-    const ks = teamPlayers.filter(p => p.position.position_name === 'K');
-    const defs = teamPlayers.filter(p => p.position.position_name === 'DEF');
+    // Group players by normalized position code (accepts codes and full names)
+    const qbs = teamPlayers.filter(p => this.normalizePositionCode(p.position.position_name) === 'QB');
+    const rbs = teamPlayers.filter(p => this.normalizePositionCode(p.position.position_name) === 'RB');
+    const wrs = teamPlayers.filter(p => this.normalizePositionCode(p.position.position_name) === 'WR');
+    const tes = teamPlayers.filter(p => this.normalizePositionCode(p.position.position_name) === 'TE');
+    const ks = teamPlayers.filter(p => this.normalizePositionCode(p.position.position_name) === 'K');
+    const defs = teamPlayers.filter(p => this.normalizePositionCode(p.position.position_name) === 'DEF');
 
     // Sort players by their rankings
     this.sortPlayersByRanking(qbs, qbRankings);
