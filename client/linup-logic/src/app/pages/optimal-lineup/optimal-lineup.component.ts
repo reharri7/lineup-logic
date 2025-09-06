@@ -99,7 +99,9 @@ export class OptimalLineupComponent implements OnInit {
     this.fantasyTeamsService.apiFantasyTeamsGet()
       .subscribe({
         next: (response) => {
-          this.fantasyTeams = response.fantasy_teams || [];
+          this.fantasyTeams = (response.fantasy_teams || [])
+            .slice()
+            .sort((a: any, b: any) => (a?.name ?? '').localeCompare(b?.name ?? '', undefined, { sensitivity: 'base' }));
           this.loadingTeams = false;
         },
         error: (err) => {

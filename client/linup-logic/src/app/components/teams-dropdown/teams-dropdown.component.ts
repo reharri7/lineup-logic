@@ -29,7 +29,9 @@ export class TeamsDropdownComponent implements OnInit {
     this.teamsService.apiTeamsGet().subscribe({
       next: (response) => {
         if (response && response.teams) {
-          this.teams = response.teams;
+          this.teams = (response.teams || [])
+            .slice()
+            .sort((a: any, b: any) => (a?.name ?? '').localeCompare(b?.name ?? '', undefined, { sensitivity: 'base' }));
         } else {
           this.teams = [];
         }

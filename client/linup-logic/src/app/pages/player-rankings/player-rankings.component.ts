@@ -98,7 +98,9 @@ export class PlayerRankingsComponent implements OnInit, AfterViewInit, OnDestroy
     this.teamsService.apiTeamsGet()
       .subscribe({
         next: (response) => {
-          this.teams = response.teams || [];
+          this.teams = (response.teams || [])
+            .slice()
+            .sort((a: any, b: any) => (a?.name ?? '').localeCompare(b?.name ?? '', undefined, { sensitivity: 'base' }));
           this.loadingTeams = false;
         },
         error: (err) => {
