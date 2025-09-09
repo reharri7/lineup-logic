@@ -2,8 +2,8 @@ import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
-import { forkJoin, of } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { forkJoin, of, Subject, Subscription } from 'rxjs';
+import { catchError, debounceTime } from 'rxjs/operators';
 
 import { PlayersService } from 'src/app/services/generated/api/players.service';
 import { PositionsService } from 'src/app/services/generated/api/positions.service';
@@ -52,6 +52,10 @@ export class PlayerRankingsComponent implements OnInit, AfterViewInit, OnDestroy
   private playerCache: Map<number, any> = new Map<number, any>();
   private saveDebounceHandle: any = null;
 
+  // Filter auto-apply
+  private filterChanges$ = new Subject<void>();
+  private filterSub?: Subscription;
+
   // Intersection Observer
   private observer: IntersectionObserver | null = null;
 
@@ -63,6 +67,13 @@ export class PlayerRankingsComponent implements OnInit, AfterViewInit, OnDestroy
   ) {}
 
   ngOnInit(): void {
+    // Set up debounced auto-apply for filters
+    if (!this.filterSub) {
+      this.filterSub = this.filterChanges$
+        .pipe(debounceTime(250))
+        .subscribe(() => this.applyFilters());
+    }
+
     this.loadPositions();
     this.loadTeams();
   }
@@ -74,6 +85,7 @@ export class PlayerRankingsComponent implements OnInit, AfterViewInit, OnDestroy
   ngOnDestroy(): void {
     // Clean up the observer when the component is destroyed
     this.disconnectObserver();
+    this.filterSub?.unsubscribe();
   }
 
   private disconnectObserver(): void {
@@ -318,7 +330,11 @@ export class PlayerRankingsComponent implements OnInit, AfterViewInit, OnDestroy
     this.playerNameFilter = '';
     this.selectedTeamId = null;
     this.currentPage = 1; // Reset to first page
-    this.refreshPlayerLists();
+    this.onFiltersChanged();
+  }
+
+  onFiltersChanged(): void {
+    this.filterChanges$.next();
   }
 
   onDrop(event: CdkDragDrop<any[]>): void {

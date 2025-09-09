@@ -33,7 +33,8 @@
         </div>
       </div>
 
-      <div class="card bg-base-100 shadow-xl mb-6">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="card bg-base-100 shadow-xl">
         <div class="card-body">
           <h2 class="card-title">Team Players</h2>
           @if(players && players.length > 0) {
@@ -70,10 +71,98 @@
               <p>No players added to this team yet.</p>
             </div>
           }
-          <div class="card-actions justify-end mt-4">
-            <button class="btn btn-primary" (click)="openAddPlayerModal()">Add Player</button>
-          </div>
         </div>
+      </div>
+
+      <div class="card bg-base-100 shadow-xl">
+        <div class="card-body">
+          <h2 class="card-title">Quick Add Players</h2>
+
+          <div class="mb-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-2">
+              <app-input
+                label="Search by Name"
+                placeholder="Player name"
+                [(ngModel)]="playerNameFilter"
+                (ngModelChange)="onFiltersChanged()">
+              </app-input>
+
+              <app-select
+                label="Filter by Team"
+                [(ngModel)]="selectedTeamId"
+                (ngModelChange)="onFiltersChanged()"
+                [options]="teams"
+                [labelKey]="'name'"
+                [valueKey]="'id'"
+                placeholder="All Teams"
+                [includeBlankOption]="true"
+                [disabled]="loadingTeams"
+                [hint]="loadingTeams ? 'Loading teams...' : undefined">
+              </app-select>
+
+              <app-select
+                label="Filter by Position"
+                [(ngModel)]="selectedPositionId"
+                (ngModelChange)="onFiltersChanged()"
+                [options]="positions"
+                [labelKey]="'position_name'"
+                [valueKey]="'id'"
+                placeholder="All Positions"
+                [includeBlankOption]="true"
+                [disabled]="loadingPositions"
+                [hint]="loadingPositions ? 'Loading positions...' : undefined">
+              </app-select>
+            </div>
+
+            <div class="flex justify-end space-x-2">
+              <button class="btn btn-sm" (click)="clearFilters()">Clear Filters</button>
+            </div>
+          </div>
+
+          @if(loadingPlayers) {
+            <div class="flex justify-center my-4">
+              <span class="loading loading-spinner loading-md"></span>
+            </div>
+          }
+
+          @if(!loadingPlayers && availablePlayers.length === 0) {
+            <div class="text-center py-4">
+              <p>No available players to add.</p>
+            </div>
+          }
+
+          @if(!loadingPlayers && availablePlayers.length > 0) {
+            <div class="overflow-x-auto max-h-96">
+              <table class="table w-full">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Number</th>
+                    <th>Position</th>
+                    <th>Team</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                @for(player of availablePlayers; track $index) {
+                  <tr>
+                    <td>{{ player.name }}</td>
+                    <td>{{ player.number }}</td>
+                    <td>{{ player.position?.position_name }}</td>
+                    <td>{{ player.team?.name }}</td>
+                    <td>
+                      <button class="btn btn-sm btn-primary" (click)="addPlayer(player)">Add</button>
+                    </td>
+                  </tr>
+                }
+                </tbody>
+              </table>
+            </div>
+          }
+
+        </div>
+      </div>
+
       </div>
     </div>
   }
@@ -117,12 +206,14 @@
           <app-input
             label="Search by Name"
             placeholder="Player name"
-            [(ngModel)]="playerNameFilter">
+            [(ngModel)]="playerNameFilter"
+            (ngModelChange)="onFiltersChanged()">
           </app-input>
 
           <app-select
             label="Filter by Team"
             [(ngModel)]="selectedTeamId"
+            (ngModelChange)="onFiltersChanged()"
             [options]="teams"
             [labelKey]="'name'"
             [valueKey]="'id'"
@@ -135,6 +226,7 @@
           <app-select
             label="Filter by Position"
             [(ngModel)]="selectedPositionId"
+            (ngModelChange)="onFiltersChanged()"
             [options]="positions"
             [labelKey]="'position_name'"
             [valueKey]="'id'"
@@ -147,7 +239,6 @@
 
         <div class="flex justify-end space-x-2">
           <button class="btn btn-sm" (click)="clearFilters()">Clear Filters</button>
-          <button class="btn btn-sm btn-primary" (click)="applyFilters()">Apply Filters</button>
         </div>
       </div>
 

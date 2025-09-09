@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -11,6 +11,8 @@ import { ApiFantasyTeamsIdGet200Response } from 'src/app/services/generated/mode
 import { ApiFantasyTeamsGet200ResponseFantasyTeamsInner } from 'src/app/services/generated/model/apiFantasyTeamsGet200ResponseFantasyTeamsInner';
 import { InputComponent } from '../../../components/input/input.component';
 import { SelectComponent } from '../../../components/select/select.component';
+import { Subject, Subscription } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-team-detail',
@@ -18,7 +20,7 @@ import { SelectComponent } from '../../../components/select/select.component';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, FormsModule, InputComponent, SelectComponent]
 })
-export class TeamDetailComponent implements OnInit {
+export class TeamDetailComponent implements OnInit, OnDestroy {
   fantasyTeam: ApiFantasyTeamsGet200ResponseFantasyTeamsInner | null = null;
   players: any[] = [];
   loading = false;
@@ -42,6 +44,9 @@ export class TeamDetailComponent implements OnInit {
   positions: any[] = [];
   loadingTeams = false;
   loadingPositions = false;
+
+  private filterChanges$ = new Subject<void>();
+  private filterSub?: Subscription;
 
   private teamId: number | null = null;
 
@@ -99,6 +104,14 @@ export class TeamDetailComponent implements OnInit {
       const id = params.get('id');
       if (id) {
         this.teamId = +id;
+
+        // Set up debounced auto-apply for filters
+        if (!this.filterSub) {
+          this.filterSub = this.filterChanges$
+            .pipe(debounceTime(250))
+            .subscribe(() => this.loadFilteredPlayers());
+        }
+
         this.loadTeamDetails();
         this.loadTeams();
         this.loadPositions();
@@ -120,6 +133,7 @@ export class TeamDetailComponent implements OnInit {
           this.fantasyTeam = response.fantasy_team || null;
           this.players = response.players || [];
           this.loading = false;
+          this.onFiltersChanged();
         },
         error: (err) => {
           this.error = 'Failed to load team details. Please try again.';
@@ -201,7 +215,7 @@ export class TeamDetailComponent implements OnInit {
     this.selectedTeamId = null;
     this.selectedPositionId = null;
 
-    this.loadFilteredPlayers();
+    this.onFiltersChanged();
   }
 
   loadFilteredPlayers(): void {
@@ -242,7 +256,15 @@ export class TeamDetailComponent implements OnInit {
     this.playerNameFilter = '';
     this.selectedTeamId = null;
     this.selectedPositionId = null;
-    this.loadFilteredPlayers();
+    this.onFiltersChanged();
+  }
+
+  onFiltersChanged(): void {
+    this.filterChanges$.next();
+  }
+
+  ngOnDestroy(): void {
+    this.filterSub?.unsubscribe();
   }
 
   closeAddPlayerModal(): void {

@@ -55,6 +55,7 @@
                 label="Search by Name"
                 placeholder="Player name"
                 [(ngModel)]="playerNameFilter"
+                (ngModelChange)="onFiltersChanged()"
               ></app-input>
             </div>
 
@@ -64,6 +65,7 @@
               </label>
               <app-select
                 [(ngModel)]="selectedTeamId"
+                (ngModelChange)="onFiltersChanged()"
                 [options]="teams"
                 [labelKey]="'name'"
                 [valueKey]="'id'"
