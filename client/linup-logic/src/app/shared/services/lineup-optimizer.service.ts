@@ -86,7 +86,9 @@ export class LineupOptimizerService {
     this.sortPlayersByRanking(wrs, wrRankings);
     this.sortPlayersByRanking(tes, teRankings);
     this.sortPlayersByRanking(ks, kRankings);
+    console.log(defs);
     this.sortPlayersByRanking(defs, defRankings);
+    console.log(defs);
 
 
     // 1. Quarterback (1)

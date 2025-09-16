@@ -51,7 +51,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                @for(player of players; track $index) {
+                @for(player of players; track player.fantasy_team_player_id ?? player.id) {
                   <tr>
                     <td>{{ player.name }}</td>
                     <td>{{ player.number }}</td>
@@ -144,7 +144,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                @for(player of availablePlayers; track $index) {
+                @for(player of availablePlayers; track player.id) {
                   <tr>
                     <td>{{ player.name }}</td>
                     <td>{{ player.number }}</td>
@@ -267,7 +267,7 @@
               </tr>
             </thead>
             <tbody>
-            @for(player of availablePlayers; track $index) {
+            @for(player of availablePlayers; track player.id) {
               <tr>
                 <td>{{ player.name }}</td>
                 <td>{{ player.number }}</td>
