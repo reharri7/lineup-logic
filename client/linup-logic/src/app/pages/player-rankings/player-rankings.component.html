@@ -32,7 +32,7 @@
     </div>
   }
 
-  @if(selectedPosition && !loading) {
+  @if(selectedPosition) {
     <div class="card bg-base-100 shadow-xl">
       <div class="card-body flex flex-col flex-none">
         <div class="flex justify-between items-center mb-3">
@@ -92,7 +92,14 @@
               </div>
               <p class="text-sm text-gray-500 mb-4">Select players to add to your rankings</p>
 
-              @if(availablePlayers.length === 0) {
+              @if(loading && availablePlayers.length === 0) {
+                <div class="text-center py-8">
+                  <span class="loading loading-spinner loading-sm"></span>
+                  <span class="ml-2">Loading players...</span>
+                </div>
+              }
+
+              @if(!loading && availablePlayers.length === 0) {
                 <div class="text-center py-8">
                   <p>No available players found.</p>
                 </div>
