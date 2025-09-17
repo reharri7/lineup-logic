@@ -33,6 +33,8 @@ export class PlayerRankingsComponent implements OnInit, AfterViewInit, OnDestroy
   teams: any[] = [];
   loadingTeams = false;
 
+  rankedPlayerFilter: string = '';
+
   exportedRankings: string = '';
   importRankings: string = '';
   showExportModal = false;
@@ -523,5 +525,24 @@ export class PlayerRankingsComponent implements OnInit, AfterViewInit, OnDestroy
       this.currentPage++;
       this.loadPlayersByPosition(true);
     }
+  }
+
+  matchesRankedFilter(player: any): boolean {
+    const q = (this.rankedPlayerFilter || '').trim().toLowerCase();
+    if (!q) return true;
+    const name = (player?.name || '').toLowerCase();
+    const team = (player?.team?.name || '').toLowerCase();
+    const pos = (player?.position?.position_name || '').toLowerCase();
+    return name.includes(q) || team.includes(q) || pos.includes(q);
+  }
+
+  rankedVisibleCount(): number {
+    const q = (this.rankedPlayerFilter || '').trim();
+    if (!q) return this.selectedPlayers.length;
+    let count = 0;
+    for (const p of this.selectedPlayers) {
+      if (this.matchesRankedFilter(p)) count++;
+    }
+    return count;
   }
 }

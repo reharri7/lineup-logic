@@ -157,7 +157,25 @@
                 <h3 class="card-title text-lg">Player Rankings</h3>
                 <span class="badge badge-primary">{{ selectedPlayers.length }}</span>
               </div>
-              <p class="text-sm text-gray-500 mb-4">Drag players to reorder your rankings</p>
+              <p class="text-sm text-gray-500 mb-2">Drag players to reorder your rankings</p>
+
+              <div class="flex items-end justify-between mb-4 gap-2">
+                <div class="form-control w-full">
+                  <app-input
+                    label="Search ranked players"
+                    placeholder="Name, team, or position"
+                    [(ngModel)]="rankedPlayerFilter"
+                  ></app-input>
+                </div>
+                <div class="flex items-center gap-2 whitespace-nowrap">
+                  @if(rankedPlayerFilter?.trim()) {
+                    <span class="text-sm opacity-70">
+                      Showing {{ rankedVisibleCount() }} of {{ selectedPlayers.length }}
+                    </span>
+                  }
+                  <button class="btn btn-sm" (click)="rankedPlayerFilter = ''" [disabled]="!rankedPlayerFilter?.trim()">Clear</button>
+                </div>
+              </div>
 
               @if(selectedPlayers.length === 0) {
                 <div class="text-center py-8">
@@ -176,9 +194,9 @@
                         <th>Actions</th>
                       </tr>
                     </thead>
-                    <tbody cdkDropList (cdkDropListDropped)="onDrop($event)">
+                    <tbody cdkDropList (cdkDropListDropped)="onDrop($event)" [cdkDropListDisabled]="!!rankedPlayerFilter?.trim()">
                       @for(player of selectedPlayers; track player.id; let i = $index) {
-                        <tr cdkDrag class="cursor-move hover:bg-base-200">
+                        <tr cdkDrag class="cursor-move hover:bg-base-200" [class.hidden]="!matchesRankedFilter(player)" [cdkDragDisabled]="!!rankedPlayerFilter?.trim()">
                           <td>
                             <input
                               type="number"
