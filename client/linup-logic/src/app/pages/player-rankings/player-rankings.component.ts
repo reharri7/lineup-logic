@@ -367,6 +367,32 @@ export class PlayerRankingsComponent implements OnInit, AfterViewInit, OnDestroy
     }
   }
 
+  onRankEdited(player: any, newValue: any, currentIndex: number): void {
+    const len = this.selectedPlayers.length;
+    if (len <= 1) return;
+
+    const str = (newValue ?? '').toString().trim();
+    if (str === '') return;
+    const num = Number(str);
+
+    if (!Number.isFinite(num) || !Number.isInteger(num)) return;
+
+    const value = num as number;
+    const min = 1;
+    const max = len; // allow last position
+
+    if (value < min || value > max) return;
+
+    const targetIndex = value - 1;
+    if (targetIndex === currentIndex) return;
+
+    moveItemInArray(this.selectedPlayers, currentIndex, targetIndex);
+
+    // Reflect new order in IDs and schedule save
+    this.selectedPlayerIds = this.selectedPlayers.map(p => p.id).filter((id): id is number => id != null);
+    this.scheduleSave();
+  }
+
   saveRankings(): void {
     // Kept for compatibility; internally uses debounced change-detected save
     this.scheduleSave();

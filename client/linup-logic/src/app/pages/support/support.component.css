@@ -1,1 +1,3 @@
+@reference "../../../styles.css";
+
 .card-title { @apply text-xl; }

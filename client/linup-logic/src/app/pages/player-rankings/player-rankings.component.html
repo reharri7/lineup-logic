@@ -172,7 +172,21 @@
                     <tbody cdkDropList (cdkDropListDropped)="onDrop($event)">
                       @for(player of selectedPlayers; track player.id; let i = $index) {
                         <tr cdkDrag class="cursor-move hover:bg-base-200">
-                          <td>{{ i + 1 }}</td>
+                          <td>
+                            <input
+                              type="number"
+                              class="input input-bordered input-sm w-20 text-right"
+                              [ngModel]="i + 1"
+                              [min]="1"
+                              [attr.max]="selectedPlayers.length"
+                              [disabled]="selectedPlayers.length <= 1"
+                              step="1"
+                              (change)="onRankEdited(player, $any($event.target).value, i)"
+                              (keydown.enter)="$any($event.target).blur()"
+                              inputmode="numeric"
+                              [attr.aria-label]="'Edit rank for ' + player.name"
+                            />
+                          </td>
                           <td>
                             <div class="flex items-center space-x-3">
                               <!-- Drag handle -->
