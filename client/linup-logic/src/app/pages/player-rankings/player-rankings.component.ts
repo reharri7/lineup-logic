@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 import { forkJoin, of, Subject, Subscription } from 'rxjs';
 import { catchError, debounceTime } from 'rxjs/operators';
 
@@ -17,7 +18,7 @@ import { TextareaComponent } from '../../components/textarea/textarea.component'
   selector: 'app-player-rankings',
   templateUrl: './player-rankings.component.html',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, DragDropModule, InputComponent, SelectComponent, TextareaComponent]
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, DragDropModule, ScrollingModule, InputComponent, SelectComponent, TextareaComponent]
 })
 export class PlayerRankingsComponent implements OnInit, AfterViewInit, OnDestroy {
   positions: any[] = [];

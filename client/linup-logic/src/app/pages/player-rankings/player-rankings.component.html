@@ -168,12 +168,12 @@
                   ></app-input>
                 </div>
                 <div class="flex items-center gap-2 whitespace-nowrap">
-                  @if(rankedPlayerFilter?.trim()) {
+                  @if(rankedPlayerFilter.trim()) {
                     <span class="text-sm opacity-70">
                       Showing {{ rankedVisibleCount() }} of {{ selectedPlayers.length }}
                     </span>
                   }
-                  <button class="btn btn-sm" (click)="rankedPlayerFilter = ''" [disabled]="!rankedPlayerFilter?.trim()">Clear</button>
+                  <button class="btn btn-sm" (click)="rankedPlayerFilter = ''" [disabled]="!rankedPlayerFilter.trim()">Clear</button>
                 </div>
               </div>
 
@@ -184,7 +184,7 @@
               }
 
               @if(selectedPlayers.length > 0) {
-                <div class="overflow-x-auto max-h-[500px] overflow-y-auto">
+                <div class="overflow-x-auto max-h-[500px] overflow-y-auto" cdkScrollable>
                   <table class="table w-full">
                     <thead>
                       <tr>
@@ -194,9 +194,9 @@
                         <th>Actions</th>
                       </tr>
                     </thead>
-                    <tbody cdkDropList (cdkDropListDropped)="onDrop($event)" [cdkDropListDisabled]="!!rankedPlayerFilter?.trim()">
+                    <tbody cdkDropList (cdkDropListDropped)="onDrop($event)" [cdkDropListDisabled]="!!rankedPlayerFilter.trim()">
                       @for(player of selectedPlayers; track player.id; let i = $index) {
-                        <tr cdkDrag class="cursor-move hover:bg-base-200" [class.hidden]="!matchesRankedFilter(player)" [cdkDragDisabled]="!!rankedPlayerFilter?.trim()">
+                        <tr cdkDrag class="cursor-move hover:bg-base-200" [class.hidden]="!matchesRankedFilter(player)" [cdkDragDisabled]="!!rankedPlayerFilter.trim()" cdkDragRootElement="tr">
                           <td>
                             <input
                               type="number"
